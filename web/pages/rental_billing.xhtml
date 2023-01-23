@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+
+        <h:form>
+            <p:growl />
+        </h:form>
+
+        <p:panel header="Rental Billing">
+
+            <p:tabView activeIndex="#{rentalBillingController.currentTabIndex}">
+                <p:tab title="Set Rental Bill" >
+                    <h:form id="set_rental_bill">
+                        <h:panelGroup layout="block">
+                            <ui:include src="/includes/rented_ppty_selection.xhtml" />
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">
+                            <h:panelGrid columns="5">
+                                <h:outputText value="Rent Charge"/>
+                                <h:inputText value="#{rentalBillingController.estatePropertyLedger.amountInvolved}" required="true" requiredMessage="rent charge cannot be empty" 
+                                             title="Rent charge is required" id="rentCharge" style="width: 100px"/>
+                                <p:tooltip for="rentCharge" showEvent="focus" hideEvent="blur" />
+                                <h:outputText value="Date Of Billing" />
+                                <p:calendar value="#{rentalBillingController.estatePropertyLedger.dateOfRecordTransaction}" />
+                            </h:panelGrid>
+                        </h:panelGroup>
+                        <div class="form-actions">
+                            <h:panelGroup layout="block">
+                                <h:panelGrid columns="3">
+                                    <h:commandButton value="#{msg.save}" action="#{rentalBillingController.saveButtonAction}" rendered="#{!rentalBillingController.renderRentalPanel}"
+                                                     styleClass="btn btn-primary">
+                                        <f:setPropertyActionListener target="#{rentalBillingController.currentTabIndex}" value="0"/>
+                                    </h:commandButton>
+                                    <h:commandButton value="#{msg.update}" rendered="#{rentalBillingController.renderRentalPanel}" action="#{rentalBillingController.editButtonAction()}"
+                                                     styleClass="btn btn-info"/>
+                                    <h:commandButton value="#{msg.cls}" action="#{rentalBillingController.clearButtonAction}" styleClass="btn btn-warning">
+                                        <f:setPropertyActionListener target="#{rentalBillingController.currentTabIndex}" value="0"/>
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                        </div>
+                    </h:form>
+                </p:tab>
+
+                <p:tab title="Batch Billing">
+                    <h:form id="batch_bill">
+                        <div class="form-actions">
+                            <h:panelGrid columns="1">
+                                <h:commandButton value="Apply Current Bill" rendered="false">
+                                    <f:setPropertyActionListener target="#{rentalBillingController.currentTabIndex}" value="1"/>
+                                </h:commandButton>
+                                <h:commandButton value="Apply Last Rent Billed to Current Month"
+                                                 action="#{rentalBillingController.billPropertyRentAsPreviousMonth}" styleClass="btn btn-primary"
+                                                 style="font-weight: bold">
+                                    <f:setPropertyActionListener target="#{rentalBillingController.currentTabIndex}" value="1"/>
+                                </h:commandButton>
+                            </h:panelGrid>
+                        </div>
+                    </h:form>
+                </p:tab>
+
+                <p:tab title="Manage Rental Billing">
+                    <h:panelGroup>
+                        <h:form id="manage_rental_bill">
+                            <h:outputText value="Select Rent Month and Year" />
+                            <h:selectOneMenu value="#{rentalBillingController.billingMonth}">
+                                <f:selectItems value="#{commonOptions.calenderMonthNamesOptions}" />
+                            </h:selectOneMenu>
+                            <h:selectOneMenu value="#{rentalBillingController.selectedYear}">
+                                <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                            </h:selectOneMenu>
+                            <div class="form-actions">
+                                <h:commandButton value="Load House Rent for selected month and year" action="#{rentalBillingController.loadRentedPropertyBill}"
+                                                 styleClass="btn btn-primary" style="font-weight: bold">
+                                    <f:setPropertyActionListener target="#{rentalBillingController.currentTabIndex}" value="2"/>
+                                </h:commandButton>
+                            </div>
+                            <h:panelGroup rendered="#{rentalBillingController.renderRentalPanel}">
+                                <p:dataTable value="#{rentalBillingController.rentalOccupantDataModel}" var="groundRent" stickyHeader="true"  
+                                             scrollable="true" scrollHeight="150">
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Property NO."/>
+                                        </f:facet>
+                                        <h:outputText value="#{groundRent.propertyNumber}"/>
+                                    </p:column >
+
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Occupant Name"/>
+                                        </f:facet>
+                                        <h:outputText value="#{groundRent.propertyOccupant}"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Old Rent"/>
+                                        </f:facet>
+                                        <h:outputText value="#{groundRent.oldRent}"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="New Rent"/>
+                                        </f:facet>
+                                        <h:inputText value="#{groundRent.newRent}" style="width: 50px"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <div class="form-actions">
+                                    <h:panelGrid columns="2">
+                                        <h:commandButton value="Update Rental Charges " style="font-weight: bold"
+                                                         styleClass="btn btn-primary" action="#{rentalBillingController.updateRentalCharges}">
+                                            <f:setPropertyActionListener target="#{rentalBillingController.currentTabIndex}" value="2"/>
+                                        </h:commandButton>
+                                        <h:outputText style="background-color: red;font-size: 11px;color: #fff" value="(NB: Charges take effect from selected month)" />
+                                    </h:panelGrid>
+                                </div>
+                            </h:panelGroup>
+                        </h:form>
+                    </h:panelGroup>
+                </p:tab>
+                <p:tab title="Back Billing">
+                    <h:form>
+                        <h:panelGroup layout="block">
+                            <h:panelGrid columns="1">
+                                <ui:include src="/includes/rented_ppty_selection.xhtml" />
+                            </h:panelGrid>
+                        </h:panelGroup>
+                    
+                        <h:panelGroup layout="block">
+                            <h:panelGrid columns="10">
+                                <h:outputText value="From"/>
+                                <h:selectOneMenu value="#{rentalBillingController.fromMonth}" style="width: 100px;">
+                                    <f:selectItems value="#{commonOptions.calenderMonthNamesOptions}" />
+                                </h:selectOneMenu>
+                                <h:selectOneMenu value="#{rentalBillingController.fromYear}" style="width: 100px;">
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>&nbsp;
+                                <h:outputText value="To"/>
+                                <h:selectOneMenu value="#{rentalBillingController.toMonth}" style="width: 100px;">
+                                    <f:selectItems value="#{commonOptions.calenderMonthNamesOptions}" />
+                                </h:selectOneMenu>
+                                <h:selectOneMenu value="#{rentalBillingController.toYear}" style="width: 100px;">
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>&nbsp;
+                                <h:outputText value="Amount :"/>
+                                <h:inputText style="width: 80px;" value="#{rentalBillingController.amount}" id="amt">
+                                    <f:convertNumber for="amt"/>
+                                </h:inputText>
+                            </h:panelGrid>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block">
+                            <h:commandButton value="Apply New Rate" styleClass="btn btn-primary"
+                                             actionListener="#{rentalBillingController.applyBackBilling()}">
+                                <f:setPropertyActionListener target="#{rentalBillingController.currentTabIndex}" value="3"/>
+                            </h:commandButton>
+                        </h:panelGroup>
+                    </h:form>
+
+                </p:tab>
+            </p:tabView>
+        </p:panel>  
+
+    </h:body>
+</html>
+

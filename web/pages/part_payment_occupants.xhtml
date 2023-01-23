@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <h:form>
+            <p:messages />
+        </h:form>
+
+        <p:panel header="Property Selection">
+            <h:form >
+                <ui:include src="/includes/property_selection.xhtml"/>
+                <h:panelGroup layout="block">
+                    <div class="form-actions">
+                        <h:commandButton value="Load Ledger" actionListener="#{billPaymentController.loadSelectedEstatePropertyLedger()}" 
+                                         styleClass="btn btn-primary" style="font-weight: bold"/>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+            <h:form>
+               
+                    <h:panelGroup>
+                        <h:panelGrid columns="5" >
+                            <h:outputText value="Property Occupant: "/>
+                            <h:outputText value="#{billPaymentController.propertyOccupantName}"/>&nbsp;
+                            <h:outputText value="Occupied As: "/>
+                            <h:outputText value="#{billPaymentController.selectedOccupantProperty.occupationType}"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                    <p:dataTable value="#{billPaymentController.estatePropertyLedgerDataModel}" var="epl" rendered="#{billPaymentController.rendered}"
+                                 stickyHeader="true" scrollable="true" scrollHeight="100" >
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.esppty}
+                            </f:facet>
+                            #{epl.estateProperty}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.amt}
+                            </f:facet>
+                            #{epl.amountInvolved}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.drcr}
+                            </f:facet>
+                            #{epl.debitCreditEntry}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.payname}
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.paydate}
+                            </f:facet>
+                            <h:outputText value="#{epl.dateOfRecordTransaction}">
+                                <f:convertDateTime pattern="dd-MMM-YYYY"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.ledYr}
+                            </f:facet>
+                            #{epl.ledgerYear}
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText="Total Credit:" style="text-align: right;"/>
+                                <p:column footerText="#{billPaymentController.totalCreditEntry}"/>
+                                <p:column footerText="Total Debit:"  style="text-align: right;"/>
+                                <p:column footerText="#{billPaymentController.totalDebitEntry}" />
+                                <p:column footerText="Outstanding Bal:"  style="text-align: right;"/>
+                                <p:column footerText="#{billPaymentController.outstandingBalance}"/>
+                            </p:row>
+                        </p:columnGroup>
+                    </p:dataTable>
+            </h:form>
+            <p:panel header="Bill Payment" rendered="#{billPaymentController.rendered}">
+                <h:panelGroup layout="block">
+                    <h:form>
+                        <h:panelGrid columns="4">
+                            <h:outputText value="Payment Type" />
+                            <h:outputText value="#{billPaymentController.selectedPaymentType}" id="type_string_name"
+                                          />
+                            <h:selectOneMenu value="#{billPaymentController.payingForEstatePropertyLedger.paymentType}"
+                                             required="true" requiredMessage="Please select Payment type"
+                                             rendered="false">
+                                <f:selectItems value="#{commonOptions.paymentTypeOptions}" />
+                            </h:selectOneMenu>
+                            <h:outputText />
+                            <h:outputText />
+                            <h:outputText value ="Estate Property"/>
+                            <h:panelGroup>
+                                <h:inputText id="ep" value="#{billPaymentController.selectedEstateProperty}" disabled="true" required="true" requiredMessage="Please select an estate property"  />
+                                
+                            </h:panelGroup>
+                            
+                            <h:outputText value ="Date Of Payment"/>
+                            <h:panelGroup>
+                                <p:calendar id="dateOfRecordTransaction" 
+                                            value="#{billPaymentController.dateOfRecordTransaction}"
+                                            required="true" requiredMessage="Date of payment is required" pattern="dd-MM-yyyy"/>
+                                            
+                            </h:panelGroup>
+                            
+                            <h:outputText value ="Amount Involved"/>
+                            <h:panelGroup>
+                                <h:inputText id="amountInvolved" value="#{billPaymentController.amtInvolved}" required="true" requiredMessage="*"  readonly="#{billPaymentController.canView}">
+                                
+                                </h:inputText>
+                            </h:panelGroup>
+                            
+                            <h:outputText value ="Receipt Number Issued"/>
+                            <h:panelGroup>
+                                <h:inputText id="receiptNumberIssued" value="#{billPaymentController.receiptNumber}" required="true" requiredMessage="Receipt Number is required"  readonly="#{billPaymentController.canView}"/>
+                                
+                            </h:panelGroup>
+                            
+                            <h:outputText value ="Payee Name"/>
+                            <h:panelGroup>
+                                <h:inputText id="payeeName" value="#{billPaymentController.payeeName}" required="true" requiredMessage="Payee name is required"  readonly="#{billPaymentController.canView}"/>
+                                
+                            </h:panelGroup>
+                            
+                            <h:outputText value ="Medium Of Payment"/>
+                            <h:panelGroup>
+                                <h:selectOneMenu id="mediumOfPayment" value="#{billPaymentController.mediumOfPayment}" required="false" requiredMessage="*" >
+                                    <f:selectItems value ="#{commonOptions.mediumOfPaymentOptions}" />
+                                </h:selectOneMenu>
+                                <h:message for="mediumOfPayment" errorClass="noTextErrorStyle"/>
+                            </h:panelGroup>
+                            
+                            <h:outputText value ="Medium Of Payment Number" rendered="#{billPaymentController.rendered}"/>
+                            <h:panelGroup>
+                                <h:inputText id="mediumOfPaymentNumber" value="#{billPaymentController.mediumOfPaymentNumber}" required="false" requiredMessage="*"  
+                                             rendered="#{billPaymentController.rendered}"/>
+                                <h:message for="mediumOfPaymentNumber" errorClass="noTextErrorStyle"/>
+                            </h:panelGroup>
+                            
+                        </h:panelGrid>
+                        <div class="form-actions">
+                            <h:panelGrid columns="2">
+                                <h:commandButton value="#{msg.save}" styleClass="btn btn-primary" rendered="#{!billPaymentController.canView}"
+                                                 action="#{billPaymentController.saveButtonAction()}" style="font-weight: bold"
+                                                 onclick="myfunction()" />
+                                                 
+                                <h:commandButton value="#{msg.cls}" styleClass="btn btn-warning" style="font-weight: bold" 
+                                                 action="#{billPaymentController.clearButtonAction}" immediate="true"/>
+                            </h:panelGrid>
+                        </div>
+                    </h:form>
+                </h:panelGroup>
+            </p:panel>
+        </p:panel>
+        <script>
+            function myfunction(){
+                confirm("If you Sure of This Transaction, Click Ok to complete it");
+            }
+        </script>
+
+    </h:body>
+</html>
+

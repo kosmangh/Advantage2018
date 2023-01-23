@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <head>
+        <link type="text/css" rel="stylesheet" href="/advantage/resources/css/main.css"/>
+    </head>
+    
+    <h:form>
+        <ui:include src="../pagefragments/property_selection.xhtml" />
+        <h:commandButton value="Load All Estate Properties" action="#{entryCrossCheckController.loadEstateBlockProperties}" />
+    </h:form>
+
+    <h:outputText value="Please this is for name arrangement / order only.
+                  if name is different Please use the initial data set"
+                  style="font-size: 17px;"/>
+
+    <h:form>
+        <h:commandButton value="Update All" action="#{entryCrossCheckController.updateAll}" />
+        <h:panelGroup id="cross_check" layout="block" style="height: 400px; overflow: auto;">
+
+<!--            <h:dataTable binding="#{entryCrossCheckController.estatePropertyDetailDataPanel.dataTable}" />-->
+
+            <h:dataTable value="#{entryCrossCheckController.propertyDetailsList}" var="data" rendered="true">
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Property Number" />
+                    </f:facet>
+                    <h:outputText value="#{data.propertyName}" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Property Occupant" />
+                    </f:facet>
+                    <h:inputText value="#{data.propertyOccupant}" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Areas From" />
+                    </f:facet>
+                    <h:inputText value="#{data.arrreasFrom}" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Verified .." />
+                    </f:facet>
+                    <h:selectBooleanCheckbox value="#{data.verified}" />
+                </h:column>
+
+            </h:dataTable>
+
+        </h:panelGroup>
+    </h:form>
+
+</html>
+

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form>
+        <p:accordionPanel activeIndex="#{userdata.currentTab}" prependId="false">
+            <p:tab title="Dashboard" titletip="View Summary of all activities">
+                <i class="icon-tag"></i> 
+                <a style="line-height: 16px; font-size: 14px !important; margin-bottom: 5px;" title="Under construction">
+                    Dashboard
+                    <span style="color: whitesmoke; background-color: tomato; margin-left: 1px; border-radius: 4px;"><strong style="margin: 1px"><b>New</b></strong></span>
+                </a>
+            </p:tab>
+            
+            <c:forEach items="#{userdata.userPageGroupsList}" var="pageGrp" >
+                <p:tab title="#{pageGrp.groupName}">
+                    <c:forEach items="#{pageGrp.userPagesList}" var="userPage">
+                        <h:panelGroup style="display: block;">
+
+                            <h:commandLink style="text-decoration: underline; line-height: 16px; 
+                                           font-size: 14px !important; margin-bottom: 5px;"
+                                           action="#{userdata.setRequestedPageURL(userPage.pageURL)}">
+                                <i class="icon-tag"></i> #{userPage.pageName}
+                                <f:setPropertyActionListener target="#{userPage.pageIndex}" value="#{userPage.pageIndex}"/>
+                            </h:commandLink>
+
+                        </h:panelGroup>
+                    </c:forEach>
+                </p:tab>
+            </c:forEach>
+        </p:accordionPanel>
+    </h:form>
+</html>
+

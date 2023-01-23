@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        <style type="text/css">
+            .tip_box{
+                height: 50px;
+                width: 500px;
+                color: whitesmoke;
+                background-color: tomato;
+                border-radius: 8px;
+                border-color: #363636;
+                border-width: thin;
+                box-shadow: #363636 0.4, #444444 0.4, #595959 0.4;
+            }
+        </style>
+
+        <p:panel header="#{msg.grndrent} Information">
+            <p:tabView activeIndex="#{groundRentSetupController.currentTab}">
+                <p:tab  title="Manage Ground Rent">
+                    <h:form>
+                        <h:panelGroup>
+                            <h:outputText value="Select Ground Rent Year" />
+                            <h:selectOneMenu value="#{groundRentSetupController.selectedYear}">
+                                <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                            </h:selectOneMenu>
+                            <div class="form-actions">
+                                <h:panelGrid columns="3">
+                                    <h:commandButton value="Load Ground Rent For Selected Year" styleClass="btn btn-primary"
+                                                     action="#{groundRentSetupController.loadSelectedYearGroundRent}" style="font-weight: bold">
+
+                                        <f:setPropertyActionListener target="#{groundRentSetupController.currentTab}" value="0"/>
+                                    </h:commandButton>&nbsp;
+                                    <h:commandButton value="Update Ground Rent Charges for Selected Year"
+                                                     action="#{groundRentSetupController.updateGroundRentValues}"  
+                                                     styleClass="btn btn-primary" style="font-weight: bold">
+
+                                        <f:setPropertyActionListener value="0" target="#{groundRentSetupController.currentTab}"/>
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </div>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+
+                            <h:dataTable value="#{groundRentSetupController.yearGroundRentItemsList}" var="groundRent"  
+                                         rowClasses="odd_row,even_row" 
+                                         styleClass="data_table_panel" style="border:solid 1px; height: 100px; overflow: auto;" 
+                                         rendered="#{groundRentSetupController.yearGroundRentItemsList.rowCount != null}"
+                                         id="ground_rent_charges_table">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputLabel value="Property Usage"/>
+                                    </f:facet>
+                                    <h:outputText value="#{groundRent.propertyUsage}"/>
+                                </h:column >
+
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputLabel value="First Class"/>
+                                    </f:facet>
+                                    <h:inputText value="#{groundRent.firstClassEstateAmountCharged}"/>
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputLabel value="Second Class"/>
+                                    </f:facet>
+                                    <h:inputText value="#{groundRent.secondClassEstateAmountCharged}"/>
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputLabel value="Third Class"/>
+                                    </f:facet>
+                                    <h:inputText value="#{groundRent.thirdClassEstateAmountCharged}"/>
+                                </h:column>
+
+                            </h:dataTable>
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:tab>
+
+                <p:tab title="Apply Selected Year Ground Rent"  >
+                    <h:panelGroup styleClass="page_block_header">
+                        <h:outputLabel value="Apply Selected Year Ground Rent. This action might take a long time" style="color: red;"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:form>
+                            <h:panelGrid columns="4">
+                                <h:outputLabel value=" Estate" />
+                                <h:selectOneMenu value="#{groundRentSetupController.selectedEstate}">
+                                    <f:selectItems value="#{commonOptions.estateOptions}"/>
+                                </h:selectOneMenu>
+
+                                <h:outputText value="Select Ground Rent Year" />
+                                <h:selectOneMenu value="#{groundRentSetupController.selectedYear}">
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>
+
+                            </h:panelGrid>
+                            <div class="form-actions">
+                                <h:commandLink value="Apply Selected Year Ground Rent" target="_blank"
+                                               actionListener="#{groundRentSetupController.applyGroundRentForSelectedYear}"
+                                               styleClass="btn btn-primary" style="color: white;">
+                                    <f:setPropertyActionListener value="1" target="#{groundRentSetupController.currentTab}"/>
+                                </h:commandLink>
+                            </div>
+                        </h:form>
+                    </h:panelGroup>
+                </p:tab>
+                
+                
+                
+                       <p:tab title="Apply Single Occupant Billing">
+                    <h:panelGroup styleClass="page_block_header">
+                        <h:outputLabel value="Single Occupant Billing Mode" style="color: red;"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:form>
+                            <h:panelGrid columns="5" >
+                                <ui:include src="/includes/single_bill.xhtml" />
+
+                                <h:outputText value="Select Ground Rent Year" />
+                                <h:selectOneMenu value="#{groundRentSetupController.selectedYear}">
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>
+
+                            </h:panelGrid>
+                            <div class="form-actions">
+                                <h:commandButton value="Apply Ground Rent Bill To Selected Occupant"  
+                                               action="#{groundRentSetupController.applySingleBillingToOccupantForSelected()}"
+                                               styleClass="btn btn-primary" style="color: white;">
+                                    <f:setPropertyActionListener value="1" target="#{groundRentSetupController.currentTab}"/>
+                                </h:commandButton>
+                            </div>
+                        </h:form>
+                    </h:panelGroup>
+                </p:tab>
+                
+                 
+                
+                
+                
+                
+                       <p:tab title="Load Occupant Billing Status">
+                    <h:panelGroup styleClass="page_block_header">
+                        <h:outputLabel value="Single Occupant Status Mode" style="color: red;"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block">
+                        <h:form>
+                            <h:panelGrid columns="5" >
+                                <ui:include src="/includes/single_bill.xhtml" />
+
+                                <h:outputText value="Select Ground Rent Year" />
+                                <h:selectOneMenu value="#{groundRentSetupController.selectedYear}">
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>
+
+                            </h:panelGrid>
+                            <div class="form-actions">
+                                <h:commandButton value="Apply Ground Rent Bill To Selected Occupant"  
+                                               action="#{groundRentSetupController.applySingleBillingToOccupantForSelected()}"
+                                               styleClass="btn btn-primary" style="color: white;">
+                                    <f:setPropertyActionListener value="1" target="#{groundRentSetupController.currentTab}"/>
+                                </h:commandButton>
+                            </div>
+                        </h:form>
+                    </h:panelGroup>
+                </p:tab>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                <p:tab title="Apply Default Penalty">
+                    <h:form>
+                        <h:panelGroup layout="block">
+                           <ui:include src="/includes/default_penalty_property_selection.xhtml" />
+                           <h:panelGrid columns="2">
+                               <h:outputText value="Penalty To"/>
+                               <h:selectOneMenu value="#{groundRentSetupController.selectedYear}" style="width: 100px; margin-left: 75px;">
+                                   <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                               </h:selectOneMenu>
+                           </h:panelGrid>
+                        </h:panelGroup>
+                        <div class="form-actions">
+                            <h:commandButton value="Apply Penalty" actionListener="#{groundRentSetupController.applyDefaultPenaltyCharges()}">
+                                <f:setPropertyActionListener value="2" target="#{groundRentSetupController.currentTab}"/>
+                            </h:commandButton>
+                        </div>
+                        
+                    </h:form>
+                </p:tab>
+
+                <p:tab title="Print Ground Rent" >
+                    <h:form>
+                        <h:panelGroup layout="block">
+                            <h:panelGrid columns="4">
+                                <h:outputText value="Begin Year"/>
+                                <h:selectOneMenu value="#{groundRentSetupController.beginYearForGroundRentCharges}">
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>
+
+                                <h:outputText value="End Year"/>
+                                <h:selectOneMenu value="#{groundRentSetupController.endYearForGroundRentCharges}">
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            <div class="form-actions">
+                                <h:commandLink target="_blank" styleClass="btn btn-primary" style="color: #FFFFFF;"
+                                               action="#{groundRentSetupController.printGroundRentChargesBetweenYears}">
+                                    <i class="icon-white icon-print"></i> View Ground Rent
+                                    <f:setPropertyActionListener value="3" target="#{groundRentSetupController.currentTab}"/>
+                                </h:commandLink>
+                            </div>
+                        </h:panelGroup>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+        </p:panel>
+    </h:body>
+</html>
+

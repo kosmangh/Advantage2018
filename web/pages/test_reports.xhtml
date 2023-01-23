@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:panelGroup>
+        <h:form>
+            <h:panelGrid columns="4">
+                <h:outputText value="Estate Name:"/>
+                <h:selectOneMenu value="#{estateController.estate}">
+                    <f:selectItems value="#{estateController.estateList}" />
+                </h:selectOneMenu>
+
+                <h:outputText value="Estate Block"/>
+                <h:selectOneMenu value="#{estateBlockController.selectedEstate}">
+                    <f:selectItems value="#{estateBlockController.selectedEstate}"/>
+                </h:selectOneMenu>
+
+            </h:panelGrid>
+
+            <h:panelGroup layout="block">
+                <h:commandButton value="Save" action="#{estateBlockController.saveEditButtonAction}"/>
+                <h:commandButton value="Edit" action="#{estateBlockController.saveEditButtonAction}"/>
+                <h:commandButton value="Delete" action="#{estateBlockController.deleteButtonAction}"/>
+                <h:commandButton value="clear" action="#{estateBlockController.clearButtonAction}"/>
+            </h:panelGroup>
+        </h:form>
+    </h:panelGroup>
+</html>
+

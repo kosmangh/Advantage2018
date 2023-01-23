@@ -1,0 +1,456 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    
+    <h:body>
+        <style>
+            .tip_box{
+                height: 50px;
+                width: 500px;
+                color: whitesmoke;
+                background-color: tomato;
+                border-radius: 8px;
+                border-color: #363636;
+                border-width: thin;
+                box-shadow: #363636 0.4, #444444 0.4, #595959 0.4;
+            }
+            
+            .valLabel{
+                font-weight: bold;
+                text-align: right;
+                font-size: medium
+            }
+            
+            .active{
+                font-weight: bolder;
+                color: green;
+            }
+            
+            .inactive{
+                font-weight: bolder;
+                color: red;
+            }
+        </style>
+        
+        <p:panel header="User Account">
+            <p:tabView effect="slide" effectDuration="slow" prependId="false" activeIndex="#{userAccountController.tabIndex}">
+                
+                <!--Beginning of tab 1-->
+                <p:tab title="User Account List">
+                    <h:form prependId="false">
+                        <br />
+                        <p:growl autoUpdate="true" life="3800" showSummary="true" showDetail="false" globalOnly="true"/>
+                        <p:messages autoUpdate="true" closable="true" globalOnly="true" severity="Severity.error" showDetail="true" showIcon="true" showSummary="false" style="text-align: center" >
+                            <p:effect event="load" type="pulsate" delay="500"/>
+                        </p:messages>
+                        <br />
+                        <br />
+                        
+                        <div align="left">
+                            <h:commandLink class="btn btn-info btn-large" action="#{userAccountController.toNewAccount()}" style="color: #FFFFFF" title="click to add a new user to already existing ones">
+                                <i class="icon-plus"></i> New User Account
+                            </h:commandLink>
+                        </div>
+                        <br />
+                        <br />
+                        
+                        <div>
+                            <div align="right" style="float: right">
+                                <h:panelGrid columns="3" cellpadding="3">
+                                    <h:selectOneMenu value="#{userAccountController.searchOptions}" style="width: auto" title="Search criteria">
+                                        <f:selectItem itemLabel="Name" itemValue="staff.fullName"/>
+                                        <f:selectItem itemLabel="Access Level" itemValue="userCategory.roleName"/>
+                                        <f:selectItem itemLabel="Position" itemValue="staff.position"/>
+                                    </h:selectOneMenu>
+                                    <h:inputText  value="#{userAccountController.searchText}" style="width: 300px"/>
+                                    <h:commandLink class="btn btn-primary" action="#{userAccountController.searchAccount()}" style="font-weight: bold; color: whitesmoke; margin-top: -10px" title="search staff">
+                                        <i class="icon-search"></i> Search
+                                    </h:commandLink>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        <br /> <br /> <br />
+                        
+                        <div align="left" style="float: left">
+                            <h:outputText style="font-weight: 600; font-size: large; color: #0074cc" value="#{userAccountController.totalAccounts} User Account(s)"/>
+                        </div>
+                        <p:dataTable value="#{userAccountController.userAccountTableModel}" var="ua" paginator="true" paginatorPosition="bottom" emptyMessage="No Record(s) Found" style="width: 100%"
+                                     rows="25">
+                            <p:column width="5%" style="text-align: center">
+                                <h:selectBooleanCheckbox value="#{ua.selected}" title="select row"/>
+                            </p:column>
+                            
+                            <p:column style="text-align: center">
+                                <f:facet name="header">Staff</f:facet>
+                                #{ua.staff.fullName}
+                            </p:column>
+                            
+                            <p:column width="15%" style="text-align: center">
+                                <f:facet name="header">Department</f:facet>
+                                #{ua.staff.department}
+                            </p:column>
+                            
+                            <p:column width="15%" style="text-align: center">
+                                <f:facet name="header">Position</f:facet>
+                                #{ua.staff.position}
+                            </p:column>
+                            
+                            <p:column width="15%" style="text-align: center">
+                                <f:facet name="header">Access Level</f:facet>
+                                #{ua.userCategory.roleName}
+                            </p:column>
+                            
+                            <p:column width="10%" style="text-align: center">
+                                <f:facet name="header">Account Status</f:facet>
+                                <h:outputText value="#{ua.accountStatus.status}" class="#{ua.accountStatus.status.equalsIgnoreCase('Active')? 'active' : 'inactive'}" />
+                            </p:column>
+                            
+                            <p:column width="13%">
+                                <f:facet name="header">#{msg.actions}</f:facet>
+                                <h:commandLink class="btn btn-info btn-small" style="color: #FFFFFF" action="#{userAccountController.selectAccount()}">
+                                    <i class="icon-pencil"></i> #{msg.edit}
+                                </h:commandLink>
+                                
+                                 <a  class="disabled btn btn-small btn-primary"  style="color: #FFFFFF; cursor: not-allowed" title="View account details">
+                                    <i class="icon-eye-open"></i>
+                                </a>
+                            </p:column>
+                        </p:dataTable>
+                        <br />
+                        
+                        <div align="right">
+                            <h:panelGrid columns="2" cellpadding="4">
+                                <a class="btn btn-danger btn-large" style="color: #FFFFFF" href="#userAccDelete" data-toggle="modal" title="Delete selected user accounts">
+                                    <i class="icon-trash"></i> Delete
+                                </a>
+                                <h:commandLink class="btn btn-large btn-warning" action="#{userAccountController.refreshList()}" style="color: #FFFFFF" title="click to refresh User Account list">
+                                    <i class="icon-refresh"></i> Refresh
+                                </h:commandLink>
+                            </h:panelGrid>
+                        </div>
+                        
+                        <!--Delete Account modal-->
+                        <div class="modal hide" id="userAccDelete" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Delete User Account(s)</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you really want to <span style="color: tomato;  font-weight: bold">delete</span> <br />
+                                selected Account(s)?</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to delete selected estates" action="#{userAccountController.deleteAccounts()}" class="btn btn-primary" style="color: #FFFFFF">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                        
+                    </h:form>
+                </p:tab>
+                <!--End of tab-->
+                
+                <!--Beginning of tab 2-->
+                <p:tab title="New User Account" disabled="true">
+                    <h:form prependId="false">
+                        <div align="center">
+                            <div align="center">
+                                <div class="tip_box">
+                                    <table cellpadding="7">
+                                        <tr>
+                                            <td>
+                                                <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                            </td>
+                                            <td>
+                                                <h4 style="color: orange" align="center">Tip</h4>
+                                                <h5><i style="color: #0066cc">Fields that displays <img src=".../img/error_pic.PNG"/> are required input fields</i> </h5>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+                            
+                            <br/>
+                            <p:growl autoUpdate="true" globalOnly="true" life="3800" showSummary="true" showDetail="false" />
+                            <p:messages autoUpdate="true" globalOnly="true" showDetail="true" showSummary="false" closable="true" showIcon="true">
+                                <p:effect event="load" type="pulsate" delay="500" />
+                            </p:messages>
+                            <br />
+                            
+                            <h:panelGrid columns="4" cellpadding="8" cellspacing="10" style="width: 100%">
+                                <h:outputLabel for="staffName" class="alright valLabel" value="Staff : " title="Avilable Staffs"/>
+                                <h:selectOneMenu id="staffName" value="#{userAccountController.staffId}" required="true" requiredMessage="Staff Required" title="Staff to which this account is for" style="width: 450px">
+                                    <f:selectItems value="#{commonOptions.activeStaffNames}"/>
+                                </h:selectOneMenu>
+                                <p:message for="staffName" showSummary="false" showDetail="false" display="icon">
+                                    <p:effect event="load" type="bounce" />
+                                </p:message>
+                                <p:tooltip for="staffName" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="accCat" class="alright valLabel" value="Access Level : " title="Account access level"/>
+                                <h:selectOneMenu id="accCat" value="#{userAccountController.userAccount.userCategory}" required="true" requiredMessage="Access Level Required" title="Account access level" style="width: 450px">
+                                    <f:selectItems value="#{commonOptions.userAccessRightsOptions}"/>
+                                </h:selectOneMenu>
+                                <p:message for="accCat" showSummary="false" showDetail="false" display="icon">
+                                    <p:effect event="load" type="bounce" />
+                                </p:message>
+                                <p:tooltip for="accCat" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="accStatus" class="alright valLabel" value="Status : " title="Account Status"/>
+                                <h:selectOneMenu id="accStatus" value="#{userAccountController.userAccount.accountStatus}" required="true" requiredMessage="Account Status Required" title="Account Statusl" style="width: 450px">
+                                    <f:selectItems value="#{commonOptions.statusOptions}"/>
+                                </h:selectOneMenu>
+                                <p:message for="accStatus" showSummary="false" showDetail="false" display="icon">
+                                    <p:effect event="load" type="bounce" />
+                                </p:message>
+                                <p:tooltip for="accStatus" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="userName" class="alright valLabel" value="Username : " title="Account username for access account"/>
+                                <h:inputText id="userName" value="#{userAccountController.userAccount.username}" required="true" requiredMessage="Username Required" title="Account username for access account" style="width: 450px" />
+                                <p:message for="userName" showSummary="false" showDetail="false" display="icon">
+                                    <p:effect event="load" type="bounce" />
+                                </p:message>
+                                <p:tooltip for="userName" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="pswrd" class="alright valLabel" value="Password : " title="Account password"/>
+                                <h:inputSecret  id="pswrd" value="#{userAccountController.userAccount.userPassword}" required="true" requiredMessage="Password Required" title="Account password" style="width: 450px" />
+                                <p:message for="pswrd" showSummary="false" showDetail="false" display="icon">
+                                    <p:effect event="load" type="bounce" />
+                                </p:message>
+                                <p:tooltip for="pswrd" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="repswrd" class="alright valLabel" value="Retype Password : " title="Account password"/>
+                                <h:inputSecret  id="repswrd" value="#{userAccountController.rePswrd}" required="true" requiredMessage="Retpye Password" title="Account password" style="width: 450px" />
+                                <p:message for="repswrd" showSummary="false" showDetail="false" display="icon">
+                                    <p:effect event="load" type="bounce" />
+                                </p:message>
+                                <p:tooltip for="repswrd" showEvent="focus" hideEvent="blur"/>
+                            </h:panelGrid>
+                        </div>
+                        
+                        <div  class="form-actions">
+                            <div class="pull-right" style="margin-right: 150px">
+                                <h:panelGrid columns="3" cellpadding="4">
+                                    <a class="btn btn-success btn-large" style="color: #FFFFFF" href="#AccntSave" data-toggle="modal">
+                                        <i class="icon-check"></i> #{msg.save}
+                                    </a>
+
+                                    <a id="refreshFields" class="btn btn-warning btn-large" style="color: #FFFFFF" onclick="window.location.reload(true);">
+                                        <i class="icon-refresh"></i> Refresh
+                                    </a>
+
+                                    <a id="back" class="btn btn-danger btn-large" style="color: #FFFFFF" href="#newBack" data-toggle="modal">
+                                        <i class="icon-arrow-left"></i> Back
+                                    </a>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+
+
+                        <!--Confirm Save User Account modal-->
+                        <div class="modal hide" id="AccntSave" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: #3a87ad">
+                                <h3>Save Account Details</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you want to <span style="color: green">save</span> values entered?<br /> 
+                                    Press Yes to save</p><br />
+                                    <span style="font-size: large; font-weight: bolder; color: red;">NB : </span><br/>
+                                    <h5><i style="color: tomato">Username will be used to access account</i> </h5>
+                                    <h5><i style="color: tomato">Account Password will be sent to your mail or mobile</i> </h5>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{userAccountController.saveAccount()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                        
+                    </h:form>
+
+                    <!--Back modal-->
+                    <div class="modal hide" id="newBack" style="width: 400px; left: 65%">
+                        <h:form>
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Warning</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Values entered will be ignored!<br /> 
+                                    Press Yes to go back</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" action="#{userAccountController.toUserAccountList()}" class="btn btn-primary" style="color: #FFFFFF" >
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </h:form>
+                    </div>
+                    <!--End Modal-->
+                            
+                </p:tab>
+                <!--End of tab-->
+                
+                
+                <!--Beginning of tab 2-->
+                <p:tab title="Update Account" disabled="true">
+                    <h:form prependId="false">
+                        <div align="center">
+                            <div align="center">
+                                <div class="tip_box">
+                                    <table cellpadding="7">
+                                        <tr>
+                                            <td>
+                                                <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                            </td>
+                                            <td>
+                                                <h4 style="color: orange" align="center">Tip</h4>
+                                                <h5><i style="color: #0066cc">Click on values to display edit mode</i> </h5>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+                            
+                            <br/>
+                            <p:growl autoUpdate="true" globalOnly="true" life="3800" showSummary="true" showDetail="false" />
+                            <p:messages autoUpdate="true" globalOnly="true" showDetail="true" showSummary="false" closable="true" showIcon="true">
+                                <p:effect event="load" type="pulsate" delay="500" />
+                            </p:messages>
+                            <br />
+                            
+                            <h:panelGrid columns="4" cellpadding="8" cellspacing="10" style="width: 100%">
+                                <h:outputLabel for="upstaffId" class="alright valLabel" value="Staff ID : " title="Staff ID for user account"/>
+                                <h:outputText id="upstaffId" value="#{userAccountController.upUserAccount.staff.staffId}" title="Staff ID for user account" style="cursor: not-allowed" />
+                                <p:message for="upstaffId" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="upstaffId" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="upstaffName" class="alright valLabel" value="Staff : " title="Staff Name"/>
+                                <h:outputText id="upstaffName" value="#{userAccountController.upUserAccount.staff.fullName}" title="Staff Name" style="cursor: not-allowed"/>
+                                <p:message for="upstaffName" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="upstaffName" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="upaccCat" class="alright valLabel" value="Access Level : " title="Account access level"/>
+                                <p:inplace emptyLabel="null" effect="slide" label="#{userAccountController.upUserAccount.userCategory.roleName}">
+                                    <h:selectOneMenu id="upaccCat" value="#{userAccountController.upUserAccount.userCategory}" required="true" requiredMessage="Access Level Required" title="Account access level" style="width: 450px">
+                                        <f:selectItems value="#{commonOptions.userAccessRightsOptions}"/>
+                                    </h:selectOneMenu>
+                                </p:inplace>
+                                <p:message for="upaccCat" showSummary="false" showDetail="false" display="icon">
+                                    <p:effect event="load" type="bounce" />
+                                </p:message>
+                                <p:tooltip for="upaccCat" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="upaccStatus" class="alright valLabel" value="Status : " title="Account Status"/>
+                                <p:inplace emptyLabel="null" effect="slide" label="#{userAccountController.upUserAccount.accountStatus.status}">
+                                    <h:selectOneMenu id="upaccStatus" value="#{userAccountController.upUserAccount.accountStatus}" required="true" requiredMessage="Account Status Required" title="Account Statusl" style="width: 450px">
+                                        <f:selectItems value="#{commonOptions.statusOptions}"/>
+                                    </h:selectOneMenu>
+                                </p:inplace>
+                                <p:message for="upaccStatus" showSummary="false" showDetail="false" display="icon">
+                                    <p:effect event="load" type="bounce" />
+                                </p:message>
+                                <p:tooltip for="upaccStatus" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="upuserName" class="alright valLabel" value="Username : " title="Account username for access account"/>
+                                <h:inputText disabled="true" readonly="true" id="upuserName" value="#{userAccountController.upUserAccount.username}" required="true" requiredMessage="Username Required" title="Account username for access account" style="width: 450px" />
+                                <p:message for="upuserName" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="upuserName" showEvent="focus" hideEvent="blur"/>
+                            </h:panelGrid>
+                        </div>
+
+                        <div  class="form-actions">
+                            <div class="pull-right" style="margin-right: 150px">
+                                <h:panelGrid columns="3" cellpadding="4">
+                                    <a class="btn btn-success btn-large" style="color: #FFFFFF" href="#AccntUpdate" data-toggle="modal" title="Update user details">
+                                        <i class="icon-check"></i> Update
+                                    </a>
+
+                                    <a id="refreshFields" class="btn btn-warning btn-large" style="color: #FFFFFF" onclick="window.location.reload(true);" title="Refresh form">
+                                        <i class="icon-refresh"></i> Refresh
+                                    </a>
+
+                                    <a id="back" class="btn btn-danger btn-large" style="color: #FFFFFF" href="#upBack" data-toggle="modal" title="Go back to previous page">
+                                        <i class="icon-arrow-left"></i> Back
+                                    </a>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+
+                        <!--Confirm Update User Account modal-->
+                        <div class="modal hide" id="AccntUpdate" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: #3a87ad">
+                                <h3>Update User Account Details</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you want to <span style="color: green">update</span> account details?<br /> 
+                                    Press Yes to update</p><br />
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to update details" class="btn btn-primary" style="color: #FFFFFF" action="#{userAccountController.updateAccount()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                    </h:form>
+
+                    <!--Back modal-->
+                    <div class="modal hide" id="upBack" style="width: 400px; left: 65%">
+                        <h:form>
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Warning</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Changes on values will be ignored!!<br /> 
+                                    Press Yes to go back</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to go back to list" class="btn btn-primary" style="color: #FFFFFF" action="#{userAccountController.toUserAccountList()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </h:form>
+                    </div>
+                    <!--End Modal-->
+                    
+                </p:tab>
+                <!--End of tab-->
+                
+            </p:tabView>
+        </p:panel>
+            
+    </h:body>
+</html>
+

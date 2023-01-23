@@ -1,0 +1,304 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:body>
+        <p:accordionPanel activeIndex="#{generalStatisticsController.currentTab}">
+            <p:tab title="Property Usage" >
+                <h:form >
+                    <h:panelGrid columns="2">
+                        <h:outputText value="View Distribution by:"/>
+                        <h:selectOneMenu value="#{generalStatisticsController.propertyLoadingConstraint}">
+                            <f:selectItems value="#{commonOptions.propertyOccupiedAsOptions}"/>
+                            <f:selectItem itemValue="NONE" itemLabel="All"/>
+                        </h:selectOneMenu>
+                    </h:panelGrid>
+                    <div class="form-actions">
+                        <h:commandLink target="_blank" styleClass="btn btn-info" style="color: #FFFFFF"
+                                       action="#{generalStatisticsController.propertyUsageReport}" >
+                            <i class="icon-print icon-white"></i>Property Usage Distribution
+                            <f:setPropertyActionListener value="0" target="#{generalStatisticsController.currentTab}"/>
+                        </h:commandLink>
+                    </div>
+                </h:form>
+
+            </p:tab>
+
+            <p:tab title="Ledger Reports" >
+                <p:tabView>
+
+                    <p:tab title="Ledger Summaries">
+                        <h:form>
+                            <h:panelGroup layout="block">
+                                <h:panelGrid columns="6">
+                                    <h:outputLabel value=" Estate" />
+                                    <h:selectOneMenu value="#{generalStatisticsController.selectedEstate}">
+                                        <f:selectItems value="#{commonOptions.estateOptions}"/>
+                                    </h:selectOneMenu>
+
+                                    <h:outputText value="Property Usage" />
+                                    <h:selectOneMenu value="#{generalStatisticsController.propertyUsage}" >
+                                        <f:selectItems value="#{commonOptions.propertyUsage}" />
+                                    </h:selectOneMenu>
+                                    <h:outputText value="Ledger Year"/>
+                                    <h:selectOneMenu value="#{generalStatisticsController.selectedYear}">
+                                        <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                    </h:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                            <div class="form-actions">
+                                <h:commandLink target="_blank" styleClass="btn btn-info" style="color: #FFFFFF" action="#{generalStatisticsController.reportEstateOccupantLedgersSummary}" >
+                                    <i class="icon-white icon-print"></i>Show Current Ledger Summaries
+                                    <f:setPropertyActionListener value="1" target="#{generalStatisticsController.currentTab}"/>
+                                </h:commandLink>
+                            </div>
+                        </h:form>
+                    </p:tab>
+
+                    <!-- -->
+                    <p:tab title="Ledger Categories">
+                        <h:form>
+                            <h:panelGroup layout="block">
+                                <h:panelGrid columns="8">       
+                                    <h:selectOneMenu  value="#{generalStatisticsController.selectReportType}">                    
+                                        <p:ajax event="change" listener="#{generalStatisticsController.processValueChange}" update="monthsCombo"/>
+                                        <f:selectItem itemValue="null" itemLabel="...Select Report Category..."/>
+                                        <f:selectItems value="#{commonOptions.reportTypesOptions}" />
+                                    </h:selectOneMenu>
+
+                                    <h:selectOneMenu id="monthsCombo" value="#{generalStatisticsController.selectedMonth}">
+                                        <f:selectItem itemValue="null" itemLabel="...Select One..."/>
+                                        <f:selectItems value="#{generalStatisticsController.calenderMonthNamesOptions}" />
+                                    </h:selectOneMenu>
+                                    <h:selectOneMenu  value="#{generalStatisticsController.selectedYear}" >
+                                        <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                    </h:selectOneMenu>
+                                    <h:outputText value="Ledger For" />
+                                    <h:selectOneMenu  value="#{generalStatisticsController.propertyLoadingConstraint}" >
+                                        <f:selectItems value="#{commonOptions.propertyOccupiedAsOptions}" />
+                                        <f:selectItem itemValue="NONE" itemLabel="All" />
+                                    </h:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGroup>
+
+                            <div class="form-actions">
+                                <h:commandLink target="_blank" action="#{generalStatisticsController.yearLedgerReport()}"
+                                               styleClass="btn btn-info" style="color: #FFFFFF">
+                                    <i class="icon-white icon-print"></i>Print ledger report
+                                    <f:setPropertyActionListener value="1" target="#{generalStatisticsController.currentTab}"/>
+                                </h:commandLink>
+                            </div>
+                        </h:form>
+                    </p:tab>
+
+                    <p:tab title="Ledger Payments">
+                        <h:form>
+                            <h:panelGroup layout="block">
+                                <h:panelGrid columns="9">
+                                    <h:outputText value="Year" />
+                                    <h:selectOneMenu >
+                                        <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                    </h:selectOneMenu>&nbsp;
+                                    <h:outputText value="Month"/>
+                                    <h:selectOneMenu>
+                                        <f:selectItems value="#{commonOptions.calenderMonthNamesOptions}" />
+                                    </h:selectOneMenu>&nbsp;
+                                    <h:outputText value="Payment Type" />
+                                    <h:selectOneMenu>
+                                        <f:selectItems value="#{commonOptions.paymentTypeOptions}"/>
+                                    </h:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                            <div class="form-actions">
+                                <h:commandLink  styleClass="btn btn-info" style="color: #FFFFFF" target="_blank">
+                                    <i class="icon-white icon-print"></i>Print Payments
+                                </h:commandLink>
+                            </div>
+                        </h:form>
+                    </p:tab>
+                </p:tabView>
+            </p:tab>
+
+            <p:tab title=" Ground Rent Demand Notice" >
+                <h:form>
+                    <h:panelGroup layout="block">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Bill Years"/>
+                            <h:selectOneMenu  value="#{generalStatisticsController.selectedYear}" >
+                                <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGroup>
+
+                    <ui:include src="/includes/property_selection.xhtml" />
+                    <div class="form-actions">
+                        <h:commandLink target="_blank" styleClass="btn btn-info" style="color: #FFFFFF"
+                                       action="#{generalStatisticsController.reportGroundRentDemandNotice}" >
+                            <i class="icon-white icon-print"></i>Generate Demand Notice For Estate
+                            <f:setPropertyActionListener value="2" target="#{generalStatisticsController.currentTab}"/>
+                        </h:commandLink>
+                    </div>
+                </h:form>
+            </p:tab>
+
+            <p:tab title="Occupants Balance"  rendered="false">
+                <h:form>
+                    <h:outputLabel value="Property Occupant Estate" />
+                    <h:selectOneMenu value="#{generalStatisticsController.selectedEstate}">
+                        <f:selectItems value="#{commonOptions.estateOptions}"/>
+                    </h:selectOneMenu>
+                    <div class="form-actions">
+                        <h:commandLink target="_blank" action="#{generalStatisticsController.propertyOccupants}" style="color: #FFFFFF">
+                            <i class="icon-white icon-print"></i>Print Occupants Balance
+                            <f:setPropertyActionListener value="3" target="#{generalStatisticsController.currentTab}"/>
+                        </h:commandLink>
+                    </div>
+                </h:form>
+            </p:tab>
+
+            <p:tab title="Return of Arreas">
+                <p:tabView>
+                    <p:tab title="House Rent">
+                        <h:form>
+                            <h:panelGrid columns="6">       
+                                <h:selectOneMenu  value="#{generalStatisticsController.selectReportType}">                    
+                                    <p:ajax event="change" listener="#{generalStatisticsController.processValueChange}" update="monthsCombo"/>
+                                    <f:selectItem itemValue="null" itemLabel="...Select Report Category..."/>
+                                    <f:selectItems value="#{commonOptions.reportTypesOptions}" />
+                                </h:selectOneMenu>
+
+                                <h:selectOneMenu id="monthsCombo" value="#{generalStatisticsController.selectedMonth}">
+                                    <f:selectItem itemValue="null" itemLabel="...Select One..."/>
+                                    <f:selectItems value="#{generalStatisticsController.calenderMonthNamesOptions}" />
+                                </h:selectOneMenu>
+                                <h:selectOneMenu  value="#{generalStatisticsController.selectedYear}" >
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            <div class="form-actions">
+                            <h:commandLink target="_blank" styleClass="btn btn-info" action="#{generalStatisticsController.reportRentalReport}" 
+                                           style="color: #FFFFFF">
+                                <i class="icon-white icon-print"></i>Rental Units Arrears Report
+                                <f:setPropertyActionListener value="4" target="#{generalStatisticsController.currentTab}"/>
+                            </h:commandLink>
+                        </div>
+                        </h:form>
+                        
+                    </p:tab>
+
+                    <!--<p:tab title="Ground Rent">
+                        <h:form>
+                            <h:panelGrid columns="8">
+                                <h:selectOneMenu  value="#{generalStatisticsController.selectedEstate}">
+                                    <f:selectItems value="#{commonOptions.estateOptions}"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu  value="#{generalStatisticsController.selectReportType}">                    
+                                    <p:ajax event="change" listener="#{generalStatisticsController.processValueChange}" update="monthsCombo"/>
+                                    <f:selectItem itemValue="null" itemLabel="...Select Report Category..."/>
+                                    <f:selectItems value="#{commonOptions.reportTypesOptions}" />
+                                </h:selectOneMenu>
+
+                                <h:selectOneMenu id="monthsCombo" value="#{generalStatisticsController.selectedMonth}">
+                                    <f:selectItem itemValue="null" itemLabel="...Select One..."/>
+                                    <f:selectItems value="#{generalStatisticsController.calenderMonthNamesOptions}" />
+                                </h:selectOneMenu>
+                                <h:selectOneMenu  value="#{generalStatisticsController.selectedYear}" >
+                                    <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+
+                            <div class="form-actions">
+                                <h:commandLink target="_blank" styleClass="btn btn-info" style="color: #FFFFFF" 
+                                               action="#{generalStatisticsController.reportLeaseReport()}">
+                                    <i class="icon-white icon-print"></i>Leasehold Units Arrears Report
+                                    <f:setPropertyActionListener value="4" target="#{generalStatisticsController.currentTab}"/>
+                                </h:commandLink>
+
+                            </div>
+                        </h:form>
+                    </p:tab>-->
+                </p:tabView>
+            </p:tab>
+
+            <p:tab title="Spread Rent Balance"  rendered="false">
+                <h:form rendered="true">
+
+                    <h:selectOneMenu value="#{generalStatisticsController.selectedEstate}">
+                        <f:selectItems value="#{commonOptions.estateOptions}"/>
+                    </h:selectOneMenu>
+                    <h:commandLink value="spread ground rent bill" target="_blank"
+                                   action="#{generalStatisticsController.spreadGroundRentArreas}">
+                        <f:setPropertyActionListener value="5" target="#{generalStatisticsController.currentTab}"/>
+                    </h:commandLink>
+                </h:form>
+
+            </p:tab>
+
+            <p:tab title="Ground/Rental Properties Report" >
+                <h:form>
+                    <h:panelGrid columns="6">       
+                        <h:selectOneMenu  value="#{generalStatisticsController.selectReportType}">                    
+
+                            <p:ajax event="change" listener="#{generalStatisticsController.processValueChange}" update="monthsCombo"/>
+                            <f:selectItem itemValue="null" itemLabel="...Select Report Category..."/>
+                            <f:selectItems value="#{commonOptions.reportTypesOptions}" />
+                        </h:selectOneMenu>
+
+                        <h:selectOneMenu id="monthsCombo" value="#{generalStatisticsController.selectedMonth}">
+                            <f:selectItem itemValue="null" itemLabel="...Select One..."/>
+                            <f:selectItems value="#{generalStatisticsController.calenderMonthNamesOptions}" />
+                        </h:selectOneMenu>
+                        <h:selectOneMenu  value="#{generalStatisticsController.selectedYear}" >
+                            <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                        </h:selectOneMenu>
+                        <h:outputText value="|Rent Type" />
+                        <h:selectOneMenu value="#{generalStatisticsController.propertyLoadingConstraint}">
+                            <f:selectItems value="#{commonOptions.propertyOccupiedAsOptions}" />
+                        </h:selectOneMenu>
+
+                    </h:panelGrid>
+                    <div class="form-actions">
+                        <h:commandLink styleClass="btn btn-info" target="_blank" style="color: #FFFFFF"
+                                       actionListener="#{generalStatisticsController.generateBillsPaidReport}" >
+                            <i class="icon-white icon-print"></i>Generate Report for Bills Paid
+                            <f:setPropertyActionListener value="7" target="#{generalStatisticsController.currentTab}"/>
+                        </h:commandLink>
+                    </div>
+
+                </h:form>
+
+                <p:panel header="Advanced Search">
+                    <h:form>
+                        <h:panelGroup>
+                            <h:panelGrid columns="6" style="font-size: 13px">
+                                <h:outputLabel value="Trans. Date From:" />
+                                <p:calendar value="#{generalStatisticsController.beginDate}"/>
+                                <h:outputLabel value="Trans. Date To:" />
+                                <p:calendar value="#{generalStatisticsController.endDate}"/>
+                                <h:outputText value="|Rent Type" />
+                                <h:selectOneMenu value="#{generalStatisticsController.propertyLoadingConstraint}">
+                                    <f:selectItems value="#{commonOptions.propertyOccupiedAsOptions}" />
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            <div class="form-actions">
+                                <h:commandLink styleClass="btn btn-info" target="_blank" style="color: #FFFFFF"
+                                               action="#{generalStatisticsController.generatePaidRentals}" >
+                                    <i class="icon-white icon-print"></i>Generate Report for Bills Paid
+                                    <f:setPropertyActionListener value="7" target="#{generalStatisticsController.currentTab}"/>
+                                </h:commandLink>
+                            </div>
+                        </h:panelGroup>
+                    </h:form>
+                </p:panel>
+
+            </p:tab>
+            
+            
+        </p:accordionPanel>
+    </h:body>
+</html>
+

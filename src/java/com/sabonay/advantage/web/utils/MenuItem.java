@@ -1,0 +1,41 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.sabonay.advantage.web.utils;
+
+/**
+ *
+ * @author crash
+ */
+public enum MenuItem {
+    ALL_ITEMS,
+    
+    ESTATE_BLOCK_ITEM,
+    ESTATE_PROPERTY_ITEM,
+    ESTATE_ITEM,
+    BILL_ITEM,
+    CHARGES_ITEM,
+    STAFF_ITEM,
+    ESTATE_PROPERTY_LEDGER_ITEM,
+    GENERAL_REPORT_ITEM,
+    RENTAL_BILLING_ITEM,
+    GRND_RENT_SETUP_ITEM,
+    BILL_PAYMENT_ITEM,
+    PAYMENT_REVERSAL_ITEM,
+    USER_ACCOUNT_ITEM,
+    OCCUPANT_PROPERTY_ITEM,
+    PROPERTY_OCCUPANT_ITEM,
+    GRND_RENT_ARREARS_ITEM,
+    ROLES_ITEM,
+    PROPERTY_REASSIGN_ITEM,
+    UPLOAD_SIGNATURE_ITEM,
+    SMS_ITEM,
+    SMS_BILL_ITEM,
+    SMS_TOPUP_ITEM,
+    HELP,
+    BLOCK_ESTATEPPT_ITEM,
+    CORRECT_ESTATEPPT_ITEM,
+    BILL_STATUS,
+    GENERATE_DEMANDNOTICE_ITEM
+}

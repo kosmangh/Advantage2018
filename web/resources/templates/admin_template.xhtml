@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputStylesheet library="css" name="default.css"/>
+        
+        <style type="text/css">
+            .enough{
+                color: #62c462;
+            }
+            
+            .medium{
+                color: #5BC0DE;
+            }
+            
+            .low{
+                color:tomato;
+            }
+            
+            .critical{
+                color: red;
+            }
+        </style>
+    </h:head>
+    
+    <h:body>
+        <!--Main content-->
+
+        <div class="container-fluid">
+            <div class="default_border">
+                <ui:insert name="banner">  
+                    <h:panelGroup styleClass="banner" layout="block">
+                    </h:panelGroup> 
+                </ui:insert>
+                
+                <ui:insert name="nav_bar">
+                    <div class="navbar">
+                        <div class="navbar-inner">
+                            <!--Put in a form-->
+                            <h:form>
+                                <p:growl autoUpdate="true" life="4200" />
+                                
+                                <div class="navbar-collapse">
+                                    <ul class="nav pull-left">
+                                        <li style="color: #FFFFFF">
+                                            SMS Credit Balance: <h:outputText id="credit-balance" class="enough" rendered="#{indexPageController.canView}" value="#{indexPageController.creditLeft}"/>
+                                        </li>
+                                    </ul>
+                                    
+                                    <ul class="nav pull-right">
+                                        <li class="dropdown">
+                                            <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="icon-user icon-white"></i> Welcome #{userdata.currentUser.username} <span class="caret"></span></a>
+                                            <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                                                <li><a title="Update account credentials" href="#changePwdModal" data-toggle="modal">Change Password</a></li>
+                                                <li><h:commandLink action="#{userdata.setRequestedPageURL('pages/user_profile.xhtml')}" title="View and update your profile details">Profile</h:commandLink></li>
+                                                <!--<li><a title="View and update your profile details">Profile <span style="color: whitesmoke; background-color: tomato; margin-left: 10px; border-radius: 4px"><strong style="margin: 8px"><b>Upcoming</b></strong></span></a></li>-->
+                                                <li><a title="Take full control of your account protection and security measures">Security <span style="color: whitesmoke; background-color: tomato; margin-left: 10px; border-radius: 4px"><strong style="margin: 8px"><b>Upcoming</b></strong></span></a></li>
+                                                <li><a title="Discuss advantage">Forum <span style="color: whitesmoke; background-color: tomato; margin-left: 10px; border-radius: 4px"><strong style="margin: 8px"><b>Upcoming</b></strong></span></a></li>
+                                            </ul>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="#signOut" data-toggle="modal">
+                                                <i class="icon-off icon-white"></i> #{msg.logout}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!--Sign out modal-->
+                                <div class="modal hide" id="signOut" style="width: 400px; left: 65%">
+                                    <div class="modal-header" style="background-color: red">
+                                        <h3>Account Sign-Out</h3>
+                                    </div>
+                                    
+                                    <div class="modal-body">
+                                        <p align="center">Do you really want to <span style="color: red; font-weight: bold">Sign-out</span> <br />
+                                        of account</p>
+                                    </div>
+                                    
+                                    <div class="modal-footer">
+                                        <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                            No <i class="icon-thumbs-down"></i>
+                                        </a>
+                                        <h:commandLink title="click to sign-out of account" style="color: #FFFFFF" class="btn btn-primary" action="#{indexPageController.logout}">
+                                            Yes <i class="icon-thumbs-up"></i>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                                <!--End of Modal-->
+                                
+                                <div class="modal hide" id="changePwdModal">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">×</button>
+                                        <h3>Change Password</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p:growl />
+                                        <h:panelGroup layout="block">
+                                            <h:panelGrid columns="1">
+                                                <p:inputText placeholder="Old Password" styleClass="input-xlarge" value="#{indexPageController.oldPassword}"/>
+                                                <p:inputText placeholder="New Password" styleClass="input-xlarge" value="#{indexPageController.newPassword}"/>
+                                            </h:panelGrid>
+                                        </h:panelGroup>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="#" class="btn btn-warning" data-dismiss="modal">Close</a>
+                                        <h:commandButton value="Save Changes" styleClass="btn btn-primary" action="#{indexPageController.changePassword()}"/>
+                                    </div>
+                                </div>
+                                
+                            </h:form>
+                        </div>
+                    </div>
+                </ui:insert>
+
+                <div class="row-fluid">
+                    <!--User actions column-->
+                    <!--Left column-->
+                    <div class="span2">
+                        <div class="ui-widget">
+                            <ui:insert name="left">
+                                <h:panelGroup styleClass="user_actions_bg" layout="block">
+                                    <p:panel header="MENU"/>
+                                    <ui:include src="/includes/user_actions.xhtml"/>
+                                </h:panelGroup>
+                            </ui:insert>
+                        </div>
+                    </div>
+                    
+                    <!--User action displays-->
+                    <div class="span10 ">
+                        <h:form>
+                            <h:panelGroup layout="block" rendered="#{rentalBillingController.renderMessageDisplay}" >
+                                <h:outputText value="RENTAL BILLS NOT APPLIED TO RENTAL UNITS THIS MONTH, PLEASE DO SO !!" styleClass="notification" style="margin-left: 20px; margin-right: 20px; border-radius: 5px; text-align: center"/>
+                            </h:panelGroup>
+                        </h:form>
+
+                        <div class="ui-widget">
+
+                            <div class="hero-unit">
+                                <ui:insert name="right">
+                                    Hello welcome, #{userdata.currentUser.username}
+                                </ui:insert>
+                            </div>
+                        </div>
+                        
+                        <h:outputScript library="js" name="smessjs.js"/>
+                        <h:outputScript library="js" name="bootstrap.min.js"/>
+                        <h:outputScript name="jquery/jquery.js" library="primefaces" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+    </h:head>
+    <h:body>
+        <h:panelGroup layout="block">
+            <h:panelGrid columns="6" style="display: inline-table;">
+                <h:outputText value="Estate" />
+                <h:selectOneMenu value="#{propertySelectionController.selectedEstate}" valueChangeListener="#{propertySelectionController.estateChangeListener}">
+                    <p:ajax event="change" immediate="true" update="estateBlockCombo" />
+                    <f:selectItems value="#{commonOptions.estateOptions}" />
+                </h:selectOneMenu>
+
+                <h:outputText value="Block" />
+                <h:selectOneMenu id="estateBlockCombo" value="#{propertySelectionController.selectedEstateBlock}" valueChangeListener="#{propertySelectionController.loadRentedEstatePropertyChangeListener}">
+                    <p:ajax event="change" immediate="true" update="estatePropertyCombo" />
+                    <f:selectItems value="#{propertySelectionController.selectedEstateBlocksOptions}"/>
+                </h:selectOneMenu>
+
+                <h:outputText value="Property No." />
+                <h:selectOneMenu id="estatePropertyCombo" value="#{propertySelectionController.selectedEstateProperty}"  >
+                    <f:selectItems value="#{propertySelectionController.selectedEstatePropertiesOptions}" />
+                </h:selectOneMenu>
+            </h:panelGrid>
+        </h:panelGroup>
+    </h:body>
+</html>
+

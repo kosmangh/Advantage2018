@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+        
+        <h:outputStylesheet library="css" name="bootstrap.css" />
+        <style type="text/css">
+            .modal-footer {
+                border-top: 0px; 
+            }
+            
+            #logo{
+                width: 80%;
+                height: 180px;
+                border-radius: 10px;
+            }
+        </style>
+    </h:head>
+    
+    <h:body>
+        <h:form>
+            <p:growl autoUpdate="true" life="4200"/> 
+        </h:form>
+        
+        <div align="center">
+            <img id="logo" alt="Logo" src="img/Advantage_Big_Logo.jpg"/>
+        </div>
+        
+        <div class="modal" id="login-div" style="top: 75%">
+            <div class="modal-header">
+                <h1 class="text-center">Login</h1>
+            </div>
+            
+            <div class="modal-body">
+                <h:form class="form center-block" prependId="false">
+                    <div class="form-group">
+                        <p:inputText placeholder="Username" value="#{indexPageController.username}" styleClass="input-block-level" required="true" requiredMessage="Username Required"/>
+                    </div>
+                    <div class="form-group">
+                        <p:password placeholder="Password" value="#{indexPageController.password}" styleClass="input-block-level" required="true" requiredMessage="Password Required" />
+                    </div>
+                    <div class="form-group">
+                        <h:commandButton class="btn btn-primary btn-large" action="#{indexPageController.userLogin()}"  title="click to access your account" style="color: whitesmoke;" value="#{msg.signin}" />
+                        <span class="pull-right" style="margin-right: 30px;margin-top: 50px;" title="More about Sabonay and available services being provided"><a href="http://www.sabonay.com" target="_blank">About Us!</a></span><span><a href="javascript:;" title="Reset Password" id="forget-pswrd">Forgotten Password?</a></span>
+                    </div>
+                    <br />
+                </h:form>
+            </div>
+            <div class="modal-footer">
+                <h4 align="center"><span style="color: tomato;">Welcome!</span> to Advantage System App<br /> Please provide your credentials to access your account</h4>
+            </div>
+        </div>
+        
+        
+        <!--Beginning of Forget Password-->
+        <div class=" modal hide" id="forget-pswrd-div" style="top: 75%">
+            <div class="modal-header">
+                <h1 class="text-center">Forgotten Password</h1>
+            </div>
+            
+            <div class="modal-body">
+                <h:form class="form center-block" prependId="false">
+                    <div class="form-group">
+                        <label style="color: #333; font-weight: bold; font-size: 14px;">Username :</label>
+                        <h:inputText title="Account Username" styleClass="input-block-level" required="true" requiredMessage="Account Username Required" value=""/>
+                        
+                        <label style="color: #333; font-weight: bold; font-size: 14px;">Email :</label>
+                        <h:inputText title="Account's Email" styleClass="input-block-level" disabled="true" required="true" requiredMessage="Account Email Required"/>
+                    </div>
+                    
+                    <div class="form-horizontal">
+                        <h:commandLink title="click to Send Code" class="btn btn-large btn-info disabled" disabled="true" style="color: whitesmoke; cursor: not-allowed">
+                           Submit <i class="icon-check"></i>
+                        </h:commandLink> 
+                        <a class="btn btn-large btn-danger" id="forget-cancel">
+                            Cancel <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </h:form>
+                
+                <div class="form-horizontal" align="right">
+                    <a id="secqtns" title="Use the security questions option to retrieve your password if you have answered a security question from the system security section" href="javascript:;">Use Security Questions</a><br/>
+                    <a id="sndpswrd" title="Request system to send a default password to your mobile which can be used to log onto user's account" href="javascript:;">SMS Password</a>
+                </div>
+                
+            </div>
+            
+            <div class="modal-footer">
+                <h4 align="center"><span style="color: tomato;">Sabonay</span> Advantage system App<br /> is the solution for Estate Companies</h4>
+            </div>
+        </div>
+        <!--End of Forget Password-->
+        
+        
+        <!--Beginning of Security Question-->
+        <div class=" modal hide" id="sec-qtns-div" style="top: 75%">
+            <div class="modal-header">
+                <h1 class="text-center">Security Question</h1>
+            </div>
+            
+            <div class="modal-body">
+                <h:form class="form center-block" prependId="false">
+                    <div class="form-group">
+                        <label style="color: #333; font-weight: bold; font-size: 14px;">Username :</label>
+                        <h:inputText title="Account Username" styleClass="input-block-level" required="true" requiredMessage="Account Username Require" />
+                    </div>
+                    
+                    <div class="form-horizontal">
+                        <a title="click to initiate questions" class="btn btn-large btn-info disabled" disablesd="true" style="color: whitesmoke; cursor: not-allowed">
+                           Ask Me <i class="icon-check"></i>
+                        </a> 
+                        <a class="btn btn-large btn-danger" id="sec-cancel">
+                            Cancel <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </h:form>
+            </div>
+            
+            <div class="modal-footer">
+                <h4 align="center"><span style="color: tomato;">Sabonay</span> Advantage provides it all.<br/> Make use of the Advantage reports for executive decisions</h4>
+            </div>
+        </div>
+        <!--End of Security Questions-->
+        
+        
+        <!--Beginning of Messaging feature-->
+        <div class=" modal hide" id="msg-pswrd-div" style="top: 75%">
+            <div class="modal-header">
+                <h1 class="text-center">SMS Password</h1>
+            </div>
+            
+            <div class="modal-body">
+                <h:form class="form center-block" prependId="false">
+                    <div class="form-group">
+                        <label style="color: #333; font-weight: bold; font-size: 14px;">Username :</label>
+                        <h:inputText title="Account Username" styleClass="input-block-level" required="true" requiredMessage="Account Username Require"/>
+                    </div>
+                    
+                    <div class="form-horizontal">
+                        <a title="click to Send Code" class="btn btn-large btn-info disabled" disabled="true" style="color: whitesmoke; cursor: not-allowed">
+                           Send <i class="icon-check"></i>
+                        </a> 
+                        <a class="btn btn-large btn-danger" id="msg-cancel">
+                            Cancel <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </h:form>
+            </div>
+            
+            <div class="modal-footer">
+                <h4 align="center"><span style="color: tomato;">Sabonay</span> SMS makes your work easy.<br/> The SMS feature provides the platform to send messages from web to mobile<br/><span style="color: red">Note</span> :This comes with additional charges. Visit <a href="www.sabonay.com">www.sabonay.com</a> for more info.</h4>
+            </div>
+        </div>
+        <!--End of SMS-->
+        
+        
+        
+        <h:outputScript library="js" name="bootstrap.min.js"/>
+        <h:outputScript library="primefaces" name="jquery/jquery.js"  />
+        <script>
+            jQuery(document).ready(
+                function () {
+                    $('#forget-pswrd').click(function () {
+                        $('#forget-pswrd-div').removeClass('hide');
+                        $('#login-div').hide();
+                        $('#forgot-pswrd-div').show(200);
+                    });
+
+                    $('#forget-cancel').click(function () {
+                        $('#forget-pswrd-div').addClass('hide');
+                        $('#login-div').slideDown(200);
+                        $('#forget-pswrd-div').slideUp(200);
+                    });
+                    
+                    $('#secqtns').click(function (){
+                        $('#sec-qtns-div').removeClass('hide');
+                        $('#forget-pswrd-div').addClass('hide');
+                        $('#sec-qtns-div').show(200);
+                    });
+                    
+                    $('#sec-cancel').click(function () {
+                        $('#sec-qtns-div').addClass('hide');
+                        $('#login-div').slideDown(200);
+                        $('#sec-qtns-div').slideUp(200);
+                    });
+                    
+                    $('#sndpswrd').click(function (){
+                        $('#msg-pswrd-div').removeClass('hide');
+                        $('#forget-pswrd-div').addClass('hide');
+                        $('#msg-pswrd-div').show(200);
+                    });
+                    
+                    $('#msg-cancel').click(function (){
+                        $('#msg-pswrd-div').addClass('hide');
+                        $('#login-div').slideDown(200);
+                        $('#msg-pswrd-div').slideUp(200);
+                    });
+                    
+                }
+            );
+        </script>
+    </h:body>
+</html>
+

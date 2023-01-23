@@ -1,0 +1,505 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+  
+    <h:body>
+        <style type="text/css">
+            .tip_box{
+                height: 50px;
+                width: 500px;
+                color: whitesmoke;
+                background-color: tomato;
+                border-radius: 8px;
+                border-color: #363636;
+                border-width: thin;
+                box-shadow: #363636 0.4, #444444 0.4, #595959 0.4;
+            }
+            
+            .colorRed{
+                color: red;
+            }
+            
+            .colorGreen{
+                color: green;
+            }
+            
+            .VLabel{
+                font-weight: bold;
+                text-align: right;
+                margin-left: 210px;
+                font-size: medium
+            }
+            
+            .MLabel{
+                font-weight: bold;
+                font-size: medium
+            }
+        </style>
+        
+        <p:panel header="Estate(s)">
+            <p:tabView effect="slide" effectDuration="slow" activeIndex="#{estateController.tabIndex}" prependId="false" class="tabs-stacked tab-pane tabs-right">
+                <!--Beginning of tab 1-->
+                <p:tab title="Estate(s) Register" class="tab-content tab">
+                    <h:form prependId="false">
+                        <br />
+                        <p:growl autoUpdate="true" life="3800" showSummary="true" showDetail="false" globalOnly="true"/>
+                        <p:messages autoUpdate="true" closable="true" globalOnly="true" severity="Severity.error" showIcon="true" showDetail="true" showSummary="false" style="text-align: center">
+                            <p:effect event="load" type="pulsate" delay="500" />
+                        </p:messages>
+                        <br />
+                        <br />
+                        
+                        <div align="left">
+                            <h:commandLink class="btn btn-info btn-large" style="color: #FFFFFF" title="click to add a new estate to already existing ones" action="#{estateController.toNewEstate()}">
+                                <i class="icon-plus"></i> New Estate
+                            </h:commandLink>
+                        </div>
+                        <br />
+                        <br />
+                        
+                        <div>
+                            <div align="right" style="float: right">
+                                <h:panelGrid columns="3" cellpadding="3">
+                                    <h:selectOneMenu value="#{estateController.searchItem}" title="select item to base on during a search" style="width: 100%">
+                                        <f:selectItem itemLabel="Estate Name" itemValue="estateName"/>
+                                        <f:selectItem itemLabel="Location" itemValue="estateLocation" />
+                                    </h:selectOneMenu>
+                                    <h:inputText value="#{estateController.searchString}" style="width: 300px" a:placeholder="Enter Search Item..." a:type="search"/>
+                                    <h:commandLink action="#{estateController.estateSearch}" class="btn btn-primary" style="font-weight: bold; color: whitesmoke; margin-top: -10px" title="search for an estate">
+                                        <i class="icon-search"></i> #{msg.search}
+                                    </h:commandLink>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        <br /> <br /> <br />
+                        
+                        <div align="left" style="float: left">
+                            <h:outputText style="font-weight: 600; font-size: large; color: #0074cc" value="#{estateController.totalEstates}"/>
+                        </div>
+                        
+                        <p:dataTable tableStyle="table-hover" var="es" value="#{estateController.estateDataModel}" rows="25" paginator="true" emptyMessage="No Record(s) found" paginatorPosition="bottom" >
+                            <p:column width="5%" style="text-align: center">
+                                <h:selectBooleanCheckbox value="#{es.selected}" title="select row"/>
+                            </p:column>
+                            
+                            <p:column>
+                                <f:facet name="header">#{msg.estatname}</f:facet>
+                                <h:outputText value="#{es.estateName}" title="Estate's Name"/>
+                            </p:column>
+                            
+                            <p:column width="7%" style="text-align: center">
+                                <f:facet name="header">Initials</f:facet>
+                                <h:outputText value="#{es.estateId}" title="Estate Initials"/>
+                            </p:column>
+                            
+                            <p:column width="10%" style="text-align: center">
+                                <f:facet name="header">#{msg.class}</f:facet>
+                                <h:outputText value="#{es.estateClass}" title="Estate's Class"/>
+                            </p:column>
+                            
+                            <p:column width="8%" style="text-align: center">
+                                <f:facet name="header">Land Size</f:facet>
+                                <h:outputText value="#{es.landSize}" title="Size of Estate"/>
+                            </p:column>
+                            
+                            <p:column width="8%" style="text-align: center">
+                                <f:facet name="header">Size Left</f:facet>
+                                <h:outputText value="#{es.landsizeleft}" title="Land size left to be used"/>
+                            </p:column>
+                            
+                            <p:column width="12%" style="text-align: center">
+                                <f:facet name="header">Duration Left</f:facet>
+                                <h:outputText value="#{es.durationLeft}" title="Estate's Location"/>
+                            </p:column>
+                            
+                            <p:column width="6%" style="text-align: center">
+                                <f:facet name="header">Blocks</f:facet>
+                                <h:outputText value="#{es.totalBlock}" title="Total number of Blocks assigned to this Estate"/>
+                            </p:column>
+                            
+                            <p:column width="10%" style="text-align: center">
+                                <f:facet name="header">Property(s)</f:facet>
+                                <h:outputText value="#{es.totalProperty}" title="Total number of Properties assigned to this Estate (Blocks)"/>
+                            </p:column>
+                            
+                            <p:column width="13%">
+                                <f:facet name="header">#{msg.actions}</f:facet>
+                                <h:commandLink class="btn btn-small btn-info" style="color: #FFFFFF" action="#{estateController.estateRowSelction()}" title="Click to edit Estate's info">
+                                    <i class="icon-pencil"></i> #{msg.edit}
+                                </h:commandLink> &nbsp;
+                                
+                                <h:commandLink class="btn btn-small btn-primary disabled" style="color: #FFFFFF; cursor: not-allowed" disabled="true" title="View Estate details" action="#{estateController.viewEstDetails()}">
+                                    <i class="icon-eye-open"></i>
+                                </h:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                        <br />
+                        
+                        <div align="right">
+                            <h:panelGrid columns="2" cellpadding="4">
+                                <a class="btn btn-danger btn-large" style="color: #FFFFFF" href="#estateDelete" data-toggle="modal" title="Delete selected estates">
+                                    <i class="icon-trash"></i> Delete
+                                </a>
+                                <h:commandLink class="btn btn-large" style="color: #000000" action="#{estateController.refreshList()}" title="click to refresh estates list" >
+                                    <i class="icon-refresh"></i> Refresh
+                                </h:commandLink>
+                            </h:panelGrid>
+                        </div>                        
+                        <!--End table-->
+                        
+                        
+                        <!--Delete Estate modal-->
+                        <div class="modal hide" id="estateDelete" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Delete Estate(s)</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you really want to <span style="color: tomato;  font-weight: bold">delete</span> <br />
+                                selected Estate(s)?</p><br />
+                                <h:selectBooleanCheckbox value="#{estateController.permDelete}" title="check to permanently to delete selected Estates"/> Delete Permanently
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to delete selected estates" class="btn btn-primary" style="color: #FFFFFF" action="#{estateController.deleteEstate}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                        
+                    </h:form>
+                </p:tab>
+                <!--End of tab-->
+                
+                
+                <!--Beginning of tab 2-->
+                <p:tab title="New Estate" disabled="true">
+                    <h:form id="new_estate_form" prependId="false">
+                        <div align="center">
+                            <div align="center">
+                                <div class="tip_box">
+                                    <table cellpadding="7">
+                                        <tr>
+                                            <td>
+                                                <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                            </td>
+                                            <td>
+                                                <h4 style="color: orange" align="center">Tip</h4>
+                                                <h5><i style="color: #0066cc">Fields that displays <img src=".../img/error_pic.PNG"/> are required input fields</i> </h5>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+                            
+                            <br/>
+                            <p:growl autoUpdate="true" globalOnly="true" life="3800" showSummary="true" showDetail="false" />
+                            <p:messages globalOnly="true" showDetail="true" showSummary="false" closable="true" autoUpdate="true" showIcon="true" style="text-align: center">
+                                <p:effect event="load" type="pulsate" delay="500" />
+                            </p:messages>
+                            <br />
+
+                            <h:panelGrid columns="4" cellspacing="10" cellpadding="8" style="margin-left: -150px">
+                                <h:outputLabel for="estName" class="VLabel" value="#{msg.estatname} : " title="Estate's name"/>
+                                <h:inputText value="#{estateController.estate.estateName}" required="true" requiredMessage="Estate Name Required" id="estName" title="Name of the new Estate" style="width: 450px;"/>
+                                <p:message for="estName" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip showEvent="focus" hideEvent="blur" for="estName"/>
+                            
+                                <h:outputLabel for="estInitials" class="VLabel" value="#{msg.estateini} : " title="Estate's Initials"/>
+                                <h:inputText id="estInitials" value="#{estateController.estate.estateId}" a:placeholder="eg, AE for Airport Estate, AS for Asawasi Estates" required="true" requiredMessage="Estate Initials Required" title="Initials for the Estate eg. AE for Airport Estate" style="width: 450px;"/>
+                                <p:message for="estInitials" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip showEvent="focus" hideEvent="blur" for="estInitials"/>
+
+                                <h:outputLabel for="estClass" class="VLabel" value="Estate Class : " title="Estate class"/>
+                                <h:selectOneMenu id="estClass" required="true" requiredMessage="Estate Class Required" value="#{estateController.estate.estateClass}" title="class category of estate" style="width: 450px">
+                                    <f:selectItems value="#{commonOptions.estateClassOptions}"/>
+                                </h:selectOneMenu>
+                                <p:message for="estClass" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="estClass" showEvent="focus" hideEvent="blur"/>
+
+                                <h:outputLabel for="landSize" class="VLabel" value="Land Size : " title="Plot size" style="margin-top: -25px"/>
+                                <h:panelGroup>
+                                    <h:inputText id="landSize" a:type="number" value="#{estateController.estate.landSize}" required="true" requiredMessage="Land Size Required" validatorMessage="Invalid Land size" title="Size of the Land of the new estaete" style="width: 450px">
+                                        <f:validateDoubleRange for="landSize" />
+                                    </h:inputText><br />
+                                    <p style="font-size: small; margin-top: -10px; margin-left: 25px"><span style="color: red"><i>NB : Land size is numeric and measured in acre</i></span></p>
+                                </h:panelGroup>
+                                <p:message for="landSize" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="landSize" showEvent="focus" hideEvent="blur"/>
+                                
+
+                                <h:outputLabel for="estLocation" class="VLabel" value="Location : " title="Location of the new estate"/>
+                                <h:inputText id="estLocation" value="#{estateController.estate.estateLocation}" required="true" requiredMessage="Estate Location Required" title="Specify where the estate is located" style="width: 450px"/>
+                                <p:message for="estLocation" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="estLocation" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="estCommence" class="VLabel" value="Commencement : " title="commencement date for new Estate"/>
+                                <p:calendar id="estCommence" value="#{estateController.estate.dateInitialized}" maxdate="#{estateController.currentDate}" effect="slide" title="Specify when the estate was acquired" navigator="true"/>
+                                <p:message for="estCommence" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="estCommence" showEvent="focus" hideEvent="blur"/>
+
+                                <h:outputLabel for="estExpire" class="VLabel" value="Expiration : " title="Expration date for new Estate"/>
+                                <p:calendar id="estExpire" value="#{estateController.estate.expirationdate}" mindate="#{estateController.currentDate}" effect="slide" title="Specify when the estate will expire" navigator="true"/>
+                                <p:message for="estExpire" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="estExpire" showEvent="focus" hideEvent="blur"/>
+
+                                <h:outputLabel for="addDesc" class="VLabel" value="Description : " title="Additional description of the new estate"/>
+                                <h:inputTextarea id="addDesc" a:placeholder="Additional Info" value="#{estateController.estate.addDesc}" title="Additional description of the new estate" style="width: 450px; height: 70px; min-height: 70px; min-width: 450px; max-height: 100px; max-width: 450px"/>
+                                <p:message for="addDesc" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="addDesc" showEvent="focus" hideEvent="blur"/>
+                            </h:panelGrid>
+                        </div>
+                        
+                        <div  class="form-actions">
+                            <div class="pull-right" style="margin-right: 150px">
+                                <h:panelGrid columns="3" cellpadding="4">
+                                    <a class="btn btn-success btn-large" style="color: #FFFFFF" href="#estateSave" data-toggle="modal">
+                                        <i class="icon-check"></i> #{msg.save}
+                                    </a>
+        
+                                    <h:commandLink id="refreshFields" class="btn btn-large" style="color: #000000">
+                                        Clear
+                                        <p:ajax immediate="true" update="new_estate_form" resetValues="true"/>
+                                    </h:commandLink>
+                                    
+                                    <a id="back" class="btn btn-danger btn-large" style="color: #FFFFFF" href="#newback" data-toggle="modal">
+                                        <i class="icon-arrow-left"></i> Back
+                                    </a>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        <!--Confirm Save Estate modal-->
+                        <div class="modal hide" id="estateSave" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: #3a87ad">
+                                <h3>Save Estate Details</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you want to <span style="color: green">save</span> values entered?<br /> 
+                                    Press Yes to save</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{estateController.saveNewEstate}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                        
+                    </h:form>
+                    
+                    
+                    <!--Confirm Going back modal-->
+                    <h:form prependId="false">
+                        <div class="modal hide" id="newback" style="width: 400px; left: 65% ">
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Warning</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Changes on values will be ignored !!<br /> 
+                                    Press Yes to go back</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{estateController.toEstateList()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                     </h:form>
+                    <!--End Modal-->
+                </p:tab>
+                <!--End of tab-->
+                
+                
+                <!--Beginning of tab 3-->
+                <p:tab title="Update Estate" disabled="true">
+                    <h:form id="update_estate_form" prependId="false">
+                        <div align="center">
+                            <div align="center">
+                                <div class="tip_box">
+                                    <table cellpadding="7">
+                                        <tr>
+                                            <td>
+                                                <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                            </td>
+                                            <td>
+                                                <h4 style="color: orange" align="center">Tip</h4>
+                                                <h5><i style="color: #0066cc">Click on values to toggle the edit mode</i> </h5>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+                            
+                            <p:growl autoUpdate="true" globalOnly="true" life="3800" showSummary="true" showDetail="false" />
+                            <p:messages globalOnly="true" showDetail="true" showSummary="false" showIcon="true" closable="true" autoUpdate="true" style="text-align: center">
+                                <p:effect event="load" type="pulsate" delay="500" />
+                            </p:messages>
+                            <br />
+
+                            <h:panelGrid columns="4" cellspacing="6" cellpadding="8" style="margin-left: -150px">
+                                <h:outputLabel for="estEdName" class="VLabel" value="#{msg.estatname} : " title="Estate's name"/>
+                                <p:inplace effect="slide" emptyLabel="Null" >
+                                    <h:inputText value="#{estateController.estEdit.estateName}" id="estEdName" title="Name of the Estate" style="width: 450px;"/>
+                                </p:inplace>
+                                <p:message for="estEdName" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="estEdName" showEvent="focus" hideEvent="blur"/>
+                            
+                                <h:outputLabel for="estEdInitials" class="VLabel" value="#{msg.estateini} : " title="Estate's Initials"/>
+                                <p:inplace effect="slide" emptyLabel="Null" >
+                                    <h:inputText id="estEdInitials" value="#{estateController.estEdit.estateId}" title="Initials for the Estate eg. AE for Airport Estate" style="width: 450px;"/>
+                                </p:inplace>
+                                <p:message for="estEdInitials" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="estEdInitials" showEvent="focus" hideEvent="blur" />
+                            
+                                <h:outputLabel for="estEdClass" class="VLabel" value="Estate Class : " title="Estate class"/>
+                                <p:inplace effect="slide" emptyLabel="null" >
+                                    <h:selectOneMenu id="estEdClass" required="true" requiredMessage="Estate Class Required" value="#{estateController.estEdit.estateClass}" title="Class category of estate" style="width: 450px">
+                                        <f:selectItems value="#{commonOptions.estateClassOptions}"/>
+                                    </h:selectOneMenu>
+                                </p:inplace>
+                                <p:tooltip for="estEdClass" showEvent="focus" hideEvent="blur"/>
+                                <p:message for="estEdClass" showSummary="false" showDetail="false" display="icon"/>
+                            
+                                <h:outputLabel for="EdplotSize" class="VLabel" value="Land Size : " title="Land size" style="margin-top: -25px"/>
+                                <h:panelGroup>
+                                    <p:inplace effect="slide" emptyLabel="null" >
+                                        <h:inputText a:type="number" id="EdplotSize" value="#{estateController.estEdit.landSize}" required="true" requiredMessage="Land Size Required" title="Size of the land of the estaete" style="width: 450px"/>
+                                    </p:inplace><br />
+                                    <p align="center" style="font-size: small; margin-top: -10px;"><span style="color: red"><i>NB : Land size is numeric and measured in acre)</i></span></p>
+                                </h:panelGroup>
+                                <p:tooltip for="EdplotSize" showEvent="focus" hideEvent="blur"/>
+                                <p:message for="EdplotSize" showSummary="false" showDetail="false" display="icon"/>
+                            
+                                <h:outputLabel for="estEdLocation" class="VLabel" value="Location : " title="Location of the estate"/>
+                                <p:inplace effect="slide" emptyLabel="null" >
+                                    <h:inputText id="estEdLocation" value="#{estateController.estEdit.estateLocation}" required="true" requiredMessage="Estate Location Required" title="Specify where the estate is located" style="width: 450px"/>
+                                </p:inplace>
+                                <p:tooltip for="estEdLocation" showEvent="focus" hideEvent="blur"/>
+                                <p:message for="estEdLocation" showSummary="false" showDetail="false" display="icon"/>
+                            
+                                <h:outputLabel for="EdestCommence" class="VLabel" value="Commencement : " title="Commencement date for new Estate" />
+                                <p:inplace effect="slide" emptyLabel="null" >
+                                    <p:calendar id="EdestCommence" value="#{estateController.estEdit.expirationdate}" effect="slide" maxdate="#{estateController.currentDate}" title="Specify when the estate was acquired" style="width: 450px" navigator="true">
+                                        <f:convertDateTime dateStyle="medium"/>
+                                    </p:calendar>
+                                </p:inplace>
+                                <p:tooltip for="EdestCommence" showEvent="focus" hideEvent="blur"/>
+                                <p:message for="EdestCommence" showSummary="false" showDetail="false" display="icon"/>
+                                
+                                <h:outputLabel for="EdestExpire" class="VLabel" value="Expiration : " title="Expration date for new Estate" />
+                                <p:inplace effect="slide" emptyLabel="null" >
+                                    <p:calendar id="EdestExpire" value="#{estateController.estEdit.expirationdate}" effect="slide" mindate="#{estateController.currentDate}" title="Specify when the estate will expire" style="width: 450px" navigator="true">
+                                        <f:convertDateTime dateStyle="medium"/>
+                                    </p:calendar>
+                                </p:inplace>
+                                <p:tooltip for="EdestExpire" showEvent="focus" hideEvent="blur"/>
+                                <p:message for="EdestExpire" showSummary="false" showDetail="false" display="icon"/>
+                            
+                                <h:outputLabel for="EdAddDesc" class="VLabel" value="Description : " title="Additional description of the new estate"/>
+                                <p:inplace effect="slide" emptyLabel="null" >
+                                    <h:inputTextarea id="EdAddDesc" a:placeholder="Additional Info" value="#{estateController.estEdit.addDesc}" title="Additional description of the new estate" style="width: 450px; height: 70px; min-height: 70px; min-width: 450px; max-height: 100px; max-width: 450px"/>
+                                </p:inplace>
+                                <p:message for="EdAddDesc" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="EdAddDesc" showEvent="focus" hideEvent="blur"/>
+                            </h:panelGrid>
+                        </div>
+                        
+                        <div  class="form-actions">
+                            <div class="pull-right" style="margin-right: 150px">
+                                <h:panelGrid columns="23" cellpadding="4">
+                                    <a id="updateBtn" class="btn btn-success btn-large" style="color: #FFFFFF;" href="#estateUpdate" data-toggle="modal">
+                                        <i class="icon-check"></i> #{msg.update}
+                                    </a>
+        
+                                    <h:commandLink id="clearFields" class="btn btn-large" style="color: #000000">
+                                        Reset
+                                        <p:ajax resetValues="true" update="update_estate_form" />
+                                    </h:commandLink>
+                                    
+                                    <a id="back" class="btn btn-large btn-danger" style="color: whitesmoke" href="#updateback" data-toggle="modal">
+                                        <i class="icon-arrow-left"></i> Back
+                                    </a>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        
+                        
+                        <!--Confirm Update Estate modal-->
+                        <div class="modal hide" id="estateUpdate" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: #3a87ad">
+                                <h3>Update Estate Details</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you want to <span style="color: blue; font-weight: bold">update</span> values entered?<br /> 
+                                    Press Yes to update</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink class="btn btn-primary" title="click to update details" action="#{estateController.updateEstate()}" style="color: #FFFFFF" >
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                        
+                    </h:form>
+                    
+                    
+                    <!--Confirm Going back modal-->
+                    <h:form prependId="false">
+                        <div class="modal hide" id="updateback" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Warning</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Changes on values will be ignored !!<br /> 
+                                    Press Yes to continue</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{estateController.toEstateList()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                    </h:form>
+                    <!--End Modal-->
+                </p:tab>
+                <!--End of tab-->
+                
+            </p:tabView>
+        </p:panel>
+    </h:body>
+</html>
+

@@ -1,0 +1,111 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 19-Feb-2014, 22:42:58
+    Author     : billy
+*/
+root{
+    display: block;
+}
+
+body{
+    background-image: url(./images/bdybg.png);
+    background-repeat: repeat-x;
+    background-color: #000000;
+}
+
+*{
+    font-family: "Trebuchet MS";
+    margin: 0px;
+}
+
+.ui-widget{
+    font-size: 12.5px !important;
+    font-weight: bold;
+}
+
+.data_table_panel{
+    height: 200px;
+    overflow: auto;
+}
+
+.user_actions_bg{
+    background-image: url(./images/user_actions_bg.png);
+    background-repeat: repeat;
+    height: 500px;
+    margin: auto;
+}
+
+.tool_bar{
+    background-image: url(./images/toolbar_bg_image.png);
+    background-repeat:  repeat-x;
+}
+
+.banner{
+    background-image: url(./images/advantage_banner.png);
+    height: 50px;
+}
+
+#capture_area{
+    
+}
+
+a:link, a:visited{
+    text-decoration: none;
+}
+
+.report_link[a]{
+     color: #005580;
+}
+
+.default_border{
+    border: 1.5px solid #942a25;
+}
+
+/*table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 5px;
+}
+
+table#t01 th {
+    color: white;
+    background-color: black;
+}
+
+table#t01 tr:nth-child(odd) {
+    background-color: #eee;
+}*/
+.list-header {
+    background-color: #333333;
+    color: #fff;
+    text-align: left;
+    border: 1px solid black;
+}
+
+@keyframes notification {  
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+@-webkit-keyframes notification {
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+.notification{
+    background: red;
+    color: white;
+    font-size: 23px;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    -webkit-animation: blink 0.5s linear infinite;
+    -moz-animation: blink 0.5s linear infinite;
+    animation: blink 0.5s linear infinite;
+}

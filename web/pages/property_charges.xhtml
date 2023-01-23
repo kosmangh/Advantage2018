@@ -1,0 +1,430 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <style type="text/css">
+            .tip_box{
+                height: 50px;
+                width: 500px;
+                color: whitesmoke;
+                background-color: tomato;
+                border-radius: 8px;
+                border-color: #363636;
+                border-width: thin;
+                box-shadow: #363636 0.4, #444444 0.4, #595959 0.4;
+            }
+            
+            .header{
+                background-color: #3A87AD;
+                color: #444444;
+                font-size: 25px;
+                border-radius: 4px;
+                column-gap: 25px;
+                text-align: center;
+            }
+            
+            .column{
+                text-align: center;
+            }
+            
+        </style>
+
+        <p:panel header="Property Charges" >
+            <div align="right">
+                <h:form id="orientForm" prependId="false">
+                    <p:selectOneButton id="orientation" value="#{propertyCharges.orient}" style="margin-right: 5%">
+                        <f:selectItem itemLabel="Ground Rents" itemValue="Ground Rents" />
+                        <f:selectItem itemLabel="Rentals" itemValue="Rentals" />
+                        <p:ajax event="change" listener="#{propertyCharges.orientationListeners()}" update=":pages"/>
+                    </p:selectOneButton>
+                </h:form>
+            </div>
+            
+            <h:panelGroup id="pages">
+                <!--Ground Rent container-->
+                <h:panelGroup layout="block" rendered="#{!propertyCharges.rendered}">
+                    <h3 style="color: blue">Ground Rents</h3>
+                    
+                    <p:tabView effect="slide" effectDuration="slow" prependId="false" dynamic="true" cache="true" activeIndex="#{propertyCharges.grndRntTabIndex}">
+                        <p:tab title="Yearly Rates">
+                            <br />
+                            <p:growl autoUpdate="true" life="3800" showSummary="true" showDetail="false" globalOnly="true"/>
+                            <p:messages autoUpdate="true" closable="true" globalOnly="true" severity="Severity.error" showIcon="true" showDetail="true" showSummary="false" style="text-align: center">
+                                <p:effect event="show" type="pulsate" delay="500" />
+                            </p:messages>
+                            <br />
+                            <br />
+                            
+                            <h:form prependId="false">
+                                <div align="left">
+                                    <h:commandLink class="btn btn-info btn-large" style="color: #FFFFFF" title="click to add a new ground rent charge" action="#{propertyCharges.toNewGrndRnt()}">
+                                        <i class="icon-plus"></i> New Rate
+                                    </h:commandLink>
+                                </div>
+                                <br />
+                            
+                                <p:dataTable id="grndRentsTable" value="#{propertyCharges.grndRentDataModel}" rows="25" emptyMessage="No Record(s) Found" paginator="true" paginatorPosition="bottom" var="grndRnt">
+                                    <p:column width="5%" style="text-align: center">
+                                        <h:selectBooleanCheckbox value="#{grndRnt.selected}"/>
+                                    </p:column>
+
+                                    <p:column style="text-align: center">
+                                        <f:facet name="header">Property Usage</f:facet>
+                                        #{grndRnt.propertyUsage.usageInitials}
+                                    </p:column>
+
+                                    <p:column width="10%" style="text-align: center">
+                                        <f:facet name="header">Year</f:facet>
+                                        #{grndRnt.yearDue}
+                                    </p:column>
+
+                                    <p:column width="12%" style="text-align: center">
+                                        <f:facet name="header">First Class</f:facet>
+                                        #{grndRnt.firstClassEstateAmountCharged}
+                                    </p:column>
+
+                                    <p:column width="12%" style="text-align: center">
+                                        <f:facet name="header">Second Class</f:facet>
+                                        #{grndRnt.secondClassEstateAmountCharged}
+                                    </p:column>
+
+                                    <p:column width="12%" style="text-align: center">
+                                        <f:facet name="header">Third Class</f:facet>
+                                        #{grndRnt.thirdClassEstateAmountCharged}
+                                    </p:column>
+
+                                    <p:column width="15%">
+                                        <f:facet name="header">Actions</f:facet>
+                                        <h:commandLink class="btn btn-small btn-info" style="color: #FFFFFF" title="Click to edit property info">
+                                            <i class="icon-edit"></i> #{msg.edit}
+                                        </h:commandLink>
+
+                                        <a  class="disabled btn btn-small btn-primary" style="color: #FFFFFF; cursor: not-allowed" title="View charge details">
+                                            <i class="icon-eye-open"></i>
+                                        </a>
+                                    </p:column>
+                                </p:dataTable>
+                                
+                                <br />
+                        
+                                <div align="right">
+                                    <h:panelGrid columns="1" cellpadding="4">
+                                        <h:commandLink class="btn btn-large btn-warning" style="color: #FFFFFF" action="#{propertyCharges.refreshGrndRnt()}" title="click to refresh charges list">
+                                            <i class="icon-refresh"></i> Refresh
+                                        </h:commandLink>
+                                    </h:panelGrid>
+                                </div>
+                            </h:form>
+                        </p:tab>
+                        
+                        <p:tab title="New Rate" disabled="true">
+                            <div align="center">
+                                <div align="center">
+                                    <div class="tip_box">
+                                        <table cellpadding="7">
+                                            <tr>
+                                                <td>
+                                                    <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                                </td>
+                                                <td>
+                                                    <h4 style="color: orange" align="center">Tip</h4>
+                                                    <h5><i style="color: #0066cc">Fields that displays <img src=".../img/error_pic.PNG"/> are required input fields</i> </h5>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <br/>
+                            
+                                <h:form prependId="false">
+                                    <br/>
+                                    <p:growl autoUpdate="true" globalOnly="true" life="3800" showSummary="true" showDetail="false" />
+                                    <p:messages globalOnly="true" showDetail="true" showSummary="false" closable="true" autoUpdate="true" showIcon="true" >
+                                        <p:effect event="show" type="pulsate" delay="500" />
+                                    </p:messages>
+                                    <br />
+
+                                    <h:panelGrid columns="4" cellspacing="10" cellpadding="4">
+                                        <h:outputLabel for="yr" value="Year : " style="font-weight: bold; text-align: right; font-size: medium" title="Charge Year"/>
+                                        <h:selectOneMenu id="yr" value="#{propertyCharges.grndRent.yearDue}" required="true" requiredMessage="Year Required" style="width: 450px;" title="Charge Year">
+                                            <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                                        </h:selectOneMenu>
+                                        <p:message for="yr" showSummary="false" showDetail="false" display="icon"/>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="yr"/>
+                                    </h:panelGrid>
+                                    
+                                    <h2 style="color: #0055cc"><u><i>Estate Classes Rates</i></u></h2>
+                                    <br />
+                                    
+                                    <h:panelGrid columns="6" cellspacing="10" cellpadding="4" width="90%" columnClasses="column">
+                                        <h:outputText value="" />
+                                        <h:outputText value="Residential" class="header"/>
+                                        <h:outputText value="Commercial" class="header"/>
+                                        <h:outputText value="Mix Use" class="header"/>
+                                        <h:outputText value="Institution" class="header"/>
+                                        <h:outputText value="" />
+                                        
+                                        <h:outputLabel value="First Class : " class="alright" style="font-weight: bold; text-align: right; font-size: medium" title="Amount charged for 1st class Estates"/>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="RESFClass" value="#{propertyCharges.charges[0][0]}" disabled="false" required="true" requiredMessage="Residetial First Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates">
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="RESFClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="RESFClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="COMFClass" value="#{propertyCharges.charges[0][1]}" required="true" requiredMessage="Commercial First Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="COMFClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="COMFClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="MXFClass" value="#{propertyCharges.charges[0][2]}" required="true" requiredMessage="Mix Use First Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="MXFClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="MXFClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="INSFClass" value="#{propertyCharges.charges[0][3]}" required="true" requiredMessage="Intitution First Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="INSFClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="INSFClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" style="margin-top: -10px; margin-left: -18px">
+                                            <span id="firstClassProcess" class="btn btn-small btn-primary" style="border-radius: 16px" onclick="processRow()">
+                                                <i class="icon-ok"></i>
+                                            </span>
+                                            <h:commandLink class="btn btn-small btn-danger" style="border-radius: 16px">
+                                                <i class="icon-remove"></i>
+                                            </h:commandLink>
+                                        </h:panelGrid>
+                                        
+                                        
+                                        <h:outputLabel value="Second Class : " class="alright" style="font-weight: bold; text-align: right; font-size: medium" title="Amount charged for 1st class Estates"/>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="RESSClass" value="#{propertyCharges.charges[1][0]}" disabled="true" required="true" requiredMessage="Residetial Second Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="RESSClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="RESSClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="COMSClass" value="#{propertyCharges.charges[1][1]}" disabled="true" required="true" requiredMessage="Commercial Second Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                                            </p:inputText>
+                                            <p:message for="COMSClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="COMSClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="MXSClass" value="#{propertyCharges.charges[1][2]}" disabled="true" required="true" requiredMessage="Mix Use Second Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="MXSClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="MXSClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="INSSClass" value="#{propertyCharges.charges[1][3]}" disabled="true" required="true" requiredMessage="Institution Second Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="INSSClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="INSSClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" style="margin-top: -10px; margin-left: -18px">
+                                            <h:commandLink class="btn btn-small btn-primary disabled" disabled="true">
+                                                <i class="icon-ok"></i>
+                                            </h:commandLink>
+                                            <h:commandLink class="btn btn-small btn-danger disabled" disabled="true">
+                                                <i class="icon-remove"></i>
+                                            </h:commandLink>
+                                        </h:panelGrid>
+                                        
+                                        
+                                        <h:outputLabel value="Second Class : " class="alright" style="font-weight: bold; text-align: right; font-size: medium" title="Amount charged for 1st class Estates"/>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="RESTClass" value="#{propertyCharges.charges[2][0]}" disabled="true" required="true" requiredMessage="Residetial Third Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="RESTClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="COMTClass" value="#{propertyCharges.charges[2][1]}" disabled="true" required="true" requiredMessage="Commercial Third Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="COMTClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="COMTClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="MXTClass" value="#{propertyCharges.charges[2][2]}" disabled="true" required="true" requiredMessage="Mix Use Third Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            </p:inputText>
+                                            <p:message for="MXTClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="MXTClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                            <p:inputText id="INSTClass" value="#{propertyCharges.charges[2][3]}" disabled="true" required="true" requiredMessage="Institution Third Class Amount Required" style="width: 120px;" title="Amount charged for 1st class Estates" >
+                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                                            </p:inputText>
+                                            <p:message for="INSTClass" showSummary="false" showDetail="false" display="icon"/>
+                                            <p:tooltip showEvent="focus" hideEvent="blur" for="INSTClass"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" style="margin-top: -10px; margin-left: -18px">
+                                            <h:commandLink class="btn btn-small btn-primary disabled" disabled="true">
+                                                <i class="icon-ok"></i>
+                                            </h:commandLink>
+                                            <h:commandLink class="btn btn-small btn-danger disabled" disabled="true">
+                                                <i class="icon-remove"></i>
+                                            </h:commandLink>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                    
+                                    <div class="form-actions" align="right">
+                                        <h:panelGrid columns="3" cellspacing="6">
+                                            <a class="btn btn-large btn-success" style="color: #FFFFFF" data-toggle="modal" href="#rateSave">
+                                                <i class="icon-check"></i> Save
+                                            </a>
+                                            <h:commandLink class="btn btn-large btn-warning" style="color: #FFFFFF">
+                                                <p:ajax update="@form" resetValues="true" />
+                                                <i class="icon-refresh"></i> Refresh
+                                            </h:commandLink>
+                                            <a class="btn btn-large btn-danger" style="color: #FFFFFF" data-toggle="modal" href="#newRateCancel">
+                                                <i class="icon-remove"></i> Cancel
+                                            </a>
+                                        </h:panelGrid>
+                                    </div>
+                                    
+                                    <!--Confirm Save Estate modal-->
+                                    <div class="modal hide" id="rateSave" style="width: 400px; left: 65%">
+                                        <div class="modal-header" style="background-color: #3a87ad">
+                                            <h3>Save Rates Details</h3>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <p align="center">Do you want to <span style="color: green">save</span> values entered?<br /> 
+                                                Press Yes to save</p>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                                No <i class="icon-thumbs-down"></i>
+                                            </a>
+                                            <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{propertyCharges.saveNewRate()}">
+                                                Yes <i class="icon-thumbs-up"></i>
+                                            </h:commandLink>
+                                        </div>
+                                    </div>
+                                    <!--End Modal-->
+                                    
+                                </h:form>
+                                
+                                <!--Confirm Going back modal-->
+                                <h:form prependId="false">
+                                    <div class="modal hide" id="newRateCancel" style="width: 400px; left: 65% ">
+                                        <div class="modal-header" style="background-color: tomato">
+                                            <h3>Warning</h3>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <p align="center">Changes on values will be ignored !!<br /> 
+                                                Press Yes to cancel</p>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                                No <i class="icon-thumbs-down"></i>
+                                            </a>
+                                            <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{propertyCharges.toGrndRntList()}">
+                                                Yes <i class="icon-thumbs-up"></i>
+                                            </h:commandLink>
+                                        </div>
+                                    </div>
+                                 </h:form>
+                                <!--End Modal-->
+                                
+                            </div>
+                        </p:tab>
+                        
+                        <p:tab title="Update Charges" disabled="true">
+                            
+                        </p:tab>
+                    </p:tabView>
+                </h:panelGroup>
+                <!--End of Ground Rent-->
+
+                <!--Rental properties container-->
+                <h:panelGroup layout="block" rendered="#{propertyCharges.rendered}">
+                    <h3 style="color: blue">Rentals</h3>
+                    <p:tabView effect="slide" effectDuration="slow" prependId="false" dynamic="true" cache="true" activeIndex="#{propertyCharges.rntalTabIndex}">
+                        <p:tab title="Rental Charges">
+                            <h:form prependId="false">
+                                <p:dataTable id="rentalsTable" rows="25" emptyMessage="No Record(s) Found" paginator="true" paginatorPosition="bottom" var="rntal">
+                                    <p:column>
+                                        <h:selectBooleanCheckbox />
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">Property Usage</f:facet>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">Month</f:facet>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">Year</f:facet>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">First Class</f:facet>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">Second Class</f:facet>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">Third Class</f:facet>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">Actions</f:facet>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:tab>
+                        
+                        <p:tab title="New Charges" disabled="true">
+                            
+                        </p:tab>
+                        
+                        <p:tab title="Update Charges" disabled="true">
+                            
+                        </p:tab>
+                    </p:tabView>
+                </h:panelGroup>
+                <!--End of Rentals-->
+            </h:panelGroup>
+        </p:panel>
+        
+        
+        <script type="text/javascript">
+            $(document).ready(){
+                $('#firstClassProcess').click(function(){
+                    $('#RESFClass').prop('disabled', 'false');
+                });
+            }
+//                function processRow(){
+//                   this.prop
+//                    
+//                }
+//                $('#RESFClass').prop('disabled', 'true');
+        </script>
+    </h:body>
+</html>
+

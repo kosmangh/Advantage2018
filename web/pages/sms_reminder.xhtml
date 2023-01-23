@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <script src="../resources/scripts/smessjs.js" type="text/javascript"></script>
+        <script src="../resources/js/jquery-1.11.0.js" type="text/javascript"></script>
+        
+        
+        <script type="text/javascript">
+    
+
+    
+</script>
+<!--            <h:outputScript name="smessjs.js" library="scripts"/>-->
+    </h:head>
+    <h:body>
+         <h:outputScript library="scripts" name="Countable.js" target="head"></h:outputScript>
+         
+         
+ 
+        <h:form id="messages">
+            <p:growl />
+        </h:form>
+        <p:panel header="Send SMS Reminders">
+            <h:form id="hform" onsubmit="">
+                <ui:include src="/includes/sms_property_selection.xhtml" />
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="3">
+                        <h:outputText value="Title" />
+                        <h:inputText id ="msgTitle" value="#{smsController.sm.title}"   title="Message title required">
+                        </h:inputText>
+                        <p:tooltip for="msgTitle" showEvent="focus" hideEvent="blur"/>
+                        <h:outputText value="Message" />
+                        <h:inputTextarea id="msgBody" value="#{smsController.sm.messageBody}" title="Message required" rows="6" onkeyup="countChars(this);">
+                        </h:inputTextarea>
+                        <p:tooltip for="msgBody" showEvent="focus" hideEvent="blur" />
+                    </h:panelGrid>
+                    
+                     <h:panelGrid columns="1" style="float: right; margin-right: 450px; margin-top: -50px;">
+                                    <ul class="result">
+                                        <p><strong>Number Of Characters Typed :</strong><span id="result_characters_chars">0</span></p><strong><p>160/SMS</p></strong>
+                                    </ul>
+
+                                </h:panelGrid>
+                    
+                    
+                    <div class="form-actions" >
+                        <h:commandButton value="Send Message" actionListener="#{smsController.prepReminderSMS()}"/>
+                    </div>
+                    <br />
+                    <h:panelGroup layout="block"  rendered="#{smsController.renderCheckReminder}">
+                      
+                        
+                   
+                    </h:panelGroup>
+
+                    
+               
+                     
+                    <table   style=" background: skyblue;
+                             width: 100%;
+                             border-color: 
+                             palegreen; border-radius: 5px;
+                             
+                             th {
+    text-align: left;
+      background-color: green;
+    color: white;
+}
+
+ tr:hover {
+          background-color: #ffff99;
+        }
+        table, td, th {
+        border: 1px solid green;
+}
+                             ">
+                           
+                            <tr>
+                                
+                                <td>No Of Contacts</td>
+                                
+                                   <td>No Of Pages</td>
+                                   
+                                        <td>Amount Charge</td>
+                                           <td>Action</td>
+                                           
+                            </tr>
+                                        
+                                
+                                   
+                      
+                                
+                                    <tr>
+                                        <td> <h:outputText  value="#{smsController.numberOfContacts}" /></td>
+                                     
+                                     <td>  <h:outputText value="#{smsController.numberOfPages}" /></td>   
+                                     
+                                                 <td>  
+                                    <h:outputText   value="#{smsController.amountToBeCharge}" />
+                                
+                                </td>
+                                     
+                                     <td>
+                                     
+                                         <h:commandButton id="submit"    style="border-radius: 5px; height: 40px;" value="Send Text Now"   action="#{smsController.sendReminder()}"/>
+                                  
+                                     </td>
+                            
+                                    </tr>
+                             
+                                
+                       
+                                   
+                             
+                                      
+                                        
+                                  
+                            
+                            
+                           
+                        
+                        </table>
+                       
+                      
+                   
+                 
+                
+                </h:panelGroup>
+<!--                        <h:outputScript name="smessjs.js" library="scripts"/>-->
+            </h:form>
+        </p:panel>
+
+
+    </h:body>
+</html>
+

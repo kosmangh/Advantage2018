@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <h:form>
+            <p:growl />
+        </h:form>
+        <p:panel header="Lessee Information">
+            <h:form>
+                <h:panelGrid columns="3">
+                    <h:outputText value="Is Institution?" /> &nbsp;
+                    <h:selectBooleanCheckbox valueChangeListener="#{propertyOccupantController.toggleInstitution}"
+                                             value="#{propertyOccupantController.isInstitution}">
+                        <p:ajax event="change" process="@form" update="@form" async="true"/>
+                    </h:selectBooleanCheckbox>
+                </h:panelGrid>
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Institution Name" rendered="#{propertyOccupantController.isInstitution}"/>
+                        <h:outputText value="Occupant Name" rendered="#{!propertyOccupantController.isInstitution}"/>
+                        <h:inputText styleClass="input input-xxlarge" value="#{propertyOccupantController.propertyOccupant.occupantName}" 
+                                     required="true" requiredMessage="Please enter Property Occupant Name" style="margin-left: 60px;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid columns="4">
+                            <h:outputText value="Occupant Type"/>
+                            <h:selectOneMenu value="#{propertyOccupantController.propertyOccupant.occupantType}"
+                                             required="true" requiredMessage="Please select occupant type">
+                                <f:selectItems value="#{commonOptions.occupantTypeOptions}" />
+                            </h:selectOneMenu>
+
+                            <h:outputText value="Birth/Registration Date" rendered="#{!propertyOccupantController.isInstitution}"/>
+                            <p:calendar value="#{propertyOccupantController.propertyOccupant.dateOfBirth}" rendered="#{!propertyOccupantController.isInstitution}"/>
+                            <h:outputText value="Gender" rendered="#{!propertyOccupantController.isInstitution}"/>
+                            <h:selectOneMenu value="#{propertyOccupantController.propertyOccupant.gender}" rendered="#{!propertyOccupantController.isInstitution}">
+                                <f:selectItems value="#{commonOptions.genderOptions}" />
+                            </h:selectOneMenu>
+
+                            <h:outputText value="Occupation / Core Buss."/>
+                            <h:inputText value="#{propertyOccupantController.propertyOccupant.occupation}"/>
+
+                            <h:outputText value="Home Town / Location"/>
+                            <h:inputText value="#{propertyOccupantController.propertyOccupant.homeTown}"/>
+
+                            <h:outputText value="Nationality" rendered="#{!propertyOccupantController.isInstitution}"/>
+                            <h:inputText value="#{propertyOccupantController.propertyOccupant.nationality}" rendered="#{!propertyOccupantController.isInstitution}"/>
+
+                            <h:outputText value="Primary Contact Number"/>
+                            <h:inputText value="#{propertyOccupantController.propertyOccupant.telephoneNumber}"/>
+
+                            <h:outputText value="E-mail"/>
+                            <h:inputText value="#{propertyOccupantController.propertyOccupant.emailAddress}"/>
+
+                            <h:outputText value="ID Type" rendered="#{!propertyOccupantController.isInstitution}"/>
+                            <h:selectOneMenu value="#{propertyOccupantController.propertyOccupant.nationalIdType}" rendered="#{!propertyOccupantController.isInstitution}">
+                                <f:selectItems value="#{commonOptions.nationalIdTypeOptions}" />
+                            </h:selectOneMenu>
+
+                            <h:outputText value="National ID No:" rendered="#{!propertyOccupantController.isInstitution}"/>
+                            <h:inputText value="#{propertyOccupantController.propertyOccupant.nationalId}" rendered="#{!propertyOccupantController.isInstitution}"/>
+
+                            <h:outputText value="Next of Kin" rendered="#{!propertyOccupantController.isInstitution}"/>
+                            <h:inputText value="#{propertyOccupantController.propertyOccupant.nextOfKin}" rendered="#{!propertyOccupantController.isInstitution}"/>
+
+                            <h:outputText value="Relationship To Next of Kin" rendered="#{!propertyOccupantController.isInstitution}"/>
+                            <h:selectOneMenu value="#{propertyOccupantController.propertyOccupant.relationship}" rendered="#{!propertyOccupantController.isInstitution}">
+                                <f:selectItems value="#{commonOptions.relationshipOptions}"/>
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGroup>
+                <div class="form-actions">
+                    <h:panelGroup layout="block">
+                        <h:panelGrid columns="3">
+                            <h:commandButton value="#{msg.save}" styleClass="btn btn-primary" action="#{propertyOccupantController.saveButtonAction}"
+                                             rendered="#{!propertyOccupantController.rendered}" style="font-weight: bold"/>
+                            <h:commandButton value="#{msg.update}" styleClass="btn btn-info" action="#{propertyOccupantController.editButtonAction}"
+                                             rendered="#{propertyOccupantController.rendered}" style="font-weight: bold"/>
+                            <h:commandButton value="#{msg.cls}" styleClass="btn btn-warning" action="#{propertyOccupantController.clearButtonAction}"
+                                             immediate="true" style="font-weight: bold"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </div>
+                <h:panelGroup layout="block" style="vertical-align: top;">
+                    <h:panelGroup layout="block">
+
+                        <h:panelGroup layout="block" styleClass="page_block_header">
+                            <h:outputText value="Known Property Occupant Properties" />
+                        </h:panelGroup>
+                        <h:inputTextarea value="#{propertyOccupantController.selectedLesseeProperties}"
+                                         style="height: 100%;"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+            <h:form>
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="5">
+                        <h:outputText value="#{msg.searchby}"/>
+                        <h:selectOneMenu value="#{propertyOccupantController.searchCriteria}">
+                            <f:selectItem itemLabel="Name" itemValue="occupantName"/>
+                            <f:selectItem itemLabel="Location" itemValue="homeTown"/>
+                        </h:selectOneMenu>
+                        <h:inputText value="#{propertyOccupantController.searchTerm}"/>&nbsp;
+                        <h:commandButton value="#{msg.search}" styleClass="btn btn-primary" action="#{propertyOccupantController.propertyOccupantDataTableSearchButttonAction}"
+                                         style="font-weight: bold"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:form>
+            <h:panelGroup layout="block">
+                <h:form>
+                    <p:dataTable  value="#{propertyOccupantController.lesseeDataModel}"
+                                 var="lessee" stickyHeader="true" scrollHeight="100" scrollable="true">
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.occupant}
+                            </f:facet>
+                            #{lessee.occupantName}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.loc}
+                            </f:facet>
+                            #{lessee.localAddress}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.telnum}
+                            </f:facet>
+                            #{lessee.telephoneNumber}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.gendinst}
+                            </f:facet>
+                            #{lessee.gender}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.actions}
+                            </f:facet>
+                            <h:commandLink action="#{propertyOccupantController.propertyOccupantDataTableRowSelectionAction}"><i class="icon-edit"></i>#{msg.edit}</h:commandLink>
+                            
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Select
+                            </f:facet>
+                             <h:selectBooleanCheckbox value="#{lessee.selected}" />
+                        </p:column>
+                    </p:dataTable>
+                        <h:panelGrid columns="6">
+                            <h:commandButton value="#{msg.dels}" action="#{propertyOccupantController.deleteButtonAction}" style="font-weight: bold"
+                                             onclick="return doDeletion('Are you sure you want to delete?');" styleClass="btn btn-danger"/>&nbsp;
+                            <h:commandLink target="_blank"  styleClass="btn btn-info" style="color: #FFFFFF"
+                                           action="#{propertyOccupantController.reportLesseeInformation}">
+                                <i class="icon-white icon-print"></i>Print Selected Occupant information
+                            </h:commandLink>&nbsp;
+
+                            <h:commandLink target="_blank"  styleClass="btn btn-info" style="color: #FFFFFF"
+                                           action="#{propertyOccupantController.reportDemandNotice}">
+                                <i class="icon-print icon-white"></i>Prepare Selected Occupant Bill
+                            </h:commandLink>
+                        </h:panelGrid>
+                    
+                </h:form>
+            </h:panelGroup>
+        </p:panel>
+
+    </h:body>
+</html>
+

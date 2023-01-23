@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:panelGroup layout="block">
+        <h:panelGrid columns="4">
+            <h:outputText value="Group To Apply Penalty"/>
+            <h:selectOneMenu value="#{groundRentSetupController.contactGroup}" valueChangeListener="#{groundRentSetupController.selectContactGroupChangeEvent}" immediate="true"
+                             style="width: 130px;">
+                <f:selectItems value="#{commonOptions.contactGroupOptions}" />
+                <p:ajax immediate="true" event="change" update="@form"/>
+            </h:selectOneMenu>
+            <h:panelGroup layout="block" rendered="#{groundRentSetupController.rendered}">
+                <h:panelGrid columns="6" style="display: inline-table;">
+                    <h:outputText value="Estate" rendered="#{groundRentSetupController.renderEstate}"/>
+                    <h:selectOneMenu value="#{groundRentSetupController.selectedEstate}" valueChangeListener="#{groundRentSetupController.estateChangeListener}" 
+                                     style="width: 172px;" rendered="#{groundRentSetupController.renderEstate}" immediate="true">
+                        <p:ajax event="change"  update="estateBlockCombo" />
+                        <f:selectItems value="#{commonOptions.estateOptions}" />
+                        
+                    </h:selectOneMenu>
+
+                    <h:outputText value="Block" rendered="#{groundRentSetupController.renderBlocks}"/>
+                    <h:selectOneMenu id="estateBlockCombo" value="#{propertySelectionController.selectedEstateBlock}" valueChangeListener="#{groundRentSetupController.estateBlockPropertyChangeListener}"
+                                     style="width: 110px;" rendered="#{groundRentSetupController.renderBlocks}" immediate="true">
+                        <p:ajax event="change"  update="estatePropertyCombo" />
+                        <f:selectItems value="#{groundRentSetupController.selectedEstateBlocksOptions}"/>
+                        
+                    </h:selectOneMenu>
+
+                    <h:outputText value="Property No." rendered="#{groundRentSetupController.renderPropertyNumber}" />
+                    <h:selectOneMenu id="estatePropertyCombo" value="#{groundRentSetupController.selectedEstateProperty}" valueChangeListener="#{groundRentSetupController.estatePropertyListener}"
+                                     style="width: 110px;" rendered="#{groundRentSetupController.renderPropertyNumber}" immediate="true">
+                        <f:selectItems value="#{groundRentSetupController.selectedEstatePropertiesOptions}" />
+                        
+                    </h:selectOneMenu>
+                </h:panelGrid>
+            </h:panelGroup>
+        </h:panelGrid>
+    </h:panelGroup>
+</html>
+

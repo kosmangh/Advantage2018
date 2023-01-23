@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:panelGroup layout="block">
+        <h:panelGrid columns="4">
+            <h:outputText value="Contact Group"/>
+            <h:selectOneMenu value="#{smsController.contactGroup}" onchange="submit()" valueChangeListener="#{smsController.selectContactGroupChangeEvent}" immediate="true">
+                <f:selectItems value="#{commonOptions.contactGroupOptions}" />
+            </h:selectOneMenu>
+            <h:panelGroup layout="block" rendered="#{smsController.rendered}">
+                <h:panelGrid columns="6" style="display: inline-table;">
+                    <h:outputText value="Estate" rendered="#{smsController.renderEstate}"/>
+                    <h:selectOneMenu value="#{smsController.selectedEstate}" valueChangeListener="#{smsController.estateChangeListener}"
+                                     style="width: 172px;" rendered="#{smsController.renderEstate}" immediate="true">
+                        <p:ajax event="change"  update="estateBlockCombo" />
+                        <f:selectItems value="#{commonOptions.estateOptions}" />
+                    </h:selectOneMenu>
+
+                    <h:outputText value="Block" rendered="#{smsController.renderBlocks}"/>
+                    <h:selectOneMenu id="estateBlockCombo" value="#{propertySelectionController.selectedEstateBlock}" valueChangeListener="#{smsController.estateBlockPropertyChangeListener}"
+                                     style="width: 110px;" rendered="#{smsController.renderBlocks}" immediate="true">
+                        <p:ajax event="change"  update="estatePropertyCombo" />
+                        <f:selectItems value="#{smsController.selectedEstateBlocksOptions}"/>
+                    </h:selectOneMenu>
+
+                    <h:outputText value="Property No." rendered="#{smsController.renderPropertyNumber}" />
+                    <h:selectOneMenu id="estatePropertyCombo" value="#{smsController.selectedEstateProperty}" valueChangeListener="#{smsController.estatePropertyListener}"
+                                     style="width: 110px;" rendered="#{smsController.renderPropertyNumber}" immediate="true">
+                        <f:selectItems value="#{smsController.selectedEstatePropertiesOptions}" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+            </h:panelGroup>
+        </h:panelGrid>
+    </h:panelGroup>
+   
+</html>
+

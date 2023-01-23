@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:growl />
+        </h:form>
+        <p:panel>
+            <f:facet name="header"><span style="float: left;font-weight: bold;font-variant: small-caps">Load Pictures</span></f:facet>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <img height="120px;" width="180px;" alt="#{imageUploadController.file.contentType}" src="#{imageUploadController.escapeSignature}"
+                         style="display: block; border: solid #f9dd34 1px;"/>
+                    <h:commandLink style="margin: auto; color: #FFFFFF" styleClass="btn btn-info" actionListener="#{imageUploadController.renderFileUpload}">
+                        
+                        <i class="icon-white icon-picture"></i>
+                        Load Picture
+                    </h:commandLink>
+                </h:panelGrid>
+
+
+                <h:panelGrid columns="1" rendered="#{imageUploadController.rendered}" id="upload_widget">
+                    <p:fileUpload fileUploadListener="#{imageUploadController.handleSignatureUpload}" 
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                  sizeLimit="2000000"
+                                  id="dir_signature"/>
+                </h:panelGrid>
+
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>
+

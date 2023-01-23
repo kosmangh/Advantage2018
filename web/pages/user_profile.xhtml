@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:body>
+        <style type="text/css">
+            .table_cont_label{
+                margin-left: 40px;
+                font-size: large;
+                font-weight: bold;
+            }
+            
+            .tabular{
+                border-top-width: 0px;
+                border-right-width: 0px;
+                border-left-width: 0px;
+            }
+            
+            .profValue{
+                font-style: italic;
+                font-family: monospace;
+                font-size: large;
+                color: sienna
+            }
+        </style>
+    
+        <p:panel header="Profile">
+            <div class="container">
+                <br /><br />
+                <h2 style="color: #0066cc; font-family: monospace">Personal Details</h2>
+                <table class="table table-bordered table-striped tabular">
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">First Name : <h:outputText value="#{userdata.currentUser.staff.firstName}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Last Name : <h:outputText value="#{userdata.currentUser.staff.lastName}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Other Name : <h:outputText value="#{userdata.currentUser.staff.otherNames}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Date of Birth : <h:outputText value="#{userdata.currentUser.staff.dob}" class="profValue" >
+                                    <f:convertDateTime dateStyle="medium" />
+                                </h:outputText></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Hair Colour : <h:outputText value="#{userdata.currentUser.staff.hairColour}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Eye Colour : <h:outputText value="#{userdata.currentUser.staff.eyeColour}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td >
+                            <h4 class="table_cont_label">Height : <h:outputText value="#{userdata.currentUser.staff.height}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td >
+                            <h4 class="table_cont_label">Weight : <h:outputText value="#{userdata.currentUser.staff.weight}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2 style="color: #0066cc; font-family: monospace">Address Details</h2>
+                <table class="table table-bordered table-hover table-striped tabular">
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Nationality : <h:outputText value="#{userdata.currentUser.staff.nationality}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">State/Province/Region : <h:outputText value="#{userdata.currentUser.staff.state_region}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">City/Town : <h:outputText value="#{userdata.currentUser.staff.city}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Postal : <h:outputText value="#{userdata.currentUser.staff.postal}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Street : <h:outputText value="#{userdata.currentUser.staff.street}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2 style="color: #0066cc; font-family: monospace">Contact Details</h2>
+                <table class="table table-bordered table-hover table-striped tabular">
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Telephone : <h:outputText value="#{userdata.currentUser.staff.telephone}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Mobile : <h:outputText value="#{userdata.currentUser.staff.mobile}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Email : <h:outputText value="#{userdata.currentUser.staff.email}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <h2 style="color: #0066cc; font-family: monospace">Institutional Details</h2>
+                <table class="table table-bordered table-hover table-striped tabular">
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Staff ID : <h:outputText value="#{userdata.currentUser.staff.staffId}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Department : <h:outputText value="#{userdata.currentUser.staff.department}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Position : <h:outputText value="#{userdata.currentUser.staff.position}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Office : <h:outputText value="#{userdata.currentUser.staff.office}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Office Number : <h:outputText value="#{userdata.currentUser.staff.officeNum}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td >
+                            <h4 class="table_cont_label">Status : <h:outputText value="#{userdata.currentUser.staff.status.status}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td >
+                            <h4 class="table_cont_label">Responsibility : <h:outputText value="#{userdata.currentUser.staff.responsiblity}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+                </table>
+                
+                <h2 style="color: #0066cc; font-family: monospace">Account Details</h2>
+                <table class="table table-bordered table-hover table-striped tabular">
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Username : <h:outputText value="#{userdata.currentUser.username}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Access Right : <h:outputText value="#{userdata.currentUser.userCategory.roleName}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4 class="table_cont_label">Account Status : <h:outputText value="#{userdata.currentUser.accountStatus.status}" class="profValue"/></h4>
+                        </td>
+                    </tr>
+                </table>
+
+                <div  class="form-actions">
+                    <div class="pull-right" style="margin-right: 20px">
+                        <h:panelGrid columns="2" cellpadding="4">
+                            <a class="btn btn-success btn-large" style="color: #FFFFFF">
+                                <i class="icon-check"></i> #{msg.update}
+                            </a>
+
+                            <a id="clearFields" class="btn btn-warning btn-large" style="color: whitesmoke" onclick="window.location.reload(true);">
+                                <i class="icon-refresh"></i> Refresh
+                            </a>
+                        </h:panelGrid>
+                    </div>
+                </div>
+
+            </div>
+        </p:panel>
+    </h:body>
+</html>
+

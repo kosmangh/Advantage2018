@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
+    <head>
+        <link type="text/css" rel="stylesheet" href="/advantage/resources/css/main.css"/>
+    </head>
+
+    <h:messages id="mainMsg" globalOnly="true" styleClass="messages" errorClass="errorInfo" infoClass="infoMsg" />
+
+
+    <h:panelGroup layout="block">
+
+            <h:panelGroup styleClass="title" layout="block">
+                <h:outputLabel value="Property Occupant Initial Information" />
+            </h:panelGroup>
+
+        <h:form id="data_capture" prependId="false">
+                <h:panelGroup style="width: 100%" >
+
+                     <h:outputLabel value="Property Occupant Name"/>
+                        <h:inputText id="occupantName" value="#{initialData.propertyOccupant.occupantName}"
+                                     required="#{!empty param['data_capture:btSaveEdit']}"
+                                     style="width: 400px;"
+                                     requiredMessage="Please enter PropertyOccupant Name" />
+
+                        
+                    <h:panelGrid columns="4" style="width: 100%">
+
+                        <h:outputLabel value="Lesse Estate" />
+                        <h:selectOneMenu value="#{initialData.selectedEstate}">
+                            <f:selectItems value="#{commonOptions.estateOptions}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value=""/>
+                        <h:outputText value=""/>
+                        
+                        <h:outputLabel value="Block Name"/>
+                        <h:inputText id="block" value="#{initialData.estateBlockName}"
+                                     required="#{!empty param['data_capture:btSaveEdit']}" requiredMessage="Please enter Block Name"/>
+
+
+                        <h:outputLabel value="Property No."/>
+                        <h:inputText value="#{initialData.houseNumber}" id="houseName"
+                                     required="#{!empty param['data_capture:btSaveEdit']}" requiredMessage="Please enter House Number">
+                            
+                        </h:inputText>
+
+                        <h:outputText value="Owing From" />
+                        <h:selectOneMenu value="#{initialData.arreasOwingFrom}">
+                            <f:selectItem itemValue="0" itemLabel="NONE" />
+                            <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                        </h:selectOneMenu>
+                        
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel/>
+                        <h:panelGrid columns="5" style="margin: auto;">
+                            <h:commandButton id="btSaveEdit" value="#{initialData.saveEditText}" action="#{initialData.saveEditButtonAction}" styleClass="action_button"/>
+                            <h:commandButton value="Clear"  action="#{initialData.clearButtonAction}" styleClass="action_button"/>
+                            <h:commandButton value="Delete" action="#{initialData.deleteButtonAction}" styleClass="action_button"/>
+                            <h:panelGroup />
+                            <h:commandButton value="Add to PropertyOccupant Asset" action="#{initialData.addNewAssetToLessee}" rendered="#{initialData.saveEditText.equalsIgnoreCase('Edit')}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:form>
+
+            <h:form id="lesse_asset_list" prependId="false">
+                <h:outputLabel value="PropertyOccupant Asset List"/>
+                <h:dataTable value="#{initialData.searchedLesseePropertiesList}" var="occupantProperty">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Estate Property"/>
+                        </f:facet>
+                        <h:commandLink value="#{occupantProperty.estateProperty}" action="#{initialData.setSelectedEstateProperty}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value=""/>
+                        </f:facet>
+                        <h:commandLink value="Delete" action="#{initialData.deleteOccupantProperty}" />
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+
+            <h:panelGroup layout="block" style="clear: both;"/>
+
+            <h:panelGroup layout="block" id="search">
+
+
+                <h:form>
+                    <h:panelGroup id ="srh" styleClass="title" layout="block" style="margin-top: 12px;">                        
+                        <h:panelGrid columns="6" >
+                            <h:outputLabel value="Search PropertyOccupant Information" />
+                            <h:outputText value="Search By"/>
+                            <h:inputText value="#{initialData.searchText}"/>
+                            <h:selectOneMenu value="#{initialData.searchAttribute}">
+                                <f:selectItem itemValue="occupantName" itemLabel="PropertyOccupant Name"/>
+                            </h:selectOneMenu>
+                            <h:commandButton value="Search..." action="#{initialData.searchButtonAction}"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </h:form>
+
+                <h:form  prependId="false" style="height: 180px; overflow: auto;">
+                    <h:dataTable value="#{initialData.searchedLesseeList}" var="propertyOccupant"  border="0" cellpadding="2" 
+                                 cellspacing="0" rowClasses="odd_row,even_row" rules="all" 
+                                 styleClass="data_table_panel" style="border:solid 1px; height: 6px; overflow: auto;" width="100%" id="search_lesse"
+                                 rendered="#{initialData.searchedLesseeList.rowCount != null}">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="PropertyOccupant Name"/>
+                            </f:facet>
+                            <h:outputText value="#{propertyOccupant.occupantName}"/>
+                        </h:column >
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value=""/>
+                            </f:facet>
+                            <h:commandLink value="Modify" action="#{initialData.showSelectedLessee}"/>
+                        </h:column>
+
+                    </h:dataTable>
+                </h:form>
+            </h:panelGroup>
+
+        </h:panelGroup>
+        
+</html>
+

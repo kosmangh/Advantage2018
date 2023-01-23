@@ -1,0 +1,804 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    
+    <h:body>
+        <style>
+            .tip_box{
+                height: 50px;
+                width: 500px;
+                color: whitesmoke;
+                background-color: tomato;
+                border-radius: 8px;
+                border-color: #363636;
+                border-width: thin;
+                box-shadow: #363636 0.4, #444444 0.4, #595959 0.4;
+            }
+            
+            .active{
+                font-weight: bolder;
+                color: green;
+            }
+            
+            .inactive{
+                font-weight: bolder;
+                color: red;
+            }
+        </style>
+        
+        <p:panel header="Staff(s) Registration" style="width: 100%">
+            <p:tabView effect="slide" effectDuration="slow" prependId="false" activeIndex="#{staffController.tabIndex}">
+
+                <!--Beginning of tab 1-->
+                <p:tab title="Staffs List">
+                    <h:form prependId="false">
+                        <br />
+                        <p:growl autoUpdate="true" life="3800" showSummary="true" showDetail="false" globalOnly="true"/>
+                        <p:messages autoUpdate="true" closable="true" globalOnly="true" severity="Severity.error" showDetail="true" showIcon="true" showSummary="false" style="text-align: center">
+                            <p:effect event="load" type="pulsate" delay="500" />
+                        </p:messages>
+                        <br />
+                        <br />
+
+                        <div align="left">
+                            <h:commandLink class="btn btn-info btn-large" action="#{staffController.toNewStaff()}" style="color: #FFFFFF" title="click to add a new Staff to already existing ones">
+                                <i class="icon-plus"></i> New Staff
+                            </h:commandLink>
+                        </div>
+                        <br />
+                        <br />
+
+                        <div>
+                            <div align="right" style="float: right">
+                                <h:panelGrid columns="3" cellpadding="3">
+                                    <h:selectOneMenu value="#{staffController.searchCriteria}" style="width: auto" title="Search criteria">
+                                        <f:selectItem itemLabel="First Name" itemValue="firstName"/>
+                                        <f:selectItem itemLabel="Last Names" itemValue="lastName"/>
+                                        <f:selectItem itemLabel="Mobile" itemValue="mobile"/>
+                                        <f:selectItem itemLabel="Email" itemValue="email"/>
+                                        <f:selectItem itemLabel="Position" itemValue="position"/>
+                                        <f:selectItem itemLabel="Department" itemValue="department"/>
+                                    </h:selectOneMenu>
+                                    <h:inputText  value="#{staffController.searchText}" style="width: 300px"/>
+                                    <h:commandLink class="btn btn-primary" action="#{staffController.searchStaff()}" style="font-weight: bold; color: whitesmoke; margin-top: -10px" title="search staff">
+                                        <i class="icon-search"></i> Search
+                                    </h:commandLink>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        <br /> <br /> <br />
+
+                        <div align="left" style="float: left">
+                            <h:outputText style="font-weight: 600; font-size: large; color: #0074cc" value="#{staffController.totalStaffs} Available Staff(s)"/>
+                        </div>
+                        <p:dataTable value="#{staffController.staffTableModel}" var="sl" paginator="true" paginatorPosition="bottom" emptyMessage="No Record(s) Found" rows="25" style="width: 100%">
+                            <p:column width="5%" style="text-align: center">
+                                <h:selectBooleanCheckbox id="rowSelector" value="#{sl.selected}" title="select row" onchange="activateDelBtn(this)" />
+                            </p:column>
+                            
+                            <p:column style="text-align: center">
+                                <f:facet name="header">Staff ID</f:facet>
+                                #{sl.staffId}
+                            </p:column>
+
+                            <p:column style="text-align: center">
+                                <f:facet name="header">Name</f:facet>
+                                #{sl.fullName}
+                            </p:column>
+
+                            <p:column width="12%" style="text-align: center">
+                                <f:facet name="header">#{msg.pnum}</f:facet>
+                                #{sl.mobile}
+                            </p:column>
+
+                            <p:column width="12%" style="text-align: center">
+                                <f:facet name="header">Position</f:facet>
+                                #{sl.position}
+                            </p:column>
+
+                            <p:column width="13%" style="text-align: center">
+                                <f:facet name="header">Department</f:facet>
+                                #{sl.department}
+                            </p:column>
+
+                            <p:column width="7%" style="text-align: center">
+                                <f:facet name="header">#{msg.status}</f:facet>
+                                <h:outputText value="#{sl.status.status}" class="#{sl.status.status.equalsIgnoreCase('Active')? 'active' : 'inactive'}" />
+                            </p:column>
+
+                            <p:column width="13%">
+                                <f:facet name="header">#{msg.actions}</f:facet>
+                                <h:commandLink class="btn btn-info btn-small" action="#{staffController.selectRow()}" style="color: #FFFFFF">
+                                    <i class="icon-pencil"></i> #{msg.edit}
+                                </h:commandLink>
+
+                                <a  class="disabled btn btn-small btn-primary"  style="color: #FFFFFF; cursor: not-allowed" title="View Staff details">
+                                    <i class="icon-eye-open"></i>
+                                </a>
+                            </p:column>
+                        </p:dataTable>
+                        <br />
+
+                        <div align="right">
+                            <h:panelGrid columns="2" cellpadding="4">
+                                <a id="delBtn" class="btn btn-danger btn-large" style="color: #FFFFFF" href="#staffDelete" data-toggle="modal" title="Delete selected Staff(s) from list">
+                                    <i class="icon-trash"></i> #{msg.dels}
+                                </a>
+                                <h:commandLink class="btn btn-large btn-warning" style="color: #FFFFFF;" title="click to refresh staff list" action="#{staffController.refreshList()}">
+                                    <i class="icon-refresh"></i> Refresh
+                                </h:commandLink>
+                            </h:panelGrid>
+                        </div>
+
+                        <!--Delete Staff modal-->
+                        <div class="modal hide" id="staffDelete" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Delete Staff(s)</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you really want to <span style="color: tomato;  font-weight: bold">delete</span> <br />
+                                selected Staff(s)?</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to delete selected estates" class="btn btn-primary" style="color: #FFFFFF" action="#{staffController.deleteStaff()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+
+                    </h:form>
+                </p:tab>
+                <!--End of tab-->
+           
+                <!--Beginning of tab 2-->
+                <p:tab title="New Staff" disabled="true">
+                    <h:form prependId="false">
+                        <div align="center">
+                            <div align="center">
+                                <div class="tip_box" id="tip">
+                                    <table cellpadding="7">
+                                        <tr>
+                                            <td>
+                                                <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                            </td>
+                                            <td>
+                                                <h4 style="color: orange" align="center">Tip</h4>
+                                                <h5><i style="color: #0066cc">Fields that displays <img src=".../img/error_pic.PNG"/> are required input fields</i> </h5>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <br/>
+                            <p:growl autoUpdate="true" globalOnly="true" life="4200" showSummary="true" showDetail="false" />
+                            <p:messages autoUpdate="true" globalOnly="true" showDetail="true" showSummary="false" closable="true" showIcon="true">
+                                <p:effect event="load" type="pulsate" delay="500" />
+                            </p:messages>
+                            <br />
+
+                            <h:panelGrid columns="2" cellspacing="15" cellpadding="10" style="width: 100%">
+                                <h:panelGrid columns="1" cellspacing="1" cellpadding="1" style="width: 100%">
+                                    <h:outputLabel for="fName" class="alright" value="First Name : " style="font-weight: bold; text-align: left; font-size: medium" title="First Name"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText id="fName" value="#{staffController.staff.firstName}" required="true" requiredMessage="First Name Required" title="First Name" style="width: 400px;"/>
+                                        <p:message for="fName" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="fName"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="LName" class="alright" value="Last Name : " style="font-weight: bold; text-align: left; font-size: medium" title="Last Name"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="LName" value="#{staffController.staff.lastName}" required="true" requiredMessage="Last Name Required" title="Last Name" style="width: 400px;"/>
+                                        <p:message for="LName" showSummary="false" showDetail="false" display="icon" >
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="LName"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="OName" class="alright" value="Other Name(s) : " style="font-weight: bold; text-align: left; font-size: medium" title="Other Name(s)"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="OName" value="#{staffController.staff.otherNames}" title="Other Name(s)" style="width: 400px;"/>
+                                        <p:message for="OName" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="OName"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="dob" class="alright" value="Date of Birth : " style="font-weight: bold; text-align: left; font-size: medium" title="Date of Birth"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:calendar id="dob" maxdate="#{staffController.currentDate}" effect="slide" value="#{staffController.staff.dob}" title="Date of Birth" navigator="true" style="width: 400px;">
+                                            <f:convertDateTime dateStyle="medium" type="date" pattern="dd/mm/yy"/>
+                                        </p:calendar>
+                                        <p:message for="dob" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="dob"/>
+                                    </h:panelGrid>
+
+                                    <br/>
+                                    <br /> <br /> <br />
+
+                                    <br/>
+                                    <br />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" cellspacing="1" cellpadding="1" style="width: 100%">
+                                    <h:outputLabel for="nation" class="alright" value="Nationality : " style="font-weight: bold; text-align: left; font-size: medium" title="Nationality"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="nation" value="#{staffController.staff.nationality}" title="Nationality" required="true" requiredMessage="Nationality Required" style="width: 400px;"/>
+                                        <p:message for="nation" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="nation"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="state_region" class="alright" value="State/Region : " style="font-weight: bold; text-align: left; font-size: medium" title="State/Region/Povince"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="state_region" value="#{staffController.staff.state_region}" title="State/Region/Povince" required="true" requiredMessage="State/Region Required" style="width: 400px;"/>
+                                        <p:message for="state_region" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="state_region"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="city" class="alright" value="City/Town : " style="font-weight: bold; text-align: left; font-size: medium" title="City/Town"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="city" value="#{staffController.staff.city}" title="City/Town" required="true" requiredMessage="City/Town Required" style="width: 400px;"/>
+                                        <p:message for="city" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="city"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="postal" class="alright" value="Postal Address : " style="font-weight: bold; text-align: left; font-size: medium" title="Postal Address"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="postal" value="#{staffController.staff.postal}" title="Postal Address" style="width: 400px;"/>
+                                        <p:message for="postal" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="postal"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="street" class="alright" value="Street Name : " style="font-weight: bold; text-align: left; font-size: medium" title="Street Name"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="street" value="#{staffController.staff.street}" title="Street Name" style="width: 400px;"/>
+                                        <p:message for="street" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="street"/>
+                                    </h:panelGrid>
+
+                                    <br/>
+                                    <br />
+
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <br />
+
+                            <h:panelGrid columns="2" cellspacing="15" cellpadding="10" style="width: 100%">
+                                <h:panelGrid columns="1" cellspacing="1" cellpadding="1">
+                                    <h:outputLabel for="depart" class="alright" value="Department : " style="font-weight: bold; text-align: left; font-size: medium" title="Department"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="depart" value="#{staffController.staff.department}" title="The Department staff is affiliated" style="width: 400px;"/>
+                                        <p:message for="depart" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="depart"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="position" class="alright" value="Position : " style="font-weight: bold; text-align: left; font-size: medium" title="Current Position"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="position" value="#{staffController.staff.position}" required="true" requiredMessage="Position Required" title="Current Position" style="width: 400px;"/>
+                                        <p:message for="position" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="position"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="officeNum" class="alright" value="Office Number: " style="font-weight: bold; text-align: left; font-size: medium" title="Office Telephone Number"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="officeNum" value="#{staffController.staff.officeNum}" title="Office Telephone Number" style="width: 400px;"/>
+                                        <p:message for="officeNum" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="officeNum"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="task" class="alright" value="Task : " style="font-weight: bold; text-align: left; font-size: medium" title="Task assigned to position"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputTextarea id="task" a:placeholder="Staff's assiged responsibilities"  value="#{staffController.staff.responsiblity}" title="Task assigned to position" style="width: 400px; height: 70px; min-height: 70px; min-width: 400px; max-height: 100px; max-width: 400px"/>
+                                        <p:message for="task" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="task"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" cellspacing="1" cellpadding="1">
+                                    <h:outputLabel for="mobile" class="alright" value="Mobile : " style="font-weight: bold; text-align: left; font-size: medium" title="Mobile number"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inputMask id="mobile" mask="(999) 999 9999" value="#{staffController.staff.mobile}" title="Mobile number" required="true" requiredMessage="Mobile Number Required" style="width: 400px;"/>
+                                        <p:message for="mobile" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="mobile"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="tel" class="alright" value="Telephone : " style="font-weight: bold; text-align: left; font-size: medium" title="Telephone Number"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText  id="tel" value="#{staffController.staff.telephone}" title="Telephone Number" style="width: 400px;"/>
+                                        <p:message for="tel" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="tel"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="email" class="alright" value="Email : " style="font-weight: bold; text-align: left; font-size: medium" title="Email Address"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <h:inputText id="email" value="#{staffController.staff.email}" title="Email Address" style="width: 400px;" validatorMessage="Invalid Email Address">
+                                            <!--<f:validateRequired />-->
+                                            <!--<f:validateRegex pattern="^(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25}+([;.](([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})+)*$" />-->
+                                        </h:inputText>
+                                        <p:message for="email" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="email"/>
+                                    </h:panelGrid>
+
+                                    <br/>
+                                    <br /> <br /> <br />
+
+                                    <br/>
+                                    <br /> <br />
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </div>
+
+                        <div  class="form-actions">
+                            <div class="pull-right" style="margin-right: 150px">
+                                <h:panelGrid columns="3" cellpadding="4">
+                                    <a class="btn btn-success btn-large" style="color: #FFFFFF" href="#staffSave" data-toggle="modal">
+                                        <i class="icon-check"></i> #{msg.save}
+                                    </a>
+
+                                    <a id="refreshFields" href="#tip" class="btn btn-warning btn-large" style="color: #FFFFFF" onclick="clrFields()">
+                                        <i class="icon-refresh"></i> Refresh
+                                    </a>
+
+                                    <a id="back" class="btn btn-danger btn-large" style="color: #FFFFFF" href="#newBack" data-toggle="modal">
+                                        <i class="icon-arrow-left"></i> Back
+                                    </a>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+
+
+                        <!--Confirm Save Staff modal-->
+                        <div class="modal hide" id="staffSave" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: #3a87ad">
+                                <h3>Save Staff Details</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you want to <span style="color: green">save</span> values entered?<br /> 
+                                    Press Yes to save</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{staffController.saveStaff()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                    </h:form>
+
+
+                    <!--Back modal-->
+                    <div class="modal hide" id="newBack" style="width: 400px; left: 65%">
+                        <h:form>
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Warning</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Values entered will be ignored!<br /> 
+                                    Press Yes to go back</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{staffController.newBackAction()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </h:form>
+                    </div>
+                    <!--End Modal-->
+
+                </p:tab>
+                <!--End of tab-->
+
+                <!--Beginning of tab 3-->
+                <p:tab title="Edit Staff" disabled="true">
+                    <h:form prependId="false">
+                        <div align="center">
+                            <div align="center">
+                                <div class="tip_box">
+                                    <table cellpadding="7">
+                                        <tr>
+                                            <td>
+                                                <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                            </td>
+                                            <td>
+                                                <h4 style="color: orange" align="center">Tip</h4>
+                                                <h5><i style="color: #0066cc">Click on values to toggle to edit mode</i> </h5>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <br/>
+                            <p:growl autoUpdate="true" globalOnly="true" life="3800" showSummary="true" showDetail="false" />
+                            <p:messages autoUpdate="true" globalOnly="true" showDetail="true" showSummary="false" closable="true" showIcon="true">
+                                <p:effect event="load" type="pulsate" delay="500" />
+                            </p:messages>
+                            <br />
+
+                            <h:panelGrid columns="2" cellspacing="15" cellpadding="10" style="width: 100%">
+                                <h:panelGrid columns="1" cellspacing="1" cellpadding="1">
+                                    <h:outputLabel for="edfName" class="alright" value="First Name : " style="font-weight: bold; text-align: left; font-size: medium" title="First Name"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText id="edfName" value="#{staffController.edStaff.firstName}" title="First Name" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edfName" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edfName"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edLName" class="alright" value="Last Name : " style="font-weight: bold; text-align: left; font-size: medium" title="Last Name"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edLName" value="#{staffController.edStaff.lastName}" title="Last Name" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edLName" showSummary="false" showDetail="false" display="icon" >
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edLName"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edOName" class="alright" value="Other Name(s) : " style="font-weight: bold; text-align: left; font-size: medium" title="Other Name(s)"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edOName" value="#{staffController.edStaff.otherNames}" title="Other Name(s)" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edOName" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edOName"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="eddob" class="alright" value="Date of Birth : " style="font-weight: bold; text-align: left; font-size: medium" title="Date of Birth"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <p:calendar id="eddob" maxdate="#{staffController.currentDate}" value="#{staffController.edStaff.dob}" effect="slide" title="Date of Birth" navigator="true" required="true" requiredMessage="Date of Birth Required" style="width: 400px;">
+                                                <f:convertDateTime dateStyle="medium" pattern="DD/MM/YY"/>
+                                            </p:calendar>
+                                        </p:inplace>
+                                        <p:message for="eddob" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="eddob"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edStatus" class="alright" value="Status : " style="font-weight: bold; text-align: left; font-size: medium" title="Status of staff"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:selectOneMenu id="edStatus" value="#{staffController.edStaff.status.status}" title="Status of staff" required="true" requiredMessage="Status Required" style="width: 400px;">
+                                                <f:selectItems itemValue="#{commonOptions.statusOptions}" />
+                                                <f:selectItem itemLabel="Active" itemValue="Active" />
+                                                <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
+                                            </h:selectOneMenu>
+                                        </p:inplace>
+                                        <p:message for="edStatus" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edStatus"/>
+                                    </h:panelGrid>
+
+                                    <br/>
+                                    <br />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" cellspacing="1" cellpadding="1">
+                                    <h:outputLabel for="ednation" class="alright" value="Nationality : " style="font-weight: bold; text-align: left; font-size: medium" title="Nationality"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="ednation" value="#{staffController.edStaff.nationality}" title="Nationality" required="true" requiredMessage="Nationality Required" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="ednation" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="ednation"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edstate_region" class="alright" value="State/Region : " style="font-weight: bold; text-align: left; font-size: medium" title="State/Region/Povince"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edstate_region" value="#{staffController.edStaff.state_region}" title="State/Region/Povince" required="true" requiredMessage="State/Region Required" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edstate_region" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edstate_region"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edcity" class="alright" value="City/Town : " style="font-weight: bold; text-align: left; font-size: medium" title="City/Town"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edcity" value="#{staffController.edStaff.city}" title="City/Town" required="true" requiredMessage="City/Town Required" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edcity" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edcity"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edpostal" class="alright" value="Postal Address : " style="font-weight: bold; text-align: left; font-size: medium" title="Postal Address"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edpostal" value="#{staffController.edStaff.postal}" title="Postal Address" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edpostal" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edpostal"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edstreet" class="alright" value="Street Name : " style="font-weight: bold; text-align: left; font-size: medium" title="Street Name"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edstreet" value="#{staffController.edStaff.street}" title="Street Name" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edstreet" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edstreet"/>
+                                    </h:panelGrid>
+
+                                    <br/>
+                                    <br />
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+
+                            <h:panelGrid columns="2" cellspacing="15" cellpadding="10" style="width: 100%">
+                                <h:panelGrid columns="1" cellspacing="1" cellpadding="1">
+                                    <h:outputLabel for="eddepart" class="alright" value="Department : " style="font-weight: bold; text-align: left; font-size: medium" title="Department"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="eddepart" value="#{staffController.edStaff.department}" title="Department" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="eddepart" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="eddepart"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edposition" class="alright" value="Position : " style="font-weight: bold; text-align: left; font-size: medium" title="Current Position"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edposition" value="#{staffController.edStaff.position}" required="true" requiredMessage="Position Required" title="Current Position" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edposition" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edposition"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edoffice" class="alright" value="Office : " style="font-weight: bold; text-align: left; font-size: medium" title="Office"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edoffice" value="#{staffController.edStaff.office}" title="Office" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edoffice" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edoffice"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edtask" class="alright" value="Task : " style="font-weight: bold; text-align: left; font-size: medium" title="Task assigned to position"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide" label="#{staffController.edStaff.responsiblity.length() == 0? ' ' : staffController.edStaff.responsiblity.subSequence(0, 20)} ...">
+                                            <h:inputTextarea id="edtask" a:placeholder="Staff's assiged responsibilities"  value="#{staffController.edStaff.responsiblity}" title="Task assigned to position" style="width: 400px; height: 70px; min-height: 70px; min-width: 400px; max-height: 100px; max-width: 400px"/>
+                                        </p:inplace>
+                                        <p:message for="edtask" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edtask"/>
+                                    </h:panelGrid>
+
+                                    <br />
+                                    <br /> <br />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" cellspacing="1" cellpadding="1">
+                                    <h:outputLabel for="edmobile" class="alright" value="Mobile : " style="font-weight: bold; text-align: left; font-size: medium" title="Mobile number"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <p:inputMask id="edmobile" mask="(999) 999 9999" value="#{staffController.edStaff.mobile}" title="Mobile number" required="true" requiredMessage="Mobile Number Required" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edmobile" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edmobile"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edtel" class="alright" value="Telephone : " style="font-weight: bold; text-align: left; font-size: medium" title="Telephone Number"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText  id="edtel" value="#{staffController.edStaff.telephone}" title="Telephone Number" style="width: 400px;"/>
+                                        </p:inplace>
+                                        <p:message for="edtel" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edtel"/>
+                                    </h:panelGrid>
+
+                                    <h:outputLabel for="edemail" class="alright" value="Email : " style="font-weight: bold; text-align: left; font-size: medium" title="Email Address"/>
+                                    <h:panelGrid columns="3" cellspacing="1" cellpadding="3">
+                                        <p:inplace emptyLabel="null" effect="slide">
+                                            <h:inputText id="edemail" value="#{staffController.edStaff.email}" title="Email Address" style="width: 400px;" />                                             
+                                        </p:inplace>
+                                        <p:message for="edemail" showSummary="false" showDetail="false" display="icon">
+                                            <p:effect event="load" type="bounce" />
+                                        </p:message>
+                                        <p:tooltip showEvent="focus" hideEvent="blur" for="edemail"/>
+                                    </h:panelGrid>
+
+                                    <br /> <br />
+                                    <br />
+
+                                    <br/>
+                                    <br /> <br />
+                                </h:panelGrid>
+
+                            </h:panelGrid>
+                        </div>
+
+
+                        <div  class="form-actions">
+                            <div class="pull-right" style="margin-right: 150px">
+                                <h:panelGrid columns="3" cellpadding="4">
+                                    <a class="btn btn-success btn-large" style="color: #FFFFFF" href="#staffUpdate" data-toggle="modal">
+                                        <i class="icon-check"></i> Update
+                                    </a>
+
+                                    <a id="refreshFields" class="btn btn-warning btn-large" style="color: #FFFFFF" onclick="window.location.reload(true);">
+                                        <i class="icon-refresh"></i> Refresh
+                                    </a>
+
+                                    <a id="back" class="btn btn-danger btn-large" style="color: #FFFFFF" href="#edBack" data-toggle="modal">
+                                        <i class="icon-arrow-left"></i> Back
+                                    </a>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+
+
+                        <!--Confirm update Staff modal-->
+                        <div class="modal hide" id="staffUpdate" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: #3a87ad">
+                                <h3>Alert</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you want to <span style="color: green">update</span> values entered?<br /> 
+                                    Press Yes to save</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to update details" class="btn btn-primary" style="color: #FFFFFF" action="#{staffController.editStaff()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+
+                    </h:form>
+
+
+                    <!--Back modal-->
+                    <div class="modal hide" id="edBack" style="width: 400px; left: 65%">
+                        <h:form>
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Warning</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Changes on values will be ignored!!<br /> 
+                                    Press Yes to go back</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to go back to previous page" class="btn btn-primary" style="color: #FFFFFF" action="#{staffController.edBackAction()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </h:form>
+                    </div>
+                    <!--End Modal-->
+
+                </p:tab>
+                <!--End of tab-->
+
+            </p:tabView>
+        </p:panel>
+        
+     
+
+
+        <script type="text/javascript" >
+            $(document).ready(function (){
+                $('#delBtn').addClass("disabled").css('cursor', 'not-allowed');
+                $('#delBtn').attr('href', '#');
+            });
+    
+            function activateDelBtn(element){
+                var stat = $(element).prop('checked');
+                if(stat === true){
+                    $('#delBtn').removeClass("disabled").css('cursor', 'url');
+                    $('#delBtn').attr('href', '#staffDelete');
+                }
+            }
+            
+            function clrFields(){
+                $('#fName').val("");
+                $('#LName').val("");
+                $('#OName').val("");
+                $('#dob').val("");
+                $('#nation').val("");
+                $('#state_region').val("");
+                $('#city').val("");
+                $('#postal').val("");
+                $('#street').val("");
+                $('#depart').val("");
+                $('#officeNum').val("");
+                $('#position').val("");
+                $('#task').val("");
+                $('#mobile').val("");
+                $('#tel').val("");
+                $('#email').val("");
+            }
+        </script>
+    </h:body>
+</html>
+

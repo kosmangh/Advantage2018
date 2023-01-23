@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+
+        <h:form>
+            <p:growl />
+        </h:form>
+        <p:panel header="Search Property Occupant # #{occupantPropertyController.selectedPropertyOccupant.propertyOccupantId}">
+            <h:form >
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="5">
+                        <h:outputText value="#{msg.searchby}"/>
+                        <h:inputText value="#{occupantPropertyController.searchTerm}"/>
+                        <h:selectOneMenu value="#{occupantPropertyController.searchCriteria}">
+                            <f:selectItem itemLabel="Occupant Name" itemValue="occupantName"/>
+                            <f:selectItem itemLabel="Home Town/Location" itemValue="homeTown"/>
+                            <f:selectItem itemLabel="Telephone Number" itemValue="telephoneNumber"/>
+                            <f:selectItem itemLabel="Occupant Name" itemValue="occupantName"/>
+                        </h:selectOneMenu>&nbsp;
+                        <h:commandButton value="#{msg.search}" action="#{occupantPropertyController.propertyOccupantDataTableSearchButttonAction()}"
+                                         styleClass="btn btn-primary"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:form>
+
+            <h:form>
+                <p:dataTable value="#{occupantPropertyController.pptyOccupantDataModel}" var="lessee" scrollable="true"
+                             stickyHeader="true" scrollHeight="80" >
+                    <p:column>
+                        <f:facet name="header">Occupant Name</f:facet>
+                        #{lessee.occupantName}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Business</f:facet>
+                        #{lessee.occupation}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Location</f:facet>
+                        #{lessee.homeTown}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Gender</f:facet>
+                        #{lessee.gender}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Telephone Number</f:facet>
+                        #{lessee.telephoneNumber}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Actions</f:facet>
+                        <h:commandLink value="#{msg.select}" actionListener="#{occupantPropertyController.propertyOccupantDataTableRowSelectionAction()}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <h:form>
+                <p:dataTable value="#{occupantPropertyController.occupantPropDataModel}" var="op" scrollable="true"
+                             scrollHeight="90" stickyHeader="true">
+                    <p:column>
+                        <f:facet name="header">Estate Property</f:facet>
+                        #{op.estateProperty.estatePropertyId}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Occupancy Type</f:facet>
+                        #{op.occupationType}
+                    </p:column>
+                    <p:column >
+                        <f:facet name="header">First Date Of Occupancy</f:facet>
+                        <h:outputText value="#{op.firstDateOfOccupancy}">
+                            <f:convertDateTime pattern="dd-MMM-YYYY" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Last Day Of Occupancy</f:facet>
+                        <h:outputText value="#{op.lastDateOfOccupancy}" >
+                            <f:convertDateTime pattern="dd-MMM-YYYY" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Actions</f:facet>
+                        <h:commandLink action="#{occupantPropertyController.occupantPropertyDataTableRowSelectionAction}">
+                            <i class="icon-edit"></i>Edit
+                        </h:commandLink> |
+                        <h:selectBooleanCheckbox value="#{op.selected}">
+                            <i class="icon-trash"></i> Delete
+                        </h:selectBooleanCheckbox>
+                    </p:column>
+                </p:dataTable>
+                <h:commandButton value="#{msg.dels}" action="#{occupantPropertyController.deleteButtonAction()}"
+                                 styleClass="btn btn-danger" style="font-weight: bold" onclick="doDeletion('Are you sure you want to delete?')"/>
+            </h:form>
+        </p:panel>
+        <p:panel header="Lessee Property">
+            <h:form>
+                <ui:include src="/includes/property_selection.xhtml"/>
+
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="4">
+                        <h:outputText value="Selected Property Occupant" />
+                        <h:inputText id="les" value="#{occupantPropertyController.occupantName}" readonly="true" required="true" requiredMessage="Lessee required" />
+
+
+                        <h:outputText value="First Date of Occupancy"/>
+                        <p:calendar id="fd" value="#{occupantPropertyController.occupantProperty.firstDateOfOccupancy}" 
+                                    required="false" requiredMessage="*" />
+
+
+                        <h:outputText value="Last Date of Occupancy"/>
+                        <p:calendar id="ld" value="#{occupantPropertyController.occupantProperty.lastDateOfOccupancy}" required="false" requiredMessage="*" />
+
+
+
+                        <h:outputText value=" Property Occupied As " />
+                        <h:selectOneMenu id="occupiedAs" value="#{occupantPropertyController.occupantProperty.occupationType}" required="false" requiredMessage="*">
+                            <f:selectItems value="#{commonOptions.propertyOccupiedAsOptions}" />
+                        </h:selectOneMenu>
+
+                    </h:panelGrid>
+                    <div class="form-actions">
+                        <h:panelGrid columns="5">
+                            <h:commandButton styleClass="btn btn-primary" value="#{msg.save}" rendered="#{!occupantPropertyController.rendered}"
+                                             action="#{occupantPropertyController.saveButtonAction}" style="font-weight: bold"/>
+                            <h:commandButton styleClass="btn btn-info" value="#{msg.update}" rendered="#{occupantPropertyController.rendered}"
+                                             action="#{occupantPropertyController.editButtonAction}" style="font-weight: bold"/>&nbsp;
+                            <h:commandButton styleClass="btn btn-warning" value="#{msg.cls}" action="#{occupantPropertyController.clearButtonAction}"
+                                             style="font-weight: bold"/>&nbsp;
+                            <h:commandLink target="_blank" styleClass="btn btn-primary" style="color: #FFFFFF"
+                                           action="#{occupantPropertyController.reportOccupantProperties}">
+                                <i class="icon-white icon-print"></i>Print Occupant Properties Information
+                            </h:commandLink>
+                        </h:panelGrid>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </p:panel>         
+
+    </h:body>
+</html>
+

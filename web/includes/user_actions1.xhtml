@@ -1,0 +1,122 @@
+<!--<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:form rendered="false">
+        <h:dataTable styleClass="items" value="#{userdata.userAccessPagesList}" var="userPage"  border="0">
+            <h:column>
+                <h:panelGroup style="display: block;" rendered="#{userPage.separateWindow}">
+                    <h:commandButton value="#{userPage.pageName}"
+                                     style="font-size: 13px; width: 100%; margin-bottom: 3px;"
+                                     onclick="#{userPage.popupCode}" />
+                </h:panelGroup>
+
+                <h:panelGroup style="display: block;" rendered="#{!userPage.separateWindow}">
+                    <h:commandButton value="#{userPage.pageName}"
+                                     action="#{userdata.setRequestedPageURL(userPage.pageURL)}"
+                                     style="font-size: 13px; width: 100%; margin-bottom: 3px;" />
+                </h:panelGroup>
+            </h:column>
+        </h:dataTable>
+    </h:form>
+
+    <h:form rendered="true">
+        <rich:panelMenu activeItem="#{userdata.currentUserPage.pageCode}"
+                        groupExpandedLeftIcon="triangleUp"
+                        groupCollapsedLeftIcon="triangleDown"
+                        topGroupExpandedRightIcon="chevronUp"
+                        topGroupCollapsedRightIcon="chevronDown" itemLeftIcon="disc"
+                        itemChangeListener="#{userdata.updateCurrentPage}">
+            <c:forEach items="#{userdata.userPageGroupsList}" var="pageGroup" >
+                <rich:panelMenuGroup label="#{pageGroup.groupName}" >
+                    <c:forEach items="#{pageGroup.userPagesList}" var="userPage" >
+                        <rich:panelMenuItem label="#{userPage.pageName}"
+                                            mode="server"
+                                            name="#{userPage.pageURL}">
+                        </rich:panelMenuItem>
+                    </c:forEach>
+                </rich:panelMenuGroup>
+            </c:forEach>
+        </rich:panelMenu>
+    </h:form>
+
+    <h:form rendered="false">
+
+        <rich:panelMenu itemMode="server" groupMode="server" style="width:130px"
+                        groupExpandedLeftIcon="triangleUp"
+                        groupCollapsedLeftIcon="triangleDown"
+                        topGroupExpandedRightIcon="chevronUp"
+                        topGroupCollapsedRightIcon="chevronDown" itemLeftIcon="disc"
+                        itemChangeListener="#{userdata.updateCurrentPage}"
+                        activeItem="General Actions">
+
+            <ui:repeat value="#{userdata.userPageGroupsList}" var="pageGroup" >
+
+                <rich:panelMenuGroup label="#{pageGroup.groupName}" name="#{pageGroup.groupName}" >
+                    <ui:repeat value="#{pageGroup.userPagesList}" var="userPage" >
+                        <rich:panelMenuItem label="#{userPage.pageName}"
+                                            mode="server"
+                                            name="#{userPage.pageURL}"/>
+
+                    </ui:repeat>
+                </rich:panelMenuGroup>
+            </ui:repeat>
+
+        </rich:panelMenu>
+
+    </h:form>
+
+
+    <h:form rendered="false">
+
+        <rich:list value="#{userdata.userPageGroupsList}" var="pageGroup" type="ordered">
+            <rich:collapsiblePanel header="#{pageGroup.groupName}" expanded="false">
+                <rich:list value="#{pageGroup.userPagesList}" var="userPage" type="ordered" >
+
+                    <h:panelGroup style="display: block;" rendered="#{userPage.separateWindow}">
+                        <h:commandLink value="#{userPage.pageName}"
+                                       style="font-size: 13px; width: 100%; margin-bottom: 3px;"
+                                       onclick="#{userPage.popupCode}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup style="display: block;" rendered="#{!userPage.separateWindow}">
+                        <h:commandLink value="#{userPage.pageName}"
+                                       action="#{userdata.setRequestedPageURL(userPage.pageURL)}"
+                                       style="font-size: 13px; width: 100%; margin-bottom: 3px;" />
+                    </h:panelGroup> 
+
+                </rich:list>
+            </rich:collapsiblePanel>
+        </rich:list>
+
+    </h:form>
+
+
+    <h:form rendered="false">
+        <rich:accordion >
+            <rich:accordionItem header="Exam Related" >
+                <ui:repeat value="#{userdata.userPageGroupPagesList('Examination Related')}" var="userPage" >
+
+                    <ui:include src="/pagefragments/user_action_links.xhtml" >
+
+                    </ui:include>
+
+                </ui:repeat>
+            </rich:accordionItem>
+
+            <rich:accordionItem header="Student Bill" >
+                <ui:repeat value="#{userdata.userPageGroupPagesList('Student Bill')}" var="userPage" >
+
+                    <ui:include src="/pagefragments/user_action_links.xhtml" >
+
+                    </ui:include>
+                </ui:repeat>
+            </rich:accordionItem>
+
+        </rich:accordion>
+    </h:form>
+</html>
+-->

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <h:form>
+            <p:messages />
+        </h:form>
+        <p:panel header="Block Estates">
+            <h:form id="block_estates">
+<!--                <h:panelGroup layout="block">-->
+<!--                    <h:panelGrid columns="4">-->
+                        <ui:include src="/includes/property_selection_1.xhtml" />&nbsp;
+                        <h:panelGroup style="margin-top: -10px;">
+                            <h:outputText value="Occupant Name:"/><h:outputText value="#{ledgerController.occupantName}" id="occupantName"/>
+                        </h:panelGroup>
+<!--                    </h:panelGrid>-->
+<!--                </h:panelGroup>-->
+                
+                <div class="form-actions">
+                    <h:panelGrid columns="3">
+                        <h:commandButton value="Block Selected Property" styleClass="btn btn-danger" actionListener="#{ledgerController.blockSelectedEstateProperty()}"/>&nbsp;
+                        <h:commandButton value="Unblock selected Property" styleClass="btn btn-warning" actionListener="#{ledgerController.unBlockSeletedEstateProperty()}"/>    
+                    </h:panelGrid>
+                </div>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>
+

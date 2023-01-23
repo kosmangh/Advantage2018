@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:panelGroup layout="block">
+        <h:panelGroup styleClass="page_block_header">
+            <h:outputLabel value="Lessee Statement of Account" />
+        </h:panelGroup>
+        <h:form id="check" prependId="false">
+
+            <ui:include src="/pagefragments/property_selection.xhtml" />
+
+            <h:outputText value="| Year " />
+            <h:selectOneMenu value="#{billPaymentController.selectedYear}" >
+                <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+            </h:selectOneMenu>
+
+            <a4j:commandButton value="Load Estate Property Ledger"
+                               action="#{billPaymentController.loadSelectedEstatePropertyLedger}"
+                               styleClass="action_button" render="check, entry, mainMsg" />
+
+            <h:outputText value=" Property Occupant : #{billPaymentController.propertyOccupantName},
+                          Occupied as #{billPaymentController.selectedOccupantProperty.occupationType}"
+                          style="font-weight: bolder"/>
+
+            <h:panelGroup layout="block" style="background-color: burlywood; font-size: 12px;margin-top: 10px" >
+                <h:panelGrid columns="6">
+                    <h:outputLabel value="Total Credit: "/>
+                    <h:inputText value="#{billPaymentController.totalCreditEntry}" readonly="true"/>
+                    <h:outputLabel value="Total Debit: "/>
+                    <h:inputText value="#{billPaymentController.totalDebitEntry}" readonly="true"/>
+                    <h:outputLabel value="Outstanding Balance: "/>
+                    <h:inputText value="#{billPaymentController.outstandingBalance}" readonly="true"/>
+                </h:panelGrid>
+            </h:panelGroup>
+
+        </h:form>
+
+        <h:panelGroup layout="block" styleClass="ledger_view" id="entry">
+            <div style="overflow: auto;height: 200px;margin-top: 10px">
+                <h:form id="frm_search_bill">
+                    <rich:dataTable binding="#{billPaymentController.estatePropertyLedgerDataPanel.dataTable}"/>
+                </h:form>  
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup styleClass="page_block_header">
+            <h:outputLabel value="Account Activity" />
+        </h:panelGroup>
+
+
+        <h:form>
+            <h:panelGrid columns="4">
+                <h:outputLabel value="Transaction From Date:"/>
+                <h:panelGroup>
+                    <p:calendar value="#{billPaymentController.transactionFrom}" >
+                        <f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" type="date"/>
+                    </p:calendar>
+                </h:panelGroup>
+                <h:outputLabel value="Transaction to Date:" style="margin-left: 20px"/>
+                <h:panelGroup>
+                    <p:calendar  value="#{billPaymentController.transactionTo}">
+                        <f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" type="date"/>
+                    </p:calendar>
+                </h:panelGroup>
+
+            </h:panelGrid>
+
+            <div style="margin-top: 20px">
+                <h:panelGroup>
+                    <h:commandLink value="Print Statement of Account" target="_blank"
+                                   styleClass="action_button" style="color: white;"
+                                   action="#{billPaymentController.generateAccountStatement}"/>
+                </h:panelGroup>
+            </div>
+        </h:form>
+
+    </h:panelGroup>
+</html>
+

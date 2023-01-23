@@ -1,0 +1,498 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    
+    <h:body>
+        <style>
+            .tip_box{
+                height: 50px;
+                width: 500px;
+                color: whitesmoke;
+                background-color: tomato;
+                border-radius: 8px;
+                border-color: #363636;
+                border-width: thin;
+                box-shadow: #363636 0.4, #444444 0.4, #595959 0.4;
+            }
+            
+            .VLabel{
+                font-weight: bold;
+                text-align: right;
+                font-size: medium
+            }
+        </style>
+        
+        <p:panel header="Estate Blocks">
+            <p:tabView effect="slide" effectDuration="slow" activeIndex="#{estateBlockController.tabIndex}" prependId="false">
+            
+                <!--Beginning of tab 1-->
+                <p:tab title="Blocks Register">
+                    <h:form prependId="false" id="tab1_form">
+                        <br />
+                        <p:growl autoUpdate="true" life="3800" showSummary="true" showDetail="false" globalOnly="true"/>
+                        <p:messages autoUpdate="true" closable="true" globalOnly="true" severity="Severity.error" showIcon="true" showDetail="true" showSummary="false" style="text-align: center" >
+                            <p:effect event="load" type="pulsate" delay="500" />
+                        </p:messages>
+                        <br />
+                        <br />
+                        
+                        <div align="left">
+                            <h:commandLink class="btn btn-info btn-large" style="color: #FFFFFF" title="click to add a new estate block to already existing ones" action="#{estateBlockController.toNewEstateBlk()}">
+                                <i class="icon-plus"></i> New Estate Block
+                            </h:commandLink>
+                        </div>
+                        <br />
+                        <br />
+                        <div>
+                            <div style="float: left">
+                                <h:selectOneMenu title="Sort Block list" disabled="true">
+                                    <f:selectItems value="#{commonOptions.blkFilters}"/>
+                                </h:selectOneMenu>
+                            </div>
+                            
+                            <div style="float: right">
+                                <h:panelGrid columns="3" cellpadding="3">
+                                    <h:selectOneMenu value="#{estateBlockController.searchItem}" title="select item to base on during a search" style="width: 100%">
+                                        <f:selectItem itemLabel="Block Name" itemValue="blockName"/>
+                                        <f:selectItem itemLabel="Estate Name" itemValue="estate.estateName"/>
+                                    </h:selectOneMenu>
+                                    <h:inputText value="#{estateBlockController.searchString}" style="width: 300px" title="Enter search item" a:placeholder="Enter Search Item..." a:type="search"/>
+                                    <h:commandLink action="#{estateBlockController.blockSearch()}" styleClass="btn btn-primary" style="font-weight: bold; color: whitesmoke; margin-top: -10px" title="search for an estate blocks">
+                                        <i class="icon-search"></i> #{msg.search}
+                                    </h:commandLink>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        <br /> <br /> <br />
+                        
+                        <div align="left" style="float: left">
+                            <h:outputText value="#{estateBlockController.totalBlocks} Estate Blocks" style="font-weight: 600; font-size: large; color: #0074cc"/>
+                        </div>
+                        
+                        <p:dataTable value="#{estateBlockController.estateBlockDataModel}" var="ebList" rows="25" paginator="true" emptyMessage="No Record(s) found" paginatorPosition="bottom">
+                            <p:column width="5%" style="text-align: center">
+                                <h:selectBooleanCheckbox title="select row" value="#{ebList.selected}" />
+                            </p:column>
+                            
+                            <p:column width="15%" style="text-align: center">
+                                <f:facet name="header">#{msg.blkname}</f:facet>
+                                <h:outputText value="#{ebList.blockName}" title="Block Name"/>
+                            </p:column>
+                            
+                            <p:column>
+                                <f:facet name="header">#{msg.esreg}</f:facet>
+                                <h:outputText value="#{ebList.estate.estateName}" title="Estate affiliated"/>
+                            </p:column>
+                            
+                            <p:column width="10%" style="text-align: center">
+                                <f:facet name="header">Block Size</f:facet>
+                                <h:outputText value="0.0" title="Size of Block"/>
+                            </p:column>
+                            
+                            <p:column width="10%" style="text-align: center">
+                                <f:facet name="header">Size Left</f:facet>
+                                <h:outputText value="0.0" title="Land size Left"/>
+                            </p:column>
+                            
+                            <p:column width="12%" style="text-align: center">
+                                <f:facet name="header">Properties</f:facet>
+                                <h:outputText value="#{ebList.propertiesSize}" title="Total number of properties assigned to block"/>
+                            </p:column>
+                            
+                            <p:column width="13%">
+                                <f:facet name="header">#{msg.actions}</f:facet>
+                                <h:commandLink actionListener="#{estateBlockController.select()}" class="btn btn-small btn-info" style="color: #FFFFFF">
+                                    <i class="icon-edit"></i> #{msg.edit}
+                                </h:commandLink>
+                                
+                                <a  class="disabled btn btn-small btn-primary"  style="color: #FFFFFF; cursor: not-allowed" title="View Block's details">
+                                    <i class="icon-eye-open"></i>
+                                </a>
+                            </p:column>
+                        </p:dataTable>
+                        <br />
+                        
+                        <div align="right">
+                            <h:panelGrid columns="2" cellpadding="4">
+                                <a class="btn btn-danger btn-large" style="color: #FFFFFF" href="#blockDelete" data-toggle="modal" title="Delete selected Block(s) from the list">
+                                    <i class="icon-trash"></i> Delete
+                                </a>
+                                <h:commandLink class="btn btn-large" style="color: #000000"  title="click to refresh estates block list" action="#{estateBlockController.refresh()}">
+                                    <i class="icon-refresh"></i> Refresh
+                                </h:commandLink>
+                            </h:panelGrid>
+                        </div>
+                        
+                        <!--Delete Estate modal-->
+                        <div class="modal hide" id="blockDelete" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Delete Block(s)</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you really want to <span style="color: tomato;  font-weight: bold">delete</span> <br />
+                                selected Estates Blocks?</p><br/>
+                                <h:selectBooleanCheckbox title="check to permanently to delete selected Block(s)" value="#{estateBlockController.permDelete}"/> Delete Permanently
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to delete selected estates" class="btn btn-primary" style="color: #FFFFFF" action="#{estateBlockController.deleteBlks()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                    </h:form>
+                </p:tab>
+                <!--End tab 1-->
+                
+                <!--Beginning of tab 2-->
+                <p:tab title="New Estates Blocks" disabled="true" >
+                    <h:form prependId="true" id="tab2_form">
+                        <div align="center">
+                            <div align="center">
+                                <div class="tip_box">
+                                    <table cellpadding="7">
+                                        <tr>
+                                            <td>
+                                                <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                            </td>
+                                            <td>
+                                                <h4 style="color: orange" align="center">Tip</h4>
+                                                <h5><i style="color: #0066cc">Fields that displays <img src=".../img/error_pic.PNG"/> are required input fields</i> </h5>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+                            
+                            <br/>
+                            <p:growl autoUpdate="true" globalOnly="true" life="3800" showSummary="true" showDetail="false" />
+                            <h:messages globalOnly="true" showDetail="true" showSummary="false">
+                                <p:effect event="load" type="pulsate" delay="500" />
+                            </h:messages>
+                            <br />
+                            <br />
+                            
+                            <h:panelGrid columns="4" cellspacing="8" cellpadding="10">
+                                <h:outputLabel for="blockEst" class="VLabel" value="#{msg.blkest} : " title="Avilable Estates"/>
+                                <h:selectOneMenu id="blockEst" required="true" requiredMessage="Block Estate Required" value="#{estateBlockController.estateBlock.estate}" title="Estate in which block is affiliated" style="width: 450px">
+                                    <f:selectItems value="#{commonOptions.estateOptions}"/>
+                                </h:selectOneMenu>
+                                <p:message for="blockEst" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="blockEst" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="blockName" class="VLabel" value="#{msg.blkname} : " title="Estate Block name"/>
+                                <h:inputText id="blockName" value="#{estateBlockController.estateBlock.blockName}" required="true" requiredMessage="Block Name Required" title="Name of the Block" style="width: 450px"/>
+                                <p:message for="blockName" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip showEvent="focus" hideEvent="blur" for="blockName"/>
+                                
+                                <h:outputLabel for="blockSize" class="VLabel" value="Size : " style="margin-top: -25px" title="Estate Block size"/>
+                                <h:panelGroup>
+                                    <h:inputText id="blockSize" a:type="number" value="#{estateBlockController.estateBlock.blkSize}" required="true" requiredMessage="Block Size Required" a:placeholder="eg, 45.95, 30.45" validatorMessage="Invalid Block's size" title="Size of the Block" style="width: 450px">
+                                        <f:validateDoubleRange for="blockSize" />
+                                    </h:inputText>
+                                    <p align="center" style="font-size: small; margin-top: -10px"><span style="color: red"><i>NB : Block size is numeric and measured in acre(s) eg, 20.56</i></span></p>
+                                </h:panelGroup>
+                                <p:message for="blockSize" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip showEvent="focus" hideEvent="blur" for="blockSize"/>
+                                
+                                <h:outputLabel for="desc" class="VLabel" value="Description : " title="Block's additional description"/>
+                                <h:inputTextarea id="desc" a:placeholder='Additional Description' value="#{estateBlockController.estateBlock.addDesc}" title="Additional description of the Block" style="width: 450px; height: 70px; min-height: 70px; min-width: 450px; max-height: 100px; max-width: 450px"/>
+                                <p:message for="desc" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip showEvent="focus" hideEvent="blur" for="desc"/>
+                            </h:panelGrid>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <div class="pull-right" style="margin-right: 100px">
+                                <h:panelGrid columns="3" cellpadding="4">
+                                    <a class="btn btn-success btn-large" style="color: #FFFFFF" href="#estateBlkSave" data-toggle="modal">
+                                        <i class="icon-check"></i> #{msg.save}
+                                    </a>
+
+                                    <h:commandLink class="btn btn-large" style="color: #000000" >
+                                        Clear
+                                        <p:ajax resetValues="true" update="tab2_form" />
+                                    </h:commandLink>
+                                    
+                                    <a id="back" class="btn btn-danger btn-large" style="color: #FFFFFF" href="#bck" data-toggle="modal">
+                                        <i class="icon-arrow-left"></i> Back
+                                    </a>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        
+                        <!--Confirm Save Estate Block modal-->
+                        <div class="modal hide" id="estateBlkSave" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: #3a87ad">
+                                <h3>Save Block Details</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you want to <span style="color: green; font-weight: bolder">save</span> values entered?<br /> 
+                                    Press Yes to save</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{estateBlockController.saveBlk()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                    </h:form>
+                    
+                    <!--Confirm Going back modal-->
+                    <h:form prependId="false">
+                        <div class="modal hide" id="bck" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Warning</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Changes on values will be ignored !<br /> 
+                                    Press Yes to go back</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{estateBlockController.toEstateBlkList()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                    </h:form>
+                    <!--End Modal-->
+                    
+                </p:tab>
+                <!--End tab 2-->
+                
+                
+                <!--Beginning of tab 3-->
+                <p:tab title="Block Info" disabled="true">
+                    <h:form id="tab3_form" prependId="false" >
+                        <div align="center">
+                            <div align="center">
+                                <div class="tip_box">
+                                    <table cellpadding="7">
+                                        <tr>
+                                            <td>
+                                                <img src=".../img/hss-alert-icon.png" alt="tip" align="middle" height="40" width="45"/>
+                                            </td>
+                                            <td>
+                                                <h4 style="color: orange" align="center">Tip</h4>
+                                                <h5><i style="color: #0066cc">Click on values to get to the edit mode</i> </h5>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+                            
+                            <br/>
+                            <p:growl autoUpdate="true" globalOnly="true" life="3800" showSummary="true" showDetail="false" />
+                            <h:messages globalOnly="true" showDetail="true" showSummary="false">
+                                <p:effect event="load" type="pulsate" delay="500" />
+                            </h:messages>
+                            <br />
+                            <br />
+                            
+                            <h:panelGrid columns="4" cellspacing="8" cellpadding="10">
+                                <h:outputLabel for="EdBlockEst" class="VLabel" value="#{msg.blkest} : " title="Avilable Estates"/>
+                                <p:inplace effect="slide" emptyLabel="null" label="#{estateBlockController.dispEstate}">
+                                    <h:selectOneMenu id="EdBlockEst" required="true" requiredMessage="Block Estate Required" value="#{estateBlockController.selectedBlock.estate}" title="Estate in which block is affiliated" style="width: 450px" disabled="true" readonly="true">
+                                        <f:selectItems value="#{commonOptions.estateOptions}"/>
+                                    </h:selectOneMenu>
+                                </p:inplace>
+                                <p:message for="EdBlockEst" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip for="EdBlockEst" showEvent="focus" hideEvent="blur"/>
+                                
+                                <h:outputLabel for="EdBlockName" class="VLabel" value="#{msg.blkname} : " title="Estate Block name"/>
+                                <p:inplace emptyLabel="null" effect="slide">
+                                    <h:inputText id="EdBlockName" disabled="true" value="#{estateBlockController.selectedBlock.blockName}" required="true" requiredMessage="Block Name Required" title="Name of the Block" style="width: 450px"/>
+                                </p:inplace>
+                                <p:message for="EdBlockName" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip showEvent="focus" hideEvent="blur" for="EdBlockName"/>
+                                
+                                <h:outputLabel for="EdBlockSize" class="VLabel" value="Size : " style="margin-top: -25px" title="Estate Block size"/>
+                                <h:panelGroup>
+                                    <p:inplace effect="slide" emptyLabel="null" >
+                                        <h:inputText id="EdBlockSize" a:type="number" value="#{estateBlockController.selectedBlock.blkSize} ac" required="true" requiredMessage="Block Size Required" a:placeholder="eg, 45.39, 30.45" title="Size of the land of the Block" style="width: 450px"/>
+                                    </p:inplace><br />
+                                    <p align="center" style="font-size: small; margin-top: -10px"><span style="color: red"><i>NB : Block size is numeric and measured in acre(s)</i></span></p>
+                                </h:panelGroup>
+                                <p:tooltip for="EdBlockSize" showEvent="focus" hideEvent="blur"/>
+                                <p:message for="EdBlockSize" showSummary="false" showDetail="false" display="icon"/>
+                                
+                                <h:outputLabel for="Eddesc" class="VLabel" value="Description : " title="Block's additional description"/>
+                                <p:inplace effect="slide" emptyLabel="null" >
+                                    <h:inputTextarea id="Eddesc" a:placeholder='Additional Description' value="#{estateBlockController.selectedBlock.addDesc}" title="Additional description of the Block" style="width: 450px; height: 70px; min-height: 70px; min-width: 450px; max-height: 100px; max-width: 450px"/>
+                                </p:inplace>
+                                <p:message for="Eddesc" showSummary="false" showDetail="false" display="icon"/>
+                                <p:tooltip showEvent="focus" hideEvent="blur" for="Eddesc"/>
+                            </h:panelGrid>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <div class="pull-right" style="margin-right: 100px">
+                                <h:panelGrid columns="3" cellpadding="4">
+                                    <a class="btn btn-success btn-large" style="color: #FFFFFF" href="#estateBlkUpdate" data-toggle="modal">
+                                        <i class="icon-check"></i> #{msg.update}
+                                    </a>
+
+                                    <h:commandLink class="btn btn-large" style="color: #000000">
+                                        Reset
+                                        <p:ajax update="tab3_form" resetValues="true" />
+                                    </h:commandLink>
+                                    
+                                    <a id="back" class="btn btn-large btn-danger" style="color: whitesmoke" href="#updateback" data-toggle="modal">
+                                        <i class="icon-arrow-left"></i> Back
+                                    </a>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        
+                         <!--Confirm Update Estate modal-->
+                        <div class="modal hide" id="estateBlkUpdate" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: #3a87ad">
+                                <h3>Update Block Details</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Do you want to <span style="color: blue; font-weight: bold">update</span> values entered?<br /> 
+                                    Press Yes to update</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink class="btn btn-primary" title="click to update details" action="#{estateBlockController.editBlk()}" style="color: #FFFFFF" >
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <!--End Modal-->
+                    </h:form>
+                    
+                    <!--Confirm Going back modal-->
+                    <h:form prependId="false">
+                        <div class="modal hide" id="updateback" style="width: 400px; left: 65%">
+                            <div class="modal-header" style="background-color: tomato">
+                                <h3>Warning</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p align="center">Changes on values will be ignored !!<br /> 
+                                    Press Yes to continue</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-danger" style="color: #FFFFFF" data-dismiss="modal" title="click to close dialog">
+                                    No <i class="icon-thumbs-down"></i>
+                                </a>
+                                <h:commandLink title="click to save details" class="btn btn-primary" style="color: #FFFFFF" action="#{estateBlockController.toEstateBlkList()}">
+                                    Yes <i class="icon-thumbs-up"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                    </h:form>
+                    <!--End Modal-->
+                    
+                </p:tab>
+                <!--End tab-->
+            </p:tabView>
+        </p:panel>
+        
+        
+        
+        
+        
+        
+<!--        <h:form id="msgs">
+            <p:growl />
+        </h:form>
+        <p:panel header="Estate Block Registration">
+            <h:form id="estateBlockForm">
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="5">
+                        <h:outputText value="{msg.blkest}" />
+                        <h:selectOneMenu value="{estateBlockController.selectedEstate}">
+                            <f:selectItems value="{commonOptions.estateOptions}"/>
+                        </h:selectOneMenu>
+                        <h:outputText value="{msg.blkname}" />
+                        <h:inputText id="block_name" value="{estateBlockController.estateBlock.blockName}" required="true" 
+                                     requiredMessage="Block name cannot be empty" title="This field is required"/>
+                        <p:tooltip showEvent="focus" hideEvent="blur" for="block_name"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+                <div class="form-actions">
+                    <h:panelGroup layout="block">
+                        <h:panelGrid columns="3">
+                            <h:commandButton value="{msg.save}" action="{estateBlockController.saveButtonAction}" styleClass="btn btn-primary"
+                                              style="font-weight: bold"/>
+                            <h:commandButton value="{msg.update}" action="{estateBlockController.editButtionAction()}" styleClass="btn btn-info"
+                                              style="font-weight: bold"/>
+                            <h:commandButton value="{msg.cls}" type="reset" styleClass="btn btn-warning"
+                                             style="font-weight: bold" immediate="true"/>
+                        </h:panelGrid>
+                    </h:panelGroup>            
+                </div>
+            </h:form>
+            <h:form>
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="4">
+                        <h:selectOneMenu value="{estateBlockController.searchItem}">
+                            <f:selectItem itemLabel="Block Name" itemValue="blockName"/>
+                            <f:selectItem itemLabel="Estate Name" itemValue="estate.estateName"/>
+                        </h:selectOneMenu>
+                        <h:inputText value="{estateBlockController.searchString}"/> &nbsp;
+                        <h:commandButton  action="{estateBlockController.searchButtonAction}" styleClass="btn btn-primary" 
+                                          value="{msg.search}"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:form>
+            <h:form>
+                <p:dataTable value="{estateBlockController.estateBlockDataModel}" var="ebList" 
+                            stickyHeader="true" scrollable="true" scrollHeight="100">
+                    <p:column>
+                        <f:facet name="header">{msg.blkname}</f:facet>
+                        {ebList.blockName}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">{msg.esreg}</f:facet>
+                        {ebList.estate}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">{msg.actions}</f:facet>
+                        <h:commandLink actionListener="{estateBlockController.select()}">
+                            <i class="icon-edit"></i>{msg.edit}
+                        </h:commandLink> |
+                        <h:selectBooleanCheckbox value="{ebList.selected}">
+                            <i class="icon-trash"></i>{msg.del} 
+                        </h:selectBooleanCheckbox>
+                    </p:column>
+                </p:dataTable>
+                
+                    <h:commandButton value="{msg.dels}" action="{estateBlockController.deleteButtonAction}" onclick="return doDeletion('Are you sure you want to delete?');"
+                                     styleClass="btn btn-danger" style="font-weight: bold"/>
+                
+            </h:form>
+        </p:panel>-->
+    </h:body>
+</html>
+

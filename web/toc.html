@@ -1,0 +1,422 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<title>Advantage User Manual - Table of Contents</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.4.0.418">
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/silver-theme/jquery-ui-1.8.12.custom.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/dynatree/chm/ui.dynatree.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="css/toc.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#tabs .ui-widget-header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.dynatree.min.js"></script>
+	<script type="text/javascript" src="js/hndjsse.js"></script>
+	<script type="text/javascript">
+	
+		window.bSearchDataLoaded = false;
+		var sHelpIdToActivate = '';
+	
+		$(document).ready(function()
+		{
+			var sAnchorName = '';
+			try { sAnchorName = top.location.href.substring(top.location.href.lastIndexOf("#") + 1, top.location.href.length); }
+			catch(err) { sAnchorName = ''; }
+			var nSelectedTab = 0;
+			if (sAnchorName == '_index') nSelectedTab = 1
+			else if (sAnchorName == '_search') nSelectedTab = 2;			
+			$("#tabs").tabs({
+				selected: nSelectedTab,
+				select: function(event, ui) { HideKwPopup(); }
+			});
+			
+			// Toc
+			if ($("#tab-toc").length) {
+				$("#tab-toc").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#tab-keywords").length && $("#tab-keywords").dynatree && $("#tab-keywords").dynatree("getTree") && $("#tab-keywords").dynatree("getTree").activateKey)
+							$("#tab-keywords").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-toc").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				// Select the active help id
+				if (sHelpIdToActivate != '') $("#tab-toc").dynatree("getTree").activateKey(sHelpIdToActivate);
+			}
+			
+			// Keywords
+			
+			if ($("#tab-keywords").length) {
+				$("#tab-keywords").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onClick: function(node, event){
+						HideKwPopup();
+						if (node.data && node.data.click)
+						{
+							var aRefList = null;
+							eval('aRefList=' + node.data.click);
+							if (ShowKwPopup(node.li, aRefList))
+							{
+								if ($("#tab-toc") && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").activateKey)
+									$("#tab-toc").dynatree("getTree").activateKey(null);
+								if(node.data.href && node.data.href != '#'){
+									window.open(node.data.href, node.data.target);
+								}
+							}
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-keywords").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				}
+			
+			// Load search data
+			(function() {
+				var se = document.createElement('script'); se.type = 'text/javascript'; se.async = true;
+				se.src = 'js/hndsd.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(se, s);
+			})();
+		});
+		
+		$('body').click(function() {
+			HideKwPopup();
+		});
+		
+		function SelectTocItem(sHelpId)
+		{
+			if ($("#tab-toc").length && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").getNodeByKey) {
+				$("#tab-toc").dynatree("getTree").getNodeByKey(sHelpId).activateSilently();
+			}
+			else {
+				sHelpIdToActivate = sHelpId;
+			}
+		}
+		
+		function HideKwPopup()
+		{
+			if($("#popupMenu")) $("#popupMenu").remove();
+		}
+		
+		function ShowKwPopup(oSender, aLinks)
+		{
+			HideKwPopup();
+			if (!aLinks || !aLinks.length || aLinks.length == 0) return false
+			else if (aLinks.length == 1) return true
+			else
+			{
+				var oParentDiv = document.createElement("DIV");
+				oParentDiv.id = "popupMenu";
+				var oLink = null;
+				// Close button
+				oLink = document.createElement("SPAN");
+				oLink.className = "close-button";
+				oLink.innerHTML = "X";
+				oLink.href = "#";
+				oLink.onclick = HideKwPopup;
+				oParentDiv.appendChild(oLink);
+				// Items
+				for (var nCnt=0; nCnt<aLinks.length; nCnt++)
+				{
+					oLink = document.createElement("A");
+					oLink.innerHTML = aLinks[nCnt][0];
+					oLink.href = aLinks[nCnt][1];
+					oLink.target = "FrameMain";
+					oLink.onclick = HideKwPopup;
+					oParentDiv.appendChild(oLink);
+				}
+				document.body.appendChild(oParentDiv);
+				var pos = $(oSender).offset(); 
+				var height = $(oSender).height();
+				$(oParentDiv).css({
+					"left": (pos.left+20) + "px",
+					"top": (pos.top + height + 5) + "px"
+				});
+				$(oParentDiv).show();
+				return false;
+			}
+		}
+		
+		function PerformSearch()
+		{
+			if (!window.bSearchDataLoaded) {
+				$("#search_results").html("Search engine data hasn't been fully loaded yet or an error occurred while loading it. This usually happens when documentation is browsed locally.");
+				return;
+			}
+			sValue = $("#search_value").val();
+			$("#search_results").html('Searching...');
+			var oSearchEngine = new HndJsSe;
+			oSearchEngine.ParseInput(sValue);			
+			oSearchEngine.PerformSearch();
+			if (!oSearchEngine.aResults || !oSearchEngine.aResults.length)
+			{
+				$("#search_results").html('No results found.');
+			}
+			else
+			{
+				$("#search_results").html('<div id="search_results_content"></div>');
+				var oUl = $("#search_results_content").append("<ul id='lr'></ul>").find("ul");
+				for (var nCnt = 0; nCnt < oSearchEngine.aResults.length; nCnt++)
+				{
+					if (oSearchEngine.aResults[nCnt][0] < aTl.length)
+					{
+						oUl.append("<li><a href='" + aTl[oSearchEngine.aResults[nCnt][0]][0] + "?search=" + escape(sValue) + "' target='FrameMain'>" + unescape(aTl[oSearchEngine.aResults[nCnt][0]][1]) + "</a></li>");
+					}
+				}
+				// Tree
+				$("#search_results_content").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#search_results_content") && $("#search_results_content").dynatree && $("#search_results_content").dynatree("getTree") && $("#search_results_content").dynatree("getTree").activateKey)
+							$("#search_results_content").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+			}
+		}
+	</script>
+</head>
+
+<body>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tab-toc">Contents</a></li>
+			<li><a href="#tab-keywords">Index</a></li>
+			<li><a href="#tab-search">Search</a></li>
+			</ul>
+		<div id="tab-toc">
+			<ul id="toc" class="">
+
+				<li class="" id="CoverPage" data="">
+							<a
+							href="CoverPage.html"
+							target="FrameMain">
+								Cover Page</a>
+
+				</li><li class="" id="Introduction" data="">
+							<a
+							href="Introduction.html"
+							target="FrameMain">
+								Introduction</a>
+
+				</li><li class="folder" id="GettingStarted" data="">
+							<a
+							href="GettingStarted.html"
+							target="FrameMain">
+								Getting Started</a>
+
+				<ul><li class="" id="Loggingintotheapplication" data="">
+							<a
+							href="Loggingintotheapplication.html"
+							target="FrameMain">
+								Logging in to the application</a>
+
+				</li><li class="" id="ACCESSLEVELS" data="">
+							<a
+							href="ACCESSLEVELS.html"
+							target="FrameMain">
+								ACCESS LEVELS</a>
+
+				</li><li class="" id="Settinguptheapplication" data="">
+							<a
+							href="Settinguptheapplication.html"
+							target="FrameMain">
+								Setting up the application</a>
+
+				</li></ul></li><li class="folder" id="CurrentFunctionalities" data="">
+							<a
+							href="CurrentFunctionalities.html"
+							target="FrameMain">
+								Current Functionalities</a>
+
+				<ul><li class="" id="FunctionalRequirements" data="">
+							<a
+							href="FunctionalRequirements.html"
+							target="FrameMain">
+								Functional Requirements</a>
+
+				</li><li class="" id="Nonfunctionalrequirements" data="">
+							<a
+							href="Nonfunctionalrequirements.html"
+							target="FrameMain">
+								Non-functional requirements</a>
+
+				</li></ul></li><li class="folder" id="GENERALUSAGEOFTHESOTWARE" data="">
+							<a
+							href="GENERALUSAGEOFTHESOTWARE.html"
+							target="FrameMain">
+								GENERAL USAGE OF THE SOTWARE</a>
+
+				<ul><li class="folder" id="EstateSetup" data="">
+							<a
+							href="EstateSetup.html"
+							target="FrameMain">
+								Estate Setup</a>
+
+				<ul><li class="" id="Estate" data="">
+							<a
+							href="Estate.html"
+							target="FrameMain">
+								Estate</a>
+
+				</li><li class="" id="EstateBlock" data="">
+							<a
+							href="EstateBlock.html"
+							target="FrameMain">
+								Estate Block</a>
+
+				</li><li class="" id="EstateProperty" data="">
+							<a
+							href="EstateProperty.html"
+							target="FrameMain">
+								Estate Property</a>
+
+				</li></ul></li><li class="" id="BillPaymentSetup" data="">
+							<a
+							href="BillPaymentSetup.html"
+							target="FrameMain">
+								Bill Payment Setup</a>
+
+				</li><li class="folder" id="LedgersSetup" data="">
+							<a
+							href="LedgersSetup.html"
+							target="FrameMain">
+								Ledgers Setup</a>
+
+				<ul><li class="" id="EstatePropertyLedger" data="">
+							<a
+							href="EstatePropertyLedger.html"
+							target="FrameMain">
+								Estate Property Ledger</a>
+
+				</li></ul></li><li class="folder" id="LesseeSetup" data="">
+							<a
+							href="LesseeSetup.html"
+							target="FrameMain">
+								Lessee Setup</a>
+
+				<ul><li class="" id="Lessee" data="">
+							<a
+							href="Lessee.html"
+							target="FrameMain">
+								Lessee </a>
+
+				</li><li class="" id="LesseeProperty" data="">
+							<a
+							href="LesseeProperty.html"
+							target="FrameMain">
+								Lessee Property</a>
+
+				</li></ul></li><li class="folder" id="BillingSetup" data="">
+							<a
+							href="BillingSetup.html"
+							target="FrameMain">
+								Billing Setup</a>
+
+				<ul><li class="" id="GroundRent" data="">
+							<a
+							href="GroundRent.html"
+							target="FrameMain">
+								Ground Rent</a>
+
+				</li><li class="" id="RentalBilling" data="">
+							<a
+							href="RentalBilling.html"
+							target="FrameMain">
+								Rental Billing</a>
+
+				</li></ul></li><li class="" id="GeneralReports" data="">
+							<a
+							href="GeneralReports.html"
+							target="FrameMain">
+								General Reports</a>
+
+				</li><li class="folder" id="UserAccounts" data="">
+							<a
+							href="UserAccounts.html"
+							target="FrameMain">
+								User Accounts</a>
+
+				<ul><li class="" id="Staff" data="">
+							<a
+							href="Staff.html"
+							target="FrameMain">
+								Staff</a>
+
+				</li><li class="" id="UserAccounts1" data="">
+							<a
+							href="UserAccounts1.html"
+							target="FrameMain">
+								User Accounts</a>
+
+				</li></ul></li><li class="folder" id="SMSBlast" data="">
+							<a
+							href="SMSBlast.html"
+							target="FrameMain">
+								SMS Blast</a>
+
+				<ul><li class="" id="SMSBlast1" data="">
+							<a
+							href="SMSBlast1.html"
+							target="FrameMain">
+								SMS Blast</a>
+
+				</li><li class="" id="SMSBillsBlast" data="">
+							<a
+							href="SMSBillsBlast.html"
+							target="FrameMain">
+								SMS Bills Blast</a>
+
+				</li></ul></li></ul></li></ul>
+		</div>
+		
+		<div id="tab-keywords">
+			<ul id="keywords">
+
+				</ul>
+		</div>
+		
+		<div id="tab-search">
+			<form onsubmit="PerformSearch(); return false;">
+				<label for="search_value">Search:</label>
+				<input id="search_value" name="search_value"></input>
+				<input type="submit" value="Search"/>
+			</form>
+			<div id="search_results"></div>
+		</div>
+		
+		</div>
+    
+</body>
+
+</html>
+

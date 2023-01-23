@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+          <p:tab title="View Occupant Bill Status">
+                         <p:panel header="Bills">
+            <h:form>
+                <ui:include src="/includes/property_selection_for_occu_status.xhtml" />
+
+                 
+
+                <h:panelGroup layout="block">
+                    <div class="form-actions">
+                        <h:commandButton value="Load Occupant Bill Status" action="#{ledgerController.prepare_bill_for_select_occu()}"
+                                         styleClass="btn btn-primary" style="font-weight: bold">
+
+                        </h:commandButton>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+                             
+                             <h:form rendered="#{ledgerController.billReportRender}">
+                                 <p:dataTable value="#{ledgerController.listBillReportDataModel}" var="lbrd" 
+                                              stickyHeader="true" scrollable="true" scrollHeight="100" >
+                                     
+                                     <p:column>
+                                         <f:facet name="header">
+                                           Bill Detail  
+                                         </f:facet>
+                                         
+                                         #{lbrd.billDetail}
+                                     </p:column>
+                                     
+                                         <p:column>
+                                         <f:facet name="header">
+                                           Bill Type  
+                                         </f:facet>
+                                         
+                                         #{lbrd.billType}
+                                     </p:column>
+                                     
+                                        <p:column>
+                                         <f:facet name="header">
+                                           Bill Year  
+                                         </f:facet>
+                                         
+                                         #{lbrd.billYear}
+                                     </p:column>
+                                     
+                                     
+                                        <p:column>
+                                         <f:facet name="header">
+                                           Bill Amount  
+                                         </f:facet>
+                                         
+                                         #{lbrd.billAmount}
+                                     </p:column>
+                                     
+                                        <p:column>
+                                         <f:facet name="header">
+                                           Bill Amount Paid  
+                                         </f:facet>
+                                         
+                                         #{lbrd.billAmountPaid}
+                                     </p:column>
+                                     
+                                     
+                                        <p:column>
+                                         <f:facet name="header">
+                                           Bill Status  
+                                         </f:facet>
+                                         
+                                         #{lbrd.billStatus}
+                                     </p:column>
+                                     
+                                     
+                                 </p:dataTable>       
+                                 
+                                  <div class="form-actions">
+                            <h:panelGrid columns="1">
+                              
+                                                 
+                                 
+                                   <h:commandLink target="_blank"
+                                           styleClass="btn btn-info" style="color: #FFFFFF;"
+                                           action="#{ledgerController.viewSelectedBillItems()}">
+                                <i class="icon-white icon-print"></i>View Occupant Bill
+                            </h:commandLink>
+                            </h:panelGrid>
+                        </div> 
+                                 
+                             </h:form>
+
+           
+        </p:panel>
+                    </p:tab>
+   
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+    </h:body>
+</html>
+

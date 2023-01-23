@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <h:form>
+            <p:messages />
+        </h:form>
+
+
+        <p:panel header="Payment Correction">
+            <!-- a search form to search payment by receipt number or estate property -->
+            <h:form>
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="6">
+                        <h:outputText value="Search By"/>
+                        <h:selectOneMenu value="#{billPaymentController.searchItem}">
+                            <f:selectItem itemLabel="Estate Property" itemValue="estateProperty.estatePropertyId"/>
+                            <f:selectItem itemLabel="Receipt Number" itemValue="receiptNumberIssued"/>
+                        </h:selectOneMenu>
+                        <h:outputText value="Number"/>
+                        <h:inputText value="#{billPaymentController.searchString}"/>&nbsp;
+                        <h:commandButton value="Search" styleClass="btn btn-primary" actionListener="#{billPaymentController.searchEstatePropertLedger()}"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:form>
+            <h:form>
+
+                <p:dataTable value="#{billPaymentController.estatePropertyLedgerDataModel}" var="bc" paginator="true"
+                             paginatorPosition="bottom" rows="10">
+                    <p:column>
+                        <f:facet name="header">Estate Property</f:facet>
+                            #{bc.estateProperty}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Estate</f:facet>
+                            #{bc.estateProperty.propertyEstate.estateName}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Receipt Number</f:facet>
+                            #{bc.receiptNumberIssued}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Amount</f:facet>
+                            #{bc.amountInvolved}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">Action</f:facet>
+                        <h:commandLink value="Select" actionListener="#{billPaymentController.loadSelectedLedgerForCorrection()}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <br />
+            <h:form>
+                <h:panelGroup layout="block">
+                    <h:panelGrid columns="6">
+                        <h:outputText value="Estate Property"/>
+                        <h:inputText value="#{billPaymentController.billCorrectionLedger.estateProperty}" readonly="true"/>
+                        <h:outputText value="Payee Name"/>
+                        <h:inputText value="#{billPaymentController.billCorrectionLedger.payeeName}"/>
+                        <h:outputText value="Receipt Number"/>
+                        <h:inputText readonly="true" value="#{billPaymentController.billCorrectionLedger.receiptNumberIssued}"/>
+                        <h:outputText value="Amount"/>
+                        <h:inputText value="#{billPaymentController.billCorrectionLedger.amountInvolved}" readonly="true"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+                <div class="form-actions">
+
+                    <h:panelGroup layout="block" rendered="#{billPaymentController.canView}">
+                        <h:panelGrid columns="1">
+                            <h:commandButton value="Reverse Payment" actionListener="#{billPaymentController.updateSelectedPayment()}"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+
+                </div>
+            </h:form>
+        </p:panel>
+
+
+
+    </h:body>
+</html>
+

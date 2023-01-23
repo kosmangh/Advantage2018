@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <h:form>
+            <p:messages/>
+        </h:form>
+
+        <p:panel header="Estate Property Ledger">
+            <h:form>
+                <ui:include src="/includes/property_selection.xhtml" />
+
+                <h:panelGroup style="margin-top: -42px; margin-left: 550px" layout="block">
+                    <h:outputText value="#{msg.yr}"/>
+                    <h:selectOneMenu value="#{ledgerController.selectedYear}" style="width: 80px; ">
+                        <f:selectItems value="#{commonOptions.groundRentBillingYears}" />
+                    </h:selectOneMenu>
+                </h:panelGroup>
+
+                <h:panelGroup>
+                    <div class="form-actions">
+                        <h:commandButton value="Load Ledger" action="#{ledgerController.prepareRequestedLedger}"
+                                         styleClass="btn btn-primary" style="font-weight: bold">
+                        </h:commandButton>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+
+            <h:panelGroup layout="block">
+                <h:form id="ledgerForm">
+                    <p:dataTable value="#{ledgerController.estatePropertyLedgerDataModel}" var="epl" scrollHeight="100"
+                                  scrollable="true" stickyHeader="true" >
+                        <p:column>
+                            <f:facet name="header"> Estate Property </f:facet>
+                            #{epl.estateProperty}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Debit/Credit
+                            </f:facet>
+                            #{epl.debitCreditEntry}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.amt}
+                            </f:facet>
+                            #{epl.amountInvolved}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Entry For
+                            </f:facet>
+                            #{epl.paymentFor}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.ledYr}
+                            </f:facet>
+                            #{epl.ledgerYear}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.payType}
+                            </f:facet>
+                            #{epl.paymentType}
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText="Total Credit:" style="text-align: right;"/>
+                                <p:column footerText="#{ledgerController.totalCredit}"/>
+                                <p:column footerText="Total Debit:"  style="text-align: right;"/>
+                                <p:column footerText="#{ledgerController.totalDebit}" />
+                                <p:column footerText="Outstanding Bal:"  style="text-align: right;"/>
+                                <p:column footerText="#{ledgerController.outstandingBalance}"/>
+                            </p:row>
+                        </p:columnGroup>
+                    </p:dataTable>
+                    <h:panelGroup layout="block">
+                        <h:panelGrid columns="5">
+                            <h:commandLink target="_blank" styleClass="btn-info btn" style="color: white;" action="#{ledgerController.reportGroundRent}">
+                                <i class="icon-white icon-print"></i> Print Bill Demand Note
+                            </h:commandLink>
+                            <h:commandLink action="#{ledgerController.sendDemandNote()}" styleClass="btn btn-info" style="color: #FFFFFF;" rendered="#{indexPageController.canView}">
+                                <i class="icon-white icon-envelope"></i> Send Bill Demand Note
+                            </h:commandLink>
+                            <h:commandLink target="_blank" styleClass="btn btn-info" style="color: #FFFFFF;" action="#{ledgerController.viewSelectedLegerItems}">
+                                <i class="icon-white icon-print"></i> View Properties Ledger
+                            </h:commandLink>
+                        </h:panelGrid>
+                    </h:panelGroup>
+
+                </h:form>
+            </h:panelGroup>
+        </p:panel>
+    </h:body>
+</html>
+

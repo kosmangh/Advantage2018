@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+
+        <h:form>
+            <p:messages/>
+            <p:panel header="Property Reassignment-Actions cannot be reversed">
+
+            </p:panel>
+            <p:panel header="Correct Property Occupant selected #{propertyReassignmentController.realPropertyOccupant}">
+                <h:form>
+                    <h:panelGroup />
+                </h:form>
+                <h:form style="height: 150px; overflow: auto;">
+
+                </h:form>
+                <h:panelGroup layout="block" style="background-color: #fcf">
+                    <h:panelGrid columns="3">
+                        <h:outputLabel value="Selected Real Occupant" />
+                        <h:inputText value="#{propertyReassignmentController.realPropertyOccupant}" />
+                        <h:outputLabel value="#{propertyReassignmentController.realSelectedLesseeProperties}" />
+
+                    </h:panelGrid>
+
+                    <h:form>
+                        <ui:include src="/includes/property_selection.xhtml" />
+                        <h:commandButton value="Reassign - Remember it cannot be reversed" styleClass="action_button"
+                                         action="#{propertyReassignmentController.assingPropertyAlone}"/>
+                    </h:form>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="false">
+                    <h:panelGroup layout="block" style="background-color: #fcf" >
+                        <h:panelGrid columns="3">
+                            <h:outputLabel value="Selected Real Occupant" />
+                            <h:inputText id="real_name" value="#{propertyReassignmentController.realPropertyOccupant}" />
+                            <h:outputLabel value="#{propertyReassignmentController.realSelectedLesseeProperties}" />
+
+                            <h:outputLabel value="Wrong Real Occupant" />
+                            <h:inputText id="wrong_name" value="#{propertyReassignmentController.wrongPropertyOccupant}" />
+                            <h:outputLabel value="#{propertyReassignmentController.wrongSelectedLesseeProperties}" />
+
+                        </h:panelGrid>
+
+                        <h:form>
+                            <h:commandButton value="Reassign - Remember it cannot be reversed" styleClass="action_button"
+                                             action="#{propertyReassignmentController.doReassignment}"/>
+                        </h:form>
+                    </h:panelGroup>
+                    <p:panel header="Wrong Property Occupant">        
+                        <h:form>
+                            <h:panelGroup/>
+                        </h:form>
+                        <h:form style="height: 120px; overflow: auto;">
+
+                        </h:form>
+                    </p:panel>
+                </h:panelGroup>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
