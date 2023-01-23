@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="demand_notice" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="14" uuid="3823ed0c-08ca-4b48-9bda-bfca89053f31">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="zonalOffice" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="zonalAddress" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="reportTitle" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="companyLogo" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="dateOfReport" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="companyName" class="java.lang.String"/>
+	<parameter name="directorSignature" class="java.lang.String"/>
+	<field name="estateProperty" class="java.lang.String"/>
+	<field name="groundRentBill" class="java.lang.Double"/>
+	<field name="amountPaid" class="java.lang.Double"/>
+	<field name="occupantName" class="java.lang.String"/>
+	<field name="outstandingBalance" class="java.lang.Double"/>
+	<field name="propertyUsage" class="java.lang.String"/>
+	<field name="propertyLocation" class="java.lang.String"/>
+	<field name="propertyOccupantId" class="java.lang.String"/>
+	<field name="statement" class="java.lang.String"/>
+	<field name="demandNoticeHeading" class="java.lang.String"/>
+	<field name="billIntroNote" class="java.lang.String"/>
+	<field name="timeOfDemandNotice" class="java.lang.String"/>
+	<field name="billReviewDate" class="java.lang.String"/>
+	<field name="billFootnotes" class="java.lang.String"/>
+	<field name="balancePeriodOfDemandNotice" class="java.lang.String"/>
+	<field name="billConclusion" class="java.lang.String"/>
+	<variable name="todayDate" class="java.util.Date">
+		<variableExpression><![CDATA[new java.util.Date()]]></variableExpression>
+	</variable>
+	<variable name="lesseeOutstandingBalance" class="java.lang.Double" resetType="Group" resetGroup="leseeGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{outstandingBalance}]]></variableExpression>
+	</variable>
+	<variable name="lesseeGroundRentBill" class="java.lang.Double" resetType="Group" resetGroup="leseeGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{groundRentBill}]]></variableExpression>
+	</variable>
+	<variable name="lesseeAmountPaid" class="java.lang.Double" resetType="Group" resetGroup="leseeGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{amountPaid}]]></variableExpression>
+	</variable>
+	<variable name="propertyNetBill" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{outstandingBalance} + $F{groundRentBill} - $F{amountPaid}]]></variableExpression>
+	</variable>
+	<variable name="lesseeNetBill" class="java.lang.Double" resetType="Group" resetGroup="leseeGroup" calculation="Sum">
+		<variableExpression><![CDATA[$V{propertyNetBill}]]></variableExpression>
+	</variable>
+	<variable name="lesseePropertyCount" class="java.lang.Integer" resetType="Group" resetGroup="leseeGroup" calculation="Count">
+		<variableExpression><![CDATA[$F{estateProperty}]]></variableExpression>
+	</variable>
+	<group name="leseeGroup">
+		<groupExpression><![CDATA[$F{propertyOccupantId}]]></groupExpression>
+		<groupHeader>
+			<band height="228">
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="1" y="173" width="533" height="20" forecolor="#333333" uuid="396658e9-4447-4a0f-8ef7-2188206c8b7b"/>
+					<box leftPadding="3">
+						<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="15" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{occupantName}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="353" y="93" width="177" height="15" uuid="9cf9402b-a364-4147-9989-8f9d9cfa8807"/>
+					<textFieldExpression><![CDATA[$P{dateOfReport}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="113" width="535" height="1" forecolor="#CCCCCC" backcolor="#999999" uuid="736a24ab-378a-4c36-b93e-58f2c92e6b3b"/>
+					<graphicElement>
+						<pen lineStyle="Double"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="0" y="110" width="535" height="1" forecolor="#CCCCCC" backcolor="#999999" uuid="74da173a-d175-45e9-a216-2cc7c1345b64"/>
+					<graphicElement>
+						<pen lineWidth="2.0" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="273" y="93" width="77" height="15" uuid="8a2e85e6-7e32-43e0-90ba-e316afe1d026"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Date of Issue]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-2" x="0" y="2" width="535" height="64" isRemoveLineWhenBlank="true" uuid="b25a1fe1-f324-4c50-ab5e-201702c81571"/>
+					<graphicElement>
+						<pen lineWidth="0.0" lineStyle="Solid"/>
+					</graphicElement>
+				</rectangle>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" mode="Transparent" x="80" y="5" width="318" height="24" forecolor="#660000" uuid="9aa2fda4-5374-4929-87a9-27f23fbba574"/>
+					<textElement>
+						<font fontName="SansSerif" size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{companyName}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="79" y="29" width="305" height="18" forecolor="#660000" uuid="662637df-04de-4be0-b646-85c09cb9e50e"/>
+					<textElement>
+						<font size="13" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{zonalOffice}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="81" y="47" width="290" height="13" forecolor="#003366" uuid="fdbeae54-1a3c-433c-a417-149497289a4b"/>
+					<textElement>
+						<font fontName="SansSerif" size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{zonalAddress}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement key="line-2" x="0" y="65" width="535" height="1" uuid="4b1ddb02-e941-4c0e-9e1c-9150b2b86873"/>
+					<graphicElement fill="Solid">
+						<pen lineWidth="0.6"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement key="line-3" x="0" y="63" width="535" height="1" uuid="f7352f51-e7e2-4cd4-a48e-41ff3860169b"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+				<image scaleImage="FillFrame">
+					<reportElement key="image-1" x="3" y="5" width="72" height="56" uuid="1139f80c-9121-4835-8885-5bca44842150"/>
+					<imageExpression><![CDATA[$P{companyLogo}]]></imageExpression>
+				</image>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+					<reportElement key="textField" mode="Opaque" x="0" y="68" width="535" height="21" forecolor="#000000" uuid="c64f7293-7cd6-4b0f-9444-2561741086c8"/>
+					<box>
+						<bottomPen lineWidth="1.0" lineStyle="Double" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{demandNoticeHeading}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="5" y="117" width="100" height="13" uuid="2dab1ae7-0617-47c4-8cef-4530c489b7ff"/>
+					<text><![CDATA[Dear Sir/Madam]]></text>
+				</staticText>
+				<frame>
+					<reportElement mode="Opaque" x="20" y="196" width="514" height="30" backcolor="#F9ECEC" uuid="45c58cbd-9787-4339-9c10-16fb72e6eea0"/>
+					<box>
+						<bottomPen lineWidth="1.25" lineStyle="Double"/>
+					</box>
+					<staticText>
+						<reportElement key="staticText-11" mode="Transparent" x="89" y="0" width="135" height="30" forecolor="#000000" backcolor="#00CCCC" uuid="0b238b40-0cc3-4cfa-9e2a-5e99e7a6b679"/>
+						<box leftPadding="4"/>
+						<textElement verticalAlignment="Top">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[Location]]></text>
+					</staticText>
+					<staticText>
+						<reportElement key="staticText-7" mode="Transparent" x="25" y="0" width="64" height="30" forecolor="#000000" backcolor="#00CCCC" uuid="c419809a-1747-4596-b3c6-a7e629a54ebf"/>
+						<box leftPadding="4"/>
+						<textElement verticalAlignment="Top">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[Property Number]]></text>
+					</staticText>
+					<staticText>
+						<reportElement key="staticText-8" mode="Transparent" x="0" y="0" width="25" height="30" forecolor="#000000" backcolor="#00CCCC" uuid="0b1b4f04-8a4a-4a41-b456-08033886b7f6"/>
+						<textElement textAlignment="Center" verticalAlignment="Top">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[No.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement key="staticText-11" mode="Transparent" x="224" y="0" width="73" height="30" forecolor="#000000" uuid="1654a22d-6cf2-40c3-8c01-3fe464c7ce9e"/>
+						<box leftPadding="2"/>
+						<textElement verticalAlignment="Top">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[Usage]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="297" y="1" width="81" height="15" uuid="adcd5cae-8ff5-4fef-b67e-6bbe0c01d278"/>
+						<textElement textAlignment="Center">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[Arrears as of]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="378" y="1" width="43" height="15" uuid="9c509531-b9f2-4dcd-90a7-94a83b7d06d6"/>
+						<textElement textAlignment="Center">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[Bill for]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="420" y="1" width="94" height="15" uuid="c8d4fd8a-403a-451c-9800-b7767e923905"/>
+						<textElement textAlignment="Center">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[Net Bal]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="297" y="15" width="81" height="15" uuid="4123ad45-1a4e-4e57-b8fb-4e925e5a0f22"/>
+						<textElement textAlignment="Center">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{balancePeriodOfDemandNotice}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="420" y="15" width="94" height="15" uuid="db5db975-b121-4e8a-9dfa-456ed591cc34"/>
+						<textElement textAlignment="Center">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{timeOfDemandNotice}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="378" y="15" width="43" height="15" uuid="55264d25-0744-4fbd-a05c-4530fc94dab7"/>
+						<textElement textAlignment="Center">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{timeOfDemandNotice}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="22" y="135" width="496" height="26" uuid="02f59933-ccab-4133-82b7-a0c7b6fe438d"/>
+					<textFieldExpression><![CDATA[$F{billIntroNote}]]></textFieldExpression>
+				</textField>
+				<break>
+					<reportElement positionType="Float" x="0" y="0" width="535" height="1" uuid="b39ea250-43eb-4484-bdaa-c95df618e7c9"/>
+				</break>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="283">
+				<staticText>
+					<reportElement x="22" y="49" width="100" height="15" uuid="e2af4898-ebd0-481b-a608-5dcdf9859ec4"/>
+					<text><![CDATA[Thank You]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="22" y="66" width="100" height="14" uuid="43959b39-ccf1-4e64-bf77-8fb178e4cca0"/>
+					<text><![CDATA[Yours faithfully]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="132" width="100" height="13" uuid="1488aaca-f4e4-46f6-807c-0bc1b216b595"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Zonal Director ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="35" y="264" width="495" height="16" uuid="f9944b77-91cf-4500-b72f-5566fb3c1731"/>
+					<textElement markup="none">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{statement}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="20" y="250" width="510" height="13" uuid="32b3896c-e110-4731-8bc1-fff25d488326"/>
+					<box leftPadding="2">
+						<bottomPen lineWidth="0.75" lineColor="#009966"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ASSESSMENT:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="440" y="1" width="94" height="18" backcolor="#F6DAF9" uuid="04bb0bbe-93c5-49dc-92f1-d0800e0a20d1"/>
+					<box>
+						<pen lineStyle="Double"/>
+						<topPen lineStyle="Double"/>
+						<leftPen lineWidth="0.0" lineStyle="Double"/>
+						<bottomPen lineWidth="2.0" lineStyle="Double"/>
+						<rightPen lineWidth="0.0" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{lesseeNetBill}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="398" y="1" width="43" height="18" backcolor="#F6DAF9" uuid="857e94c4-fccd-479e-af12-f67c4303c1d0"/>
+					<box>
+						<pen lineStyle="Double"/>
+						<topPen lineStyle="Double"/>
+						<leftPen lineWidth="0.0" lineStyle="Double"/>
+						<bottomPen lineWidth="2.0" lineStyle="Double"/>
+						<rightPen lineWidth="0.0" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{lesseeGroundRentBill}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="317" y="1" width="81" height="18" backcolor="#F6DAF9" uuid="83bce1d6-c24b-47ea-83e5-ffdde0119a05"/>
+					<box>
+						<pen lineStyle="Double"/>
+						<topPen lineStyle="Double"/>
+						<leftPen lineWidth="0.0" lineStyle="Double"/>
+						<bottomPen lineWidth="2.0" lineStyle="Double"/>
+						<rightPen lineWidth="0.0" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{lesseeOutstandingBalance}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="33" y="161" width="59" height="21" uuid="364a9364-0497-400a-a626-62ef6637ebc6"/>
+					<textElement>
+						<font fontName="SansSerif" isBold="true" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Notes:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="22" y="25" width="463" height="20" uuid="ee5a634c-91da-4af2-92a4-6d81a7f29b6c"/>
+					<textElement>
+						<font isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{billConclusion}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="20" y="144" width="100" height="13" uuid="666441f5-f8d4-4003-beaa-9f16cb87aded"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ashanti Region]]></text>
+				</staticText>
+				<image scaleImage="FillFrame">
+					<reportElement x="7" y="78" width="102" height="55" uuid="032af759-e2ce-4cf3-8be2-4fba65b062a4"/>
+					<imageExpression><![CDATA[$P{directorSignature}]]></imageExpression>
+				</image>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="53" y="169" width="465" height="81" uuid="660d9b2d-1e26-4a19-a8f3-4adf67534998"/>
+					<textElement markup="html"/>
+					<textFieldExpression><![CDATA[$F{billFootnotes}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="110" y="3" width="134" height="13" uuid="ea4c4313-1c40-43aa-8757-fc51a7745ec0"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{propertyLocation}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="244" y="3" width="73" height="13" uuid="8ad1bf6d-6e42-452b-981b-adf5ddc966b9"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{propertyUsage}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="440" y="0" width="94" height="16" uuid="000280aa-d446-472b-8bed-c26ca268788d"/>
+				<box rightPadding="1">
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{propertyNetBill}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="46" y="3" width="64" height="13" uuid="85a21c2a-2d50-49b3-820e-0429f274157b"/>
+				<box leftPadding="4">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estateProperty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="22" y="3" width="25" height="13" uuid="d0bfdb4e-fa00-4187-bc3f-79262d278c24"/>
+				<box leftPadding="4">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{lesseePropertyCount}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="317" y="3" width="81" height="13" uuid="1c83c7c5-924d-4d20-a26b-205af1eff8c8"/>
+				<box rightPadding="1">
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{outstandingBalance}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="398" y="3" width="43" height="13" uuid="fb332c30-634c-4042-92d7-0694e246d13e"/>
+				<box rightPadding="1">
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{groundRentBill}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band splitType="Stretch">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

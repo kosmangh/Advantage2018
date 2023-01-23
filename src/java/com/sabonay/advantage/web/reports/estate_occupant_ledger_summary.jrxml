@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estate_property_occupant" columnCount="2" pageWidth="850" pageHeight="952" columnWidth="405" leftMargin="20" rightMargin="20" topMargin="9" bottomMargin="7" uuid="a1311cc3-4d22-407e-8bec-bbe26d063a3e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="192"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="reportTitle" class="java.lang.String"/>
+	<field name="propertyOccupantName" class="java.lang.String"/>
+	<field name="propertyName" class="java.lang.String"/>
+	<field name="periodOfBalance" class="java.lang.String"/>
+	<field name="accountBalance" class="java.lang.Double"/>
+	<variable name="totalPropertyCount" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{propertyName}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0c0a1599-17d6-4017-b7e6-4f9cb30c1aa7" mode="Opaque" x="0" y="0" width="802" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{reportTitle}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1846407d-39e7-4ca9-a1d0-71b307060325" mode="Opaque" x="28" y="0" width="49" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Property]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="04490f4a-ebbf-46ec-8c96-7fe55c378fa7" mode="Opaque" x="77" y="0" width="228" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Occupant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b15a86d3-f02e-4c11-b10e-28dabebc8927" mode="Opaque" x="305" y="0" width="74" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Bal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f8560c56-9665-4422-820a-f8eec1b6e887" mode="Opaque" x="449" y="1" width="49" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Property]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="99930749-bb44-4b01-8150-86975af525c1" mode="Opaque" x="725" y="1" width="77" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Bal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc5bf570-960b-4603-94d1-60f91f25d18d" mode="Opaque" x="498" y="1" width="227" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Occupant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a8b2650a-f518-4d58-a743-1014c7939c91" mode="Opaque" x="0" y="0" width="28" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="90792047-c137-4333-83f8-d230734c4bca" mode="Opaque" x="415" y="1" width="34" height="20" backcolor="#CCCCCC"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement uuid="3870ac23-1df2-41df-a6dc-e2d3d9fcd068" positionType="Float" x="305" y="0" width="74" height="14"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountBalance}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="83c09432-4712-4763-a3b1-887dd5a8a3a2" positionType="Float" x="28" y="0" width="49" height="14"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{propertyName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="11306ba0-bb5d-4874-8304-0892865249df" positionType="Float" x="77" y="0" width="228" height="14"/>
+				<box leftPadding="2">
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{propertyOccupantName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="badc3f73-4026-44af-a49b-d49aaa73a03f" x="0" y="0" width="28" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="84abb00c-1e4e-4d31-8a96-7562e531cf04" mode="Opaque" x="95" y="11" width="535" height="20" backcolor="#CCFFCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Report Summary]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b957a2b0-28ab-4d63-b484-df0865918b41" x="95" y="31" width="100" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Properties:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6719330a-7135-4f55-90c8-5adda0f8fb3d" mode="Transparent" x="195" y="31" width="100" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalPropertyCount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

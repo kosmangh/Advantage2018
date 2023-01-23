@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="property_occupant_information" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="559" leftMargin="18" rightMargin="18" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="408"/>
+	<property name="ireport.y" value="757"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="zonalOffice" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="zonalAddress" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="reportTitle" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="companyLogo" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="dateOfReport" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="companyName" class="java.lang.String"/>
+	<field name="occupantName" class="java.lang.String"/>
+	<field name="localAddress" class="java.lang.String"/>
+	<field name="foreignAddress" class="java.lang.String"/>
+	<field name="dateOfBirth" class="java.util.Date"/>
+	<field name="nationality" class="java.lang.String"/>
+	<field name="maritalStatus" class="java.lang.String"/>
+	<field name="homeTown" class="java.lang.String"/>
+	<field name="occupation" class="java.lang.String"/>
+	<field name="nationalId" class="java.lang.String"/>
+	<field name="nationalIdType" class="java.lang.String"/>
+	<field name="employerAddress" class="java.lang.String"/>
+	<field name="emailAddress" class="java.lang.String"/>
+	<field name="telephoneNumber" class="java.lang.String"/>
+	<field name="nextOfKin" class="java.lang.String"/>
+	<field name="relationship" class="java.lang.String"/>
+	<field name="gender" class="java.lang.String"/>
+	<field name="estatePropertyId" class="java.lang.String"/>
+	<field name="propertyOccupantId" class="java.lang.String"/>
+	<field name="propertyName" class="java.lang.String"/>
+	<field name="estateName" class="java.lang.String"/>
+	<field name="propertyUsage" class="java.lang.String"/>
+	<field name="propertyCategory" class="java.lang.String"/>
+	<field name="firstDateOfOccupancy" class="java.util.Date"/>
+	<field name="lastDateOfOccupancy" class="java.util.Date"/>
+	<field name="propertyOccupiedAs" class="java.lang.String"/>
+	<variable name="todayDate" class="java.util.Date">
+		<variableExpression><![CDATA[new java.util.Date()]]></variableExpression>
+	</variable>
+	<variable name="occupantPropertyCount" class="java.lang.Integer" resetType="Group" resetGroup="lesseePropertyGroup" calculation="Count">
+		<variableExpression><![CDATA[$F{estatePropertyId}]]></variableExpression>
+	</variable>
+	<group name="propertyOccupantGroup">
+		<groupExpression><![CDATA[$F{propertyOccupantId}]]></groupExpression>
+		<groupHeader>
+			<band height="135">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="559" height="20" forecolor="#000000" backcolor="#99CCFF"/>
+					<box leftPadding="3">
+						<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="13" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{occupantName}]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement x="2" y="20" width="555" height="109"/>
+					<staticText>
+						<reportElement x="283" y="3" width="123" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Birth/Company Reg. Date :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="3" width="108" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Gender / Inst :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="18" width="108" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Occup. / Core Buss :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="283" y="18" width="123" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Home Town / Location :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="283" y="33" width="123" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Primary Contact Number :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="33" width="108" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Nationality :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="48" width="108" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[E-mail Address :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="63" width="108" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Registration ID Type :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="283" y="48" width="123" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Marital Status :]]></text>
+					</staticText>
+					<textField isBlankWhenNull="true">
+						<reportElement x="122" y="3" width="142" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{gender}]]></textFieldExpression>
+					</textField>
+					<textField pattern="EEE dd MMM yyyy" isBlankWhenNull="true">
+						<reportElement x="415" y="3" width="135" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.util.Date"><![CDATA[$F{dateOfBirth}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="122" y="18" width="142" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{occupation}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="122" y="33" width="142" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{nationality}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="415" y="18" width="135" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{homeTown}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="415" y="33" width="135" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{telephoneNumber}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="122" y="48" width="142" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{emailAddress}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="415" y="48" width="135" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{maritalStatus}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="283" y="63" width="123" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Registration ID Number :]]></text>
+					</staticText>
+					<textField isBlankWhenNull="true">
+						<reportElement x="122" y="63" width="142" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{nationalIdType}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="415" y="63" width="135" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{nationalId}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="122" y="78" width="142" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{nextOfKin}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="0" y="78" width="108" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Next of Kin :]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="283" y="78" width="123" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Relationship to Next of Kin :]]></text>
+					</staticText>
+					<textField isBlankWhenNull="true">
+						<reportElement x="415" y="78" width="135" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{relationship}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="0" y="92" width="108" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Local Address :]]></text>
+					</staticText>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement positionType="Float" x="122" y="92" width="142" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{localAddress}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="283" y="93" width="123" height="13"/>
+						<box>
+							<bottomPen lineWidth="0.25"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Employee Address :]]></text>
+					</staticText>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement positionType="Float" x="415" y="92" width="135" height="13"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{employerAddress}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="lesseePropertyGroup">
+		<groupExpression><![CDATA[$F{propertyOccupantId}]]></groupExpression>
+		<groupHeader>
+			<band height="38">
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="405" y="4" width="80" height="31" forecolor="#000000" backcolor="#CCFFCC"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[First Date of Occupancy ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-8" mode="Opaque" x="0" y="4" width="35" height="31" forecolor="#000000" backcolor="#CCFFCC"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="242" y="4" width="63" height="31" forecolor="#000000" backcolor="#CCFFCC"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Property Usage]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="355" y="4" width="50" height="31" forecolor="#000000" backcolor="#CCFFCC"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Property Category]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="96" y="4" width="146" height="31" forecolor="#000000" backcolor="#CCFFCC"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Property Location]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="483" y="4" width="80" height="31" forecolor="#000000" backcolor="#CCFFCC"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Last Date of Occupancy]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-7" mode="Opaque" x="34" y="4" width="62" height="31" forecolor="#000000" backcolor="#CCFFCC"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Property Number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="305" y="4" width="50" height="31" forecolor="#000000" backcolor="#CCFFCC"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Occupied As]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="64" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-2" x="0" y="0" width="559" height="64" isRemoveLineWhenBlank="true" backcolor="#66CCFF"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="79" y="27" width="305" height="18" forecolor="#660000"/>
+				<textElement>
+					<font size="13" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{zonalOffice}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="81" y="45" width="290" height="13" forecolor="#003366"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{zonalAddress}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-2" x="0" y="63" width="559" height="1"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.6"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-3" x="0" y="61" width="559" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<image scaleImage="FillFrame">
+				<reportElement key="image-1" x="0" y="1" width="76" height="62"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{companyLogo}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="80" y="3" width="318" height="24" forecolor="#660000"/>
+				<textElement>
+					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{companyName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="54" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="0" y="2" width="559" height="21" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineStyle="Double" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{reportTitle}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="263" y="27" width="77" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date of Report]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="343" y="27" width="137" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{dateOfReport}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="47" width="535" height="1" forecolor="#CCCCCC" backcolor="#999999"/>
+				<graphicElement>
+					<pen lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="44" width="535" height="1" forecolor="#CCCCCC" backcolor="#999999"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="34" y="0" width="62" height="13"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{propertyName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="96" y="0" width="146" height="13"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{estateName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="242" y="0" width="63" height="13"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{propertyUsage}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="35" height="13"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{occupantPropertyCount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE dd MMM yyyy" isBlankWhenNull="true">
+				<reportElement x="483" y="0" width="80" height="13"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{lastDateOfOccupancy}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE dd MMM yyyy" isBlankWhenNull="true">
+				<reportElement x="405" y="0" width="80" height="13"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{firstDateOfOccupancy}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="355" y="0" width="50" height="13"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{propertyCategory}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="305" y="0" width="50" height="13"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{propertyOccupiedAs}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="5" width="535" height="12" backcolor="#CCCCFF"/>
+				<textField>
+					<reportElement x="188" y="0" width="80" height="12"/>
+					<textElement textAlignment="Right">
+						<font fontName="Monospaced" size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="268" y="0" width="40" height="12"/>
+					<textElement>
+						<font fontName="Monospaced" size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="448" y="0" width="82" height="12" forecolor="#999999"/>
+					<textElement>
+						<font fontName="Monospaced" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[$V{todayDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" x="1" y="0" width="200" height="12" forecolor="#999999"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Report Generated From Advantage]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="17" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="1" y="3" width="535" height="12" backcolor="#CCCCFF"/>
+				<textField>
+					<reportElement x="188" y="0" width="80" height="12"/>
+					<textElement textAlignment="Right">
+						<font fontName="Monospaced" size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="268" y="0" width="40" height="12"/>
+					<textElement>
+						<font fontName="Monospaced" size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="448" y="0" width="82" height="12" forecolor="#999999"/>
+					<textElement>
+						<font fontName="Monospaced" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[$V{todayDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" x="1" y="0" width="200" height="12" forecolor="#999999"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Report Generated From Advantage]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

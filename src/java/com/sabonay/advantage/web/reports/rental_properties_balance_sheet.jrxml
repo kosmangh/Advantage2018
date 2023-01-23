@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rental_properties_balance_sheet" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="559" leftMargin="18" rightMargin="18" topMargin="20" bottomMargin="20" uuid="b8f0e68d-a15a-4f93-9abb-c237c498b805">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="zonalOffice" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="zonalAddress" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="reportTitle" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="companyLogo" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="dateOfReport" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="companyName" class="java.lang.String"/>
+	<field name="occupantName" class="java.lang.String"/>
+	<field name="propertyName" class="java.lang.String"/>
+	<field name="estateName" class="java.lang.String"/>
+	<field name="estateInitials" class="java.lang.String"/>
+	<field name="estateBlockId" class="java.lang.String"/>
+	<field name="blockName" class="java.lang.String"/>
+	<field name="currentPropertyRent" class="java.lang.Double"/>
+	<field name="rentBalance" class="java.lang.Double"/>
+	<field name="periodOfBalance" class="java.lang.String"/>
+	<field name="esatePropertyType" class="java.lang.String"/>
+	<field name="amountPaid" class="java.lang.Double"/>
+	<variable name="todayDate" class="java.util.Date">
+		<variableExpression><![CDATA[new java.util.Date()]]></variableExpression>
+	</variable>
+	<variable name="blockRentBalance" class="java.lang.Double" resetType="Group" resetGroup="estateBlockGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{rentBalance}]]></variableExpression>
+	</variable>
+	<variable name="estateRentBalance" class="java.lang.Double" resetType="Group" resetGroup="estateGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{rentBalance}]]></variableExpression>
+	</variable>
+	<variable name="totalRentBalance" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{rentBalance}]]></variableExpression>
+	</variable>
+	<group name="estateGroup">
+		<groupExpression><![CDATA[$F{estateInitials}]]></groupExpression>
+		<groupHeader>
+			<band height="46">
+				<staticText>
+					<reportElement mode="Opaque" x="60" y="21" width="190" height="25" backcolor="#CCFFCC" uuid="5176c717-6625-4304-bd7d-69fe21091b1c"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Occupant Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="21" width="60" height="25" backcolor="#CCFFCC" uuid="cc8219ef-dc8d-4f1c-aec5-dc5d7598e434"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Property Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="307" y="21" width="120" height="25" backcolor="#CCFFCC" uuid="c2e0df58-fdec-4423-9d9d-617d0ff860bb"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Monthly Rent Payable]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="490" y="21" width="68" height="25" backcolor="#CCFFCC" uuid="d729805a-4774-4ffd-b310-1b57ad5f1316"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Rent Balance]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="250" y="21" width="57" height="25" backcolor="#CCFFCC" uuid="5feb1f78-8396-434d-96db-9675ddb03558"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[House Type]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="-1" y="1" width="559" height="20" forecolor="#000000" backcolor="#99CCFF" uuid="3ff07faa-2de7-4d00-968c-acf161dbdef0"/>
+					<textElement verticalAlignment="Middle">
+						<font size="14" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{estateName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="427" y="21" width="63" height="25" backcolor="#CCFFCC" uuid="3a8182a2-cad0-4140-93e6-5059943b3ab6"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Amount Paid]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<line>
+					<reportElement x="0" y="18" width="559" height="1" uuid="72ec4994-9ab9-48b3-9095-c0616998ec8a"/>
+				</line>
+				<frame>
+					<reportElement mode="Opaque" x="307" y="0" width="251" height="18" backcolor="#666666" uuid="a5e88471-926f-4ee5-924f-49dadd6e73e2"/>
+					<staticText>
+						<reportElement x="86" y="0" width="87" height="18" forecolor="#FFFFFF" uuid="b7692cc0-5963-48c8-a15a-2f20ae59291a"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font isBold="true" isItalic="true"/>
+						</textElement>
+						<text><![CDATA[Estate Total]]></text>
+					</staticText>
+					<textField pattern="#,##0.00;(#,##0.00)">
+						<reportElement x="173" y="0" width="78" height="18" forecolor="#FFFFFF" uuid="e2958838-d61b-44fd-912f-27591b264124"/>
+						<box rightPadding="3"/>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$V{estateRentBalance}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="estateBlockGroup">
+		<groupExpression><![CDATA[$F{estateBlockId}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="64" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-2" x="0" y="0" width="559" height="64" isRemoveLineWhenBlank="true" backcolor="#66CCFF" uuid="3dc26a54-6139-4672-9d15-638abf4495c1"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="79" y="27" width="305" height="18" forecolor="#660000" uuid="92fbaeb4-e6d3-4532-b5c2-b5eabf9b126a"/>
+				<textElement>
+					<font size="13" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{zonalOffice}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="81" y="45" width="290" height="13" forecolor="#003366" uuid="77af827e-6165-47ed-9bc7-a9261f197a48"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{zonalAddress}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-2" x="0" y="63" width="559" height="1" uuid="e52a9e1c-3fed-4e49-8d71-92fc2f97299e"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.6"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-3" x="0" y="61" width="559" height="1" uuid="5793abb3-0d81-45bf-8f13-527b662dd07c"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<image scaleImage="FillFrame">
+				<reportElement key="image-1" x="0" y="1" width="76" height="62" uuid="6a8950aa-68df-4aa1-b5c1-044879a4e452"/>
+				<imageExpression><![CDATA[$P{companyLogo}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="80" y="3" width="318" height="24" forecolor="#660000" uuid="ee1a2efa-cf42-438a-abc7-b8ce0c0075b9"/>
+				<textElement>
+					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{companyName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="54" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="-1" y="2" width="559" height="21" forecolor="#FFFFFF" backcolor="#666666" uuid="8919c253-48f7-4a25-82d9-a66f1c32d146"/>
+				<box>
+					<bottomPen lineWidth="0.5" lineStyle="Double" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{reportTitle}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="263" y="27" width="77" height="15" uuid="41738df6-f06f-4db3-8621-6eea282850b7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date of Report]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="343" y="27" width="137" height="15" uuid="e3af7360-14f2-4c49-bc04-13069818a7ac"/>
+				<textFieldExpression><![CDATA[$P{dateOfReport}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="47" width="559" height="1" forecolor="#CCCCCC" backcolor="#999999" uuid="389d4766-d97c-4984-869a-ae71284f906b"/>
+				<graphicElement>
+					<pen lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="44" width="559" height="1" forecolor="#CCCCCC" backcolor="#999999" uuid="f0c9ad69-2680-47f0-ac43-1c04e219a48a"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="129" y="3" width="100" height="20" forecolor="#FFFFFF" uuid="8d04c046-106b-4f29-82c3-e6b68700efaf"/>
+				<textElement>
+					<font fontName="Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rental Units - ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="60" height="11" uuid="2155724e-a425-4f1b-b831-e70f4f9ffa42"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineColor="#999999"/>
+					<leftPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineColor="#999999"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{propertyName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="307" y="0" width="120" height="11" uuid="5baf2f24-7fd1-436d-9e15-8828306193d0"/>
+				<box rightPadding="3">
+					<pen lineColor="#999999"/>
+					<topPen lineColor="#999999"/>
+					<leftPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{currentPropertyRent}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="490" y="0" width="68" height="11" uuid="0cebe799-8e87-4925-a2e1-4bdaecb92b0f"/>
+				<box rightPadding="3">
+					<pen lineColor="#999999"/>
+					<topPen lineColor="#999999"/>
+					<leftPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rentBalance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="0" width="190" height="11" uuid="adc826fc-24e3-46d5-83a5-96a73dcfa59e"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineColor="#999999"/>
+					<leftPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineColor="#999999"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{occupantName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="250" y="0" width="57" height="11" uuid="77794ed7-5b63-4131-8dca-c926ad7c2972"/>
+				<box>
+					<pen lineColor="#999999"/>
+					<topPen lineColor="#999999"/>
+					<leftPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineColor="#999999"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{esatePropertyType}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="5" width="535" height="12" backcolor="#CCCCFF" uuid="b584be29-ecbd-4382-aa47-614a99586439"/>
+				<textField>
+					<reportElement x="188" y="0" width="80" height="12" uuid="9eadedb7-4fe1-4d33-8b6e-0f79d56675c9"/>
+					<textElement textAlignment="Right">
+						<font fontName="Monospaced" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="268" y="0" width="40" height="12" uuid="ec6c189f-ea53-42bc-aa88-5e3e2d2d28b5"/>
+					<textElement>
+						<font fontName="Monospaced" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="448" y="0" width="82" height="12" forecolor="#999999" uuid="f57c22b4-d636-41c3-b194-dd24d049b911"/>
+					<textElement>
+						<font fontName="Monospaced" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{todayDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" x="1" y="0" width="200" height="12" forecolor="#999999" uuid="aa074164-3370-4b1f-9850-d84a430104d5"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Report Generated From Advantage]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="17" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="1" y="3" width="535" height="12" backcolor="#CCCCFF" uuid="ae53226c-e2a7-404b-a55e-addbb415572d"/>
+				<textField>
+					<reportElement x="188" y="0" width="80" height="12" uuid="cc6340cc-266d-46ef-9f66-5917271f86f1"/>
+					<textElement textAlignment="Right">
+						<font fontName="Monospaced" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="268" y="0" width="40" height="12" uuid="40b47f1c-b371-4f85-9443-1f547afa6f03"/>
+					<textElement>
+						<font fontName="Monospaced" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="448" y="0" width="82" height="12" forecolor="#999999" uuid="9f7fc898-7c5d-4372-b0c0-2110fb968c13"/>
+					<textElement>
+						<font fontName="Monospaced" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{todayDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" x="1" y="0" width="200" height="12" forecolor="#999999" uuid="832efd92-4600-4b5a-8e31-5776ff41b095"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Report Generated From Advantage]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="95" splitType="Stretch">
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="246" y="6" width="100" height="20" uuid="72d11dfe-c748-4fce-addf-affe1c7c071a"/>
+				<textFieldExpression><![CDATA[$V{totalRentBalance}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="146" y="6" width="100" height="20" uuid="faa794d6-7953-4d42-b37e-d8f20e23372c"/>
+				<text><![CDATA[Total Rent Balance]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
