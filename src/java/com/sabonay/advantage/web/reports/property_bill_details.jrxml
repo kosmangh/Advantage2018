@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="property_ledger_details" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="ae856260-da4a-4395-9ec6-79df08495a4e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="zonalOffice" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="zonalAddress" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="reportTitle" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="schoolBadge" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="dateOfReport" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="academicYear" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="companyName" class="java.lang.String"/>
+	<parameter name="occupantName" class="java.lang.String"/>
+	<parameter name="occupantProperty" class="java.lang.String"/>
+	<field name="billDetail" class="java.lang.String"/>
+	<field name="billType" class="java.lang.String"/>
+	<field name="billYear" class="java.lang.Integer"/>
+	<field name="billAmount" class="java.lang.Double"/>
+	<field name="billAmountPaid" class="java.lang.Double"/>
+	<field name="billStatus" class="java.lang.String"/>
+	<variable name="todayDate" class="java.util.Date">
+		<variableExpression><![CDATA[new java.util.Date()]]></variableExpression>
+	</variable>
+	<variable name="lesseePropertyCount" class="java.lang.Integer" resetType="Group" resetGroup="leseeGroup" calculation="Count">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="balance" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<group name="leseeGroup">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band height="75">
+				<staticText>
+					<reportElement key="staticText-7" mode="Opaque" x="4" y="22" width="114" height="20" forecolor="#000000" uuid="e20ce224-cd32-4b17-a05b-b5e3372f8912"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Property Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-8" mode="Opaque" x="0" y="46" width="25" height="16" forecolor="#000000" backcolor="#00CCCC" uuid="e96d8ff0-ce26-400b-96f6-d07b55937164"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="25" y="46" width="88" height="16" forecolor="#000000" backcolor="#00CCCC" uuid="885598f2-7b63-4272-a6e2-4a118a7e6ef8"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Bill Detail]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="201" y="46" width="148" height="16" forecolor="#000000" backcolor="#00CCCC" uuid="370c0b90-54b2-4871-b223-76bf776724f2"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Bill Year]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="349" y="46" width="113" height="16" forecolor="#000000" backcolor="#00CCCC" uuid="09ad6065-e05f-4e23-80ed-85124bfd1808"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Bill Amount
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="670" y="47" width="96" height="16" forecolor="#000000" backcolor="#00CCCC" uuid="13f0923b-22ba-4d3d-a516-e102508080f5"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Bill Status]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-7" mode="Opaque" x="1" y="1" width="114" height="20" forecolor="#000000" uuid="79d9cd5a-53c2-42da-9ffc-0021783d947f"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Property Occupant]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="113" y="46" width="88" height="16" forecolor="#000000" backcolor="#00CCCC" uuid="757ef363-b68d-478e-a1c7-d4faea8dfc85"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Bill Type]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" mode="Opaque" x="462" y="46" width="220" height="16" forecolor="#000000" backcolor="#00CCCC" uuid="7100eade-fda7-4dfb-884e-4c2b0f7179df"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Bill Amount Paid]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="30" y="62" width="88" height="13" uuid="ac6e0df3-d37c-4945-82ed-ae67d6a127d2"/>
+					<textFieldExpression><![CDATA[$F{billDetail}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="129" y="62" width="100" height="13" uuid="1ba3bfa8-5c80-4fcd-83c7-6b726e624f7c"/>
+					<textFieldExpression><![CDATA[$F{billType}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="245" y="58" width="100" height="17" uuid="22a0f8d1-70f3-45e3-bb01-aa37652a9b47"/>
+					<textFieldExpression><![CDATA[$F{billYear}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="374" y="62" width="100" height="13" uuid="27dc9286-e8fa-4feb-bdd1-25ebd4acf8e5"/>
+					<textFieldExpression><![CDATA[$F{billAmount}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="530" y="62" width="100" height="13" uuid="84c9a32b-1f6d-4fb6-b033-4cce0608ee11"/>
+					<textFieldExpression><![CDATA[$F{billAmountPaid}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="706" y="62" width="100" height="13" uuid="123d31bd-89b9-45f7-a6a3-a96b2a8aa569"/>
+					<textFieldExpression><![CDATA[$F{billStatus}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="120" y="5" width="100" height="20" uuid="e4a0badf-eaac-4388-9310-b3ba785d3038"/>
+					<textFieldExpression><![CDATA[$P{occupantName}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="120" y="25" width="136" height="20" uuid="00daa1ca-c617-4153-9503-4812b25eaf54"/>
+					<textFieldExpression><![CDATA[$P{occupantProperty}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="4" y="55" width="21" height="20" uuid="40d05740-edac-4824-b1f2-5d2d6285e2c5"/>
+					<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="9">
+				<break>
+					<reportElement x="0" y="-75" width="778" height="1" uuid="141e0f0b-a199-4e18-9bec-9bcf7a127cb9"/>
+				</break>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="5" width="782" height="12" backcolor="#CCCCFF" uuid="d682fd6e-bee9-4be8-ba54-8310ef5daff8"/>
+				<textField>
+					<reportElement x="188" y="0" width="80" height="12" uuid="abb37edf-d61d-4383-a2b3-48d04512ebf8"/>
+					<textElement textAlignment="Right">
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="268" y="0" width="40" height="12" uuid="43dbcd87-1db0-4aeb-a9be-9487598ba7dc"/>
+					<textElement>
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="448" y="0" width="82" height="12" forecolor="#999999" uuid="fc277e7f-f5a6-41b7-a8fd-423324449977"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{todayDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" x="1" y="0" width="200" height="12" forecolor="#999999" uuid="c86a367d-d14e-4acd-84e8-1b4c2a0a6722"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Report Generated From Advantage]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="17" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="3" width="782" height="12" backcolor="#CCCCFF" uuid="309769cf-6e7b-40c4-be9d-b47c052fbf4a"/>
+				<textField>
+					<reportElement x="188" y="0" width="80" height="12" uuid="188b44ab-db53-450a-bbaa-8f6965fff4ee"/>
+					<textElement textAlignment="Right">
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="268" y="0" width="40" height="12" uuid="db037a69-5bb8-4e55-b6e7-779206a3a869"/>
+					<textElement>
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="448" y="0" width="82" height="12" forecolor="#999999" uuid="a9f3f6a8-2121-475a-8af6-5c94663f4d53"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{todayDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-2" x="1" y="0" width="200" height="12" forecolor="#999999" uuid="ae70391d-0060-482e-8dec-918d6e67eebe"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Report Generated From Advantage]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

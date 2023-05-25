@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="7">
+        <file>
+            <url>web/pages/staff.xhtml</url>
+            <bookmark id="3">
+                <name/>
+                <line>783</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>src/java/com/sabonay/advantage/modules/account/UserAccountController.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>165</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>src/java/com/sabonay/advantage/ejb/entities/Estate.java</url>
+            <bookmark id="7">
+                <name/>
+                <line>69</line>
+                <key/>
+            </bookmark>
+            <bookmark id="6">
+                <name/>
+                <line>265</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group/>
+    </open-files>
+</project-private>
